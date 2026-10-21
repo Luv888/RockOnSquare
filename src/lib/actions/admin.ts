@@ -3,8 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/db/prisma'
 import { requireAdmin } from '@/lib/auth/guards'
+import { checkRateLimit, clearRateLimit } from '@/lib/utils'
 
 // ─── Banner Actions ──────────────────────────────────────────────────────────
 
@@ -428,4 +430,69 @@ export async function updateSetting(key: string, value: string): Promise<void> {
   })
   revalidatePath('/admin/settings')
   revalidatePath('/')
+}
+
+// ─── Change Own Password ─────────────────────────────────────────────────────
+
+const ChangePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required').max(200),
+    newPassword: z.string().min(12, 'New password must be at least 12 characters').max(200),
+    confirmPassword: z.string(),
+  })
+  .refine((d) => d.newPassword === d.confirmPassword, { message: 'New passwords do not match' })
+  .refine((d) => d.newPassword !== d.currentPassword, {
+    message: 'New password must differ from the current one',
+  })
+
+export type ChangePasswordState = {
+  error?: string
+  success?: boolean
+}
+
+export async function changeOwnPassword(
+  _prev: ChangePasswordState,
+  formData: FormData
+): Promise<ChangePasswordState> {
+  const session = await requireAdmin()
+
+  const parsed = ChangePasswordSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message || 'Invalid input' }
+  }
+  const { currentPassword, newPassword } = parsed.data
+
+  // Same budget as login, so a hijacked session can't brute-force the current password
+  const limitKey = `change-password:${session.user.id}`
+  if (!checkRateLimit(limitKey, 5, 15 * 60 * 1000).allowed) {
+    return { error: 'Too many attempts. Please try again after 15 minutes.' }
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { password: true },
+  })
+  if (!user?.password || !(await bcrypt.compare(currentPassword, user.password))) {
+    return { error: 'Current password is incorrect.' }
+  }
+  clearRateLimit(limitKey)
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { password: await bcrypt.hash(newPassword, 12) },
+  })
+
+  // Revoke every session, this one included — the client signs out and the user logs in again
+  await prisma.session.updateMany({
+    where: { userId: session.user.id, isRevoked: false },
+    data: { isRevoked: true },
+  })
+
+  await prisma.auditLog
+    .create({
+      data: { userId: session.user.id, action: 'CHANGE_OWN_PASSWORD', entityType: 'User', entityId: session.user.id },
+    })
+    .catch(() => {}) // Audit logging is non-fatal
+
+  return { success: true }
 }

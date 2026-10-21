@@ -70,11 +70,13 @@ function LoginForm() {
           Enter your credentials to access the management portal.
         </p>
 
-        {(reason === "timeout" || reason === "expired") && (
+        {(reason === "timeout" || reason === "expired" || reason === "password_changed") && (
           <div className="flex items-start gap-2.5 p-3 mb-4 border border-amber-500/30 rounded-sm bg-amber-500/10">
             <Clock className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
             <p className="text-amber-300 text-xs leading-relaxed">
-              {reason === "expired"
+              {reason === "password_changed"
+                ? "Password changed. Please sign in with your new password."
+                : reason === "expired"
                 ? "Your session has ended. Please sign in again."
                 : "Your session expired due to inactivity. Please sign in again."}
             </p>
