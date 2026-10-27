@@ -8,6 +8,8 @@ import {
   cn,
   normalizeImageUrl,
   deduplicateGalleryItems,
+  safeRedirectPath,
+  clientIp,
 } from '@/lib/utils'
 import { UNIQUE_GALLERY_ITEMS } from '@/components/public/ProjectGallery'
 
@@ -59,6 +61,38 @@ describe('Utils', () => {
       const overLimit = checkRateLimit(ip, 3, 60000)
       expect(overLimit.allowed).toBe(false)
       expect(overLimit.remaining).toBe(0)
+    })
+  })
+
+  describe('safeRedirectPath', () => {
+    it('allows valid relative internal paths', () => {
+      expect(safeRedirectPath('/admin/dashboard', '/admin/login')).toBe('/admin/dashboard')
+      expect(safeRedirectPath('/admin/leads?status=NEW', '/admin')).toBe('/admin/leads?status=NEW')
+    })
+
+    it('rejects external URLs, protocol-relative paths, and invalid targets', () => {
+      expect(safeRedirectPath('https://malicious.com', '/admin')).toBe('/admin')
+      expect(safeRedirectPath('//malicious.com', '/admin')).toBe('/admin')
+      expect(safeRedirectPath('javascript:alert(1)', '/admin')).toBe('/admin')
+      expect(safeRedirectPath(null, '/admin')).toBe('/admin')
+      expect(safeRedirectPath('', '/admin')).toBe('/admin')
+    })
+  })
+
+  describe('clientIp', () => {
+    it('extracts client IP from x-real-ip header', () => {
+      const headers = new Headers({ 'x-real-ip': '203.0.113.195' })
+      expect(clientIp(headers)).toBe('203.0.113.195')
+    })
+
+    it('extracts client IP from x-forwarded-for header', () => {
+      const headers = new Headers({ 'x-forwarded-for': '198.51.100.1, 203.0.113.50' })
+      expect(clientIp(headers)).toBe('203.0.113.50')
+    })
+
+    it('returns null when no IP headers are present', () => {
+      const headers = new Headers()
+      expect(clientIp(headers)).toBeNull()
     })
   })
 

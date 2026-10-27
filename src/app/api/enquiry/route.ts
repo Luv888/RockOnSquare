@@ -1,6 +1,6 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 import { enquirySchema } from "@/lib/validation/schemas";
-import { generateReferenceId, checkRateLimit } from "@/lib/utils";
+import { generateReferenceId, checkRateLimit, clientIp } from "@/lib/utils";
 import { prisma } from "@/lib/db/prisma";
 
 // Rate limit: 5 enquiries per IP per 15 minutes
@@ -19,10 +19,7 @@ function isDbConfigured(): boolean {
 export async function POST(req: NextRequest) {
   try {
     // Rate limiting by IP
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0] ||
-      req.headers.get("x-real-ip") ||
-      "unknown";
+    const ip = clientIp(req.headers) ?? "unknown";
 
     const { allowed } = checkRateLimit(
       `enquiry:${ip}`,
@@ -106,18 +103,22 @@ export async function POST(req: NextRequest) {
           message: "Your enquiry has been received. Our team will contact you shortly.",
         });
       } catch (dbErr) {
+        // Don't report success for a lead that was never saved
         console.error("[Enquiry] Database error:", dbErr);
-        // Fall through to demo response below
+        return NextResponse.json(
+          { error: "We couldn't save your enquiry. Please try again or contact us directly." },
+          { status: 503 }
+        );
       }
     }
 
-    // Fallback: demo mode (no DB)
+    // Demo mode (no DB configured)
     return NextResponse.json({
       success: true,
       referenceId,
       message:
         "Your enquiry has been received. Our team will contact you shortly.",
-      isDemo: !isDbConfigured(),
+      isDemo: true,
     });
   } catch (error) {
     console.error("[Enquiry] Unexpected error:", error);

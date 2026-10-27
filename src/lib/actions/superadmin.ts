@@ -1,20 +1,10 @@
 ﻿"use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { auth } from "@/lib/auth/auth";
+import { requireSuperAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db/prisma";
-
-// ─── Auth Guard (superadmin only) ────────────────────────────────────────────
-
-async function requireSuperAdmin() {
-  const session = await auth();
-  if (!session?.user) redirect("/superadmin/login");
-  if (session.user.role !== "superadmin") redirect("/superadmin/login?reason=unauthorized");
-  return session;
-}
 
 async function writeAuditLog(
   userId: string,
@@ -44,8 +34,8 @@ async function writeAuditLog(
 
 const CreateAdminSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
-  email: z.string().email("Valid email required"),
-  password: z.string().min(8, "Password must be at least 8 characters").max(200),
+  email: z.string().trim().toLowerCase().email("Valid email required"),
+  password: z.string().min(12, "Password must be at least 12 characters").max(200),
   role: z.enum(["admin", "content_manager"]), // Superadmin cannot self-create superadmins via UI
 });
 
@@ -63,12 +53,12 @@ export async function createAdminUser(
   const raw = Object.fromEntries(formData);
   const parsed = CreateAdminSchema.safeParse(raw);
   if (!parsed.success) {
-    return { error: parsed.error.flatten().formErrors[0] || "Invalid input" };
+    return { error: parsed.error.issues[0]?.message || "Invalid input" };
   }
   const data = parsed.data;
 
   const existing = await prisma.user.findUnique({
-    where: { email: data.email.toLowerCase() },
+    where: { email: data.email },
   });
   if (existing) {
     return { error: "A user with this email already exists." };
@@ -78,7 +68,7 @@ export async function createAdminUser(
   const newUser = await prisma.user.create({
     data: {
       name: data.name,
-      email: data.email.toLowerCase(),
+      email: data.email,
       password: hashedPassword,
       role: data.role,
       isActive: true,
@@ -113,7 +103,7 @@ export async function toggleUserActive(userId: string, isActive: boolean): Promi
   if (!targetUser) return;
   if (targetUser.role === "superadmin") return; // Cannot disable superadmins via UI
 
-  const updated = await prisma.user.update({
+  await prisma.user.update({
     where: { id: userId },
     data: { isActive },
   });
@@ -142,7 +132,7 @@ export async function toggleUserActive(userId: string, isActive: boolean): Promi
 
 const ResetPasswordSchema = z.object({
   userId: z.string().min(1),
-  newPassword: z.string().min(8, "Password must be at least 8 characters").max(200),
+  newPassword: z.string().min(12, "Password must be at least 12 characters").max(200),
 });
 
 export type ResetPasswordState = {
@@ -159,7 +149,7 @@ export async function resetUserPassword(
   const raw = Object.fromEntries(formData);
   const parsed = ResetPasswordSchema.safeParse(raw);
   if (!parsed.success) {
-    return { error: parsed.error.flatten().formErrors[0] || "Invalid input" };
+    return { error: parsed.error.issues[0]?.message || "Invalid input" };
   }
   const data = parsed.data;
 

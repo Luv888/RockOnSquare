@@ -3,18 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/db/prisma'
-import { auth } from '@/lib/auth/auth'
-
-// ─── Auth guard ─────────────────────────────────────────────────────────────
-
-async function requireAdmin() {
-  const session = await auth()
-  if (!session?.user) {
-    redirect('/admin/login')
-  }
-  return session
-}
+import { requireAdmin } from '@/lib/auth/guards'
+import { checkRateLimit, clearRateLimit } from '@/lib/utils'
 
 // ─── Banner Actions ──────────────────────────────────────────────────────────
 
@@ -412,7 +404,7 @@ const UpdateLeadSchema = z.object({
 })
 
 export async function updateLeadStatus(id: string, formData: FormData): Promise<void> {
-  await requireAdmin()
+  const session = await requireAdmin()
   const raw = Object.fromEntries(formData)
   const parsed = UpdateLeadSchema.safeParse(raw)
   if (!parsed.success) {
@@ -425,16 +417,13 @@ export async function updateLeadStatus(id: string, formData: FormData): Promise<
     data: { status: data.status },
   })
   if (data.notes) {
-    const session = await auth()
-    if (session?.user?.id) {
-      await prisma.leadNote.create({
-        data: {
-          enquiryId: id,
-          note: data.notes,
-          userId: session.user.id,
-        },
-      })
-    }
+    await prisma.leadNote.create({
+      data: {
+        enquiryId: id,
+        note: data.notes,
+        userId: session.user.id,
+      },
+    })
   }
   revalidatePath('/admin/leads')
   revalidatePath(`/admin/leads/${id}`)
@@ -444,11 +433,79 @@ export async function updateLeadStatus(id: string, formData: FormData): Promise<
 
 export async function updateSetting(key: string, value: string): Promise<void> {
   await requireAdmin()
-  await prisma.siteSetting.upsert({
+  // Admins may only edit existing, non-system settings; creating keys and
+  // touching "system" settings is superadmin-only (updatePrivilegedSetting).
+  const setting = await prisma.siteSetting.findUnique({ where: { key }, select: { group: true } })
+  if (!setting || setting.group === 'system') return
+  await prisma.siteSetting.update({
     where: { key },
-    update: { value },
-    create: { key, value, label: key, group: 'GENERAL' },
+    data: { value: value.slice(0, 2000) },
   })
   revalidatePath('/admin/settings')
   revalidatePath('/')
+}
+
+// ─── Change Own Password ─────────────────────────────────────────────────────
+
+const ChangePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required').max(200),
+    newPassword: z.string().min(12, 'New password must be at least 12 characters').max(200),
+    confirmPassword: z.string(),
+  })
+  .refine((d) => d.newPassword === d.confirmPassword, { message: 'New passwords do not match' })
+  .refine((d) => d.newPassword !== d.currentPassword, {
+    message: 'New password must differ from the current one',
+  })
+
+export type ChangePasswordState = {
+  error?: string
+  success?: boolean
+}
+
+export async function changeOwnPassword(
+  _prev: ChangePasswordState,
+  formData: FormData
+): Promise<ChangePasswordState> {
+  const session = await requireAdmin()
+
+  const parsed = ChangePasswordSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message || 'Invalid input' }
+  }
+  const { currentPassword, newPassword } = parsed.data
+
+  // Same budget as login, so a hijacked session can't brute-force the current password
+  const limitKey = `change-password:${session.user.id}`
+  if (!checkRateLimit(limitKey, 5, 15 * 60 * 1000).allowed) {
+    return { error: 'Too many attempts. Please try again after 15 minutes.' }
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { password: true },
+  })
+  if (!user?.password || !(await bcrypt.compare(currentPassword, user.password))) {
+    return { error: 'Current password is incorrect.' }
+  }
+  clearRateLimit(limitKey)
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { password: await bcrypt.hash(newPassword, 12) },
+  })
+
+  // Revoke every session, this one included — the client signs out and the user logs in again
+  await prisma.session.updateMany({
+    where: { userId: session.user.id, isRevoked: false },
+    data: { isRevoked: true },
+  })
+
+  await prisma.auditLog
+    .create({
+      data: { userId: session.user.id, action: 'CHANGE_OWN_PASSWORD', entityType: 'User', entityId: session.user.id },
+    })
+    .catch(() => {}) // Audit logging is non-fatal
+
+  return { success: true }
 }

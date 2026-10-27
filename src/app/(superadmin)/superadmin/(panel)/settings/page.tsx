@@ -1,7 +1,9 @@
 ﻿import React from "react";
 import { prisma } from "@/lib/db/prisma";
 import { updatePrivilegedSetting } from "@/lib/actions/superadmin";
+import { requireSuperAdmin } from "@/lib/auth/guards";
 import { Settings, Shield } from "lucide-react";
+import { ChangePasswordForm } from "@/components/admin/ChangePasswordForm";
 
 async function getSettings() {
   try {
@@ -12,6 +14,7 @@ async function getSettings() {
 }
 
 export default async function SuperAdminSettingsPage() {
+  await requireSuperAdmin();
   const settings = await getSettings();
 
   return (
@@ -72,6 +75,10 @@ export default async function SuperAdminSettingsPage() {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="mt-6">
+        <ChangePasswordForm loginPath="/superadmin/login" />
       </div>
     </div>
   );

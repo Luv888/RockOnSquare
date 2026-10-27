@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import Link from "next/link";
-import { auth } from "@/lib/auth/auth";
+import { requireSuperAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db/prisma";
 import {
   Users,
@@ -41,7 +41,7 @@ async function getSuperAdminStats() {
 }
 
 export default async function SuperAdminDashboard() {
-  const session = await auth();
+  const session = await requireSuperAdmin();
   const stats = await getSuperAdminStats();
 
   const statCards = [

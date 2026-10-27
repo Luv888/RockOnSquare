@@ -147,9 +147,9 @@ export default function SuperAdminUsersPage() {
                   name="password"
                   type={showPass ? "text" : "password"}
                   required
-                  minLength={8}
+                  minLength={12}
                   className="w-full px-3 py-2.5 pr-10 bg-white/5 border border-white/10 rounded-sm text-white text-sm focus:outline-none focus:border-[#c9a84c] transition-colors"
-                  placeholder="Min 8 characters"
+                  placeholder="Min 12 characters"
                 />
                 <button
                   type="button"
@@ -300,12 +300,12 @@ export default function SuperAdminUsersPage() {
           <form action={resetAction} className="flex gap-3 items-end">
             <input type="hidden" name="userId" value={activeResetId} />
             <div className="flex-1">
-              <label className="block text-white/60 text-xs mb-1.5">New Password (min 8 chars)</label>
+              <label className="block text-white/60 text-xs mb-1.5">New Password (min 12 chars)</label>
               <input
                 name="newPassword"
                 type="password"
                 required
-                minLength={8}
+                minLength={12}
                 className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-sm text-white text-sm focus:outline-none focus:border-amber-400 transition-colors"
               />
             </div>

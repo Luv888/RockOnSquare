@@ -3,13 +3,14 @@
 import React, { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { safeRedirectPath } from "@/lib/utils";
 import { Eye, EyeOff, Loader2, AlertCircle, Clock, ShieldAlert } from "lucide-react";
 
 function SuperAdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const reason = searchParams.get("reason");
-  const callbackUrl = searchParams.get("callbackUrl") || "/superadmin/dashboard";
+  const callbackUrl = safeRedirectPath(searchParams.get("callbackUrl"), "/superadmin/dashboard");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,8 +36,8 @@ function SuperAdminLoginForm() {
       });
 
       if (result?.error) {
-        if (result.error.includes("Too many login attempts")) {
-          setError(result.error);
+        if (result.code === "rate_limited") {
+          setError("Too many login attempts. Please try again after 15 minutes.");
         } else {
           setError("Invalid credentials. Access denied.");
         }
@@ -71,12 +72,14 @@ function SuperAdminLoginForm() {
           Restricted access. Authorized super-administrators only.
         </p>
 
-        {(reason === "timeout" || reason === "expired") && (
+        {(reason === "timeout" || reason === "expired" || reason === "password_changed") && (
           <div className="flex items-start gap-2.5 p-3 mb-4 border border-amber-500/30 rounded-sm bg-amber-500/10">
             <Clock className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
             <p className="text-amber-300 text-xs leading-relaxed">
-              {reason === "expired"
-                ? "Your session has expired (7-day maximum reached). Please sign in again."
+              {reason === "password_changed"
+                ? "Password changed. Please sign in with your new password."
+                : reason === "expired"
+                ? "Your session has ended. Please sign in again."
                 : "Your session expired due to inactivity. Please sign in again."}
             </p>
           </div>

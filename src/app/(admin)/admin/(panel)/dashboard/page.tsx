@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { getServerAmenities, getServerBanners, getServerLeads } from '@/lib/data/server-data'
+import { requireAdmin } from '@/lib/auth/guards'
 import { Users, Layout, HardHat, Star, TrendingUp, Clock, AlertCircle } from 'lucide-react'
 
 async function getDashboardStats() {
@@ -32,6 +33,7 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export default async function DashboardPage() {
+  await requireAdmin()
   const stats = await getDashboardStats()
 
   const statCards = [

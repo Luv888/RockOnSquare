@@ -4,13 +4,14 @@ import React, { useState, Suspense } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { safeRedirectPath } from "@/lib/utils";
 import { Eye, EyeOff, Loader2, AlertCircle, Clock } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const reason = searchParams.get("reason");
-  const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
+  const callbackUrl = safeRedirectPath(searchParams.get("callbackUrl"), "/admin/dashboard");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,8 +38,8 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        if (result.error.includes("Too many login attempts")) {
-          setError(result.error);
+        if (result.code === "rate_limited") {
+          setError("Too many login attempts. Please try again after 15 minutes.");
         } else {
           setError("Invalid email or password. Please try again.");
         }
@@ -76,12 +77,14 @@ function LoginForm() {
           Enter your credentials to access the management portal.
         </p>
 
-        {(reason === "timeout" || reason === "expired") && (
+        {(reason === "timeout" || reason === "expired" || reason === "password_changed") && (
           <div className="flex items-start gap-2.5 p-3 mb-4 border border-amber-500/30 rounded-sm bg-amber-500/10">
             <Clock className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
             <p className="text-amber-300 text-xs leading-relaxed">
-              {reason === "expired"
-                ? "Your session has expired (24-hour maximum reached). Please sign in again."
+              {reason === "password_changed"
+                ? "Password changed. Please sign in with your new password."
+                : reason === "expired"
+                ? "Your session has ended. Please sign in again."
                 : "Your session expired due to inactivity. Please sign in again."}
             </p>
           </div>

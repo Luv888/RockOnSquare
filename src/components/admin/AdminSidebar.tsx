@@ -24,10 +24,6 @@ const NAV = [
 export function AdminSidebar() {
   const pathname = usePathname()
 
-  if (pathname === '/admin/login') {
-    return null
-  }
-
   return (
     <aside className="flex flex-col w-60 min-h-screen bg-[#060a14] border-r border-white/5 flex-shrink-0">
       {/* Logo */}

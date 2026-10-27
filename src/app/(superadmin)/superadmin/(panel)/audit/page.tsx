@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { prisma } from "@/lib/db/prisma";
+import { requireSuperAdmin } from "@/lib/auth/guards";
 import { FileText } from "lucide-react";
 
 async function getAuditLog() {
@@ -15,6 +16,7 @@ async function getAuditLog() {
 }
 
 export default async function AuditLogPage() {
+  await requireSuperAdmin();
   const entries = await getAuditLog();
 
   return (

@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Generate a unique enquiry reference ID.
- * Format: ROS-YYYYMMDD-XXXXX (where X is alphanumeric)
+ * Format: ROS-YYYYMMDD-XXXXX
  */
 export function generateReferenceId(): string {
   const date = new Date()
@@ -24,7 +24,7 @@ export function formatIndianNumber(n: number): string {
 }
 
 /**
- * Format area with unit
+ * Format area with unit.
  */
 export function formatArea(sqM?: number | null, sqFt?: number | null): string {
   if (sqFt) return `${formatIndianNumber(sqFt)} sq.ft`
@@ -33,7 +33,7 @@ export function formatArea(sqM?: number | null, sqFt?: number | null): string {
 }
 
 /**
- * Truncate text with ellipsis
+ * Truncate text with ellipsis.
  */
 export function truncate(text: string, length: number): string {
   if (text.length <= length) return text
@@ -41,7 +41,7 @@ export function truncate(text: string, length: number): string {
 }
 
 /**
- * Simple in-memory rate limiter for API routes (use Redis/Upstash in production)
+ * Simple in-memory rate limiter for API routes.
  */
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
 
@@ -71,8 +71,7 @@ export function clearRateLimit(key: string): void {
 }
 
 /**
- * Known visual asset canonical mappings for Rock One Square to detect and prevent
- * duplicate image entries pointing to the same underlying photography.
+ * Canonical mappings for known duplicate image assets.
  */
 export const ASSET_CANONICAL_MAP: Record<string, string> = {
   '/images/modern-offices.jpg': '/images/office-1.jpg',
@@ -84,43 +83,80 @@ export const ASSET_CANONICAL_MAP: Record<string, string> = {
 }
 
 /**
- * Normalize an image URL for strict deduplication comparison:
- * - Strips protocol/host if pointing to local assets
- * - Strips query parameters and hashes
- * - Strips trailing slashes
- * - Resolves known image aliases/duplicates to canonical asset paths
+ * Normalize image URLs for duplicate detection.
  */
 export function normalizeImageUrl(url: string): string {
   if (!url) return ''
+
   let cleaned = url.trim().toLowerCase()
-  // Remove protocol and host if present
   cleaned = cleaned.replace(/^https?:\/\/[^/]+/i, '')
-  // Remove query strings and anchors
   cleaned = cleaned.split('?')[0].split('#')[0]
-  // Normalize leading slash
+
   if (!cleaned.startsWith('/')) {
     cleaned = '/' + cleaned
   }
-  // Check canonical alias map
+
   return ASSET_CANONICAL_MAP[cleaned] || cleaned
 }
 
 /**
  * Deduplicate gallery items by normalized image URL.
- * Preserves first encounter order.
+ * Preserves the first occurrence.
  */
-export function deduplicateGalleryItems<T extends { imageUrl: string }>(items: T[]): T[] {
+export function deduplicateGalleryItems<T extends { imageUrl: string }>(
+  items: T[]
+): T[] {
   const seen = new Set<string>()
   const result: T[] = []
 
   for (const item of items) {
     const key = normalizeImageUrl(item.imageUrl)
+
     if (!key || seen.has(key)) {
       continue
     }
+
     seen.add(key)
     result.push(item)
   }
 
   return result
+}
+
+/**
+ * Prevent open redirects by allowing only same-origin relative paths.
+ */
+export function safeRedirectPath(
+  target: string | null | undefined,
+  fallback: string
+): string {
+  if (!target || !target.startsWith('/')) return fallback
+
+  try {
+    const base = 'http://internal.invalid'
+    const url = new URL(target, base)
+
+    return url.origin === base
+      ? url.pathname + url.search + url.hash
+      : fallback
+  } catch {
+    return fallback
+  }
+}
+
+/**
+ * Identify the client IP for rate limiting.
+ */
+export function clientIp(headers: Headers): string | null {
+  const realIp = headers.get('x-real-ip')?.trim()
+
+  if (realIp) return realIp
+
+  const forwarded = headers
+    .get('x-forwarded-for')
+    ?.split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  return forwarded?.at(-1) || null
 }
