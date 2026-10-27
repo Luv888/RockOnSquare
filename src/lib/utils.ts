@@ -69,3 +69,58 @@ export function checkRateLimit(
 export function clearRateLimit(key: string): void {
   rateLimitStore.delete(key)
 }
+
+/**
+ * Known visual asset canonical mappings for Rock One Square to detect and prevent
+ * duplicate image entries pointing to the same underlying photography.
+ */
+export const ASSET_CANONICAL_MAP: Record<string, string> = {
+  '/images/modern-offices.jpg': '/images/office-1.jpg',
+  '/images/retail.jpg': '/images/retail-1.jpg',
+  '/images/dining-rooftop.jpg': '/images/fine-dining-1.jpg',
+  '/images/building-elevation.jpg': '/images/building-front.jpg',
+  '/images/studio-suite.jpg': '/images/office-2.jpg',
+  '/images/gaming-zone.jpg': '/images/gaming-entertainment.jpg',
+}
+
+/**
+ * Normalize an image URL for strict deduplication comparison:
+ * - Strips protocol/host if pointing to local assets
+ * - Strips query parameters and hashes
+ * - Strips trailing slashes
+ * - Resolves known image aliases/duplicates to canonical asset paths
+ */
+export function normalizeImageUrl(url: string): string {
+  if (!url) return ''
+  let cleaned = url.trim().toLowerCase()
+  // Remove protocol and host if present
+  cleaned = cleaned.replace(/^https?:\/\/[^/]+/i, '')
+  // Remove query strings and anchors
+  cleaned = cleaned.split('?')[0].split('#')[0]
+  // Normalize leading slash
+  if (!cleaned.startsWith('/')) {
+    cleaned = '/' + cleaned
+  }
+  // Check canonical alias map
+  return ASSET_CANONICAL_MAP[cleaned] || cleaned
+}
+
+/**
+ * Deduplicate gallery items by normalized image URL.
+ * Preserves first encounter order.
+ */
+export function deduplicateGalleryItems<T extends { imageUrl: string }>(items: T[]): T[] {
+  const seen = new Set<string>()
+  const result: T[] = []
+
+  for (const item of items) {
+    const key = normalizeImageUrl(item.imageUrl)
+    if (!key || seen.has(key)) {
+      continue
+    }
+    seen.add(key)
+    result.push(item)
+  }
+
+  return result
+}

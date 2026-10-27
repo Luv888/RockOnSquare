@@ -22,6 +22,7 @@ import {
   OFFERING_TYPE_LABELS,
 } from '@/lib/notifications/whatsapp'
 import { saveLead } from '@/lib/data/local-storage'
+import { SITE_CONFIG } from '@/lib/config/site'
 
 const formSchema = z.object({
   fullName: z.string().min(2, 'Please enter your full name').max(100),
@@ -53,8 +54,8 @@ export function ContactSection() {
   const [lastWhatsAppUrl, setLastWhatsAppUrl] = useState<string | null>(null)
   const [statusNotice, setStatusNotice] = useState<string | null>(null)
 
-  const salesPhone = process.env.NEXT_PUBLIC_SALES_PHONE
-  const salesEmail = process.env.NEXT_PUBLIC_SALES_EMAIL || 'sales@rockonesquare.com'
+  const salesPhone = process.env.NEXT_PUBLIC_SALES_PHONE || SITE_CONFIG.contact.internationalNumber
+  const salesEmail = process.env.NEXT_PUBLIC_SALES_EMAIL || SITE_CONFIG.contact.email
   const generalWaUrl = buildWhatsAppUrl(defaultWhatsAppMessage())
 
   const {

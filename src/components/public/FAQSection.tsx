@@ -44,6 +44,11 @@ const DEFAULT_FAQS: FAQ[] = [
   },
   {
     id: '7',
+    question: 'What is the current construction status?',
+    answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites and rooftop, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.',
+  },
+  {
+    id: '8',
     question: 'What is the RERA status of Rock One Square?',
     answer: 'RERA registration details will be published on this website and the UP RERA portal upon regulatory approval. Please contact our sales team for the current registration status before making any financial commitments.',
   },

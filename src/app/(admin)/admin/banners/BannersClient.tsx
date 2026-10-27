@@ -197,8 +197,40 @@ export function BannerFormClient({ id }: BannerFormProps) {
           <input name="badge" value={form.badge ?? ''} onChange={handleChange} placeholder="New Launch" className={inputClass} />
         </div>
         <div>
-          <label className={labelClass}>Image URL</label>
-          <input name="imageUrl" value={form.imageUrl ?? ''} onChange={handleChange} type="url" placeholder="https://…" className={inputClass} />
+          <label className={labelClass}>Image URL or Project Asset Path</label>
+          <input
+            name="imageUrl"
+            value={form.imageUrl ?? ''}
+            onChange={handleChange}
+            type="text"
+            placeholder="/images/building-front.jpg or https://…"
+            className={inputClass}
+          />
+          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+            <span className="text-white/40 self-center">Quick Select:</span>
+            {[
+              { label: 'Building Elevation', path: '/images/building-front.jpg' },
+              { label: 'Lord of the Drinks', path: '/images/lord-of-the-drinks.jpg' },
+              { label: 'Gaming Zone', path: '/images/gaming-zone-hero.jpg' },
+              { label: 'Retail', path: '/images/retail-1.jpg' },
+              { label: 'Modern Offices', path: '/images/office-1.jpg' },
+              { label: 'Studio Apartment', path: '/images/studio-apartment-1.jpg' },
+            ].map((img) => (
+              <button
+                key={img.path}
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, imageUrl: img.path }))}
+                className="px-2 py-1 rounded bg-white/5 hover:bg-[#c9a84c]/20 hover:text-[#c9a84c] border border-white/10 text-white/60 transition-colors"
+              >
+                {img.label}
+              </button>
+            ))}
+          </div>
+          {form.imageUrl && (
+            <div className="mt-3 relative w-full h-32 rounded border border-white/10 overflow-hidden bg-black/40">
+              <img src={form.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>

@@ -22,7 +22,7 @@ const BannerSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200),
   subtitle: z.string().max(300).optional().nullable(),
   description: z.string().max(1000).optional().nullable(),
-  imageUrl: z.string().url().optional().nullable().or(z.literal('')),
+  imageUrl: z.string().max(500).optional().nullable(),
   ctaLabel: z.string().max(100).optional().nullable(),
   ctaUrl: z.string().max(500).optional().nullable(),
   secondaryCtaLabel: z.string().max(100).optional().nullable(),
@@ -105,6 +105,7 @@ const AmenitySchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
   description: z.string().max(500).optional().nullable(),
   iconName: z.string().max(100).optional().nullable(),
+  imageUrl: z.string().max(500).optional().nullable(),
   sortOrder: z.coerce.number().int().default(0),
   isPublished: z.enum(['true', 'false']).transform(v => v === 'true'),
 })
@@ -123,6 +124,7 @@ export async function createAmenity(formData: FormData): Promise<void> {
       name: data.name,
       description: data.description ?? null,
       iconName: data.iconName ?? null,
+      imageUrl: data.imageUrl || null,
       sortOrder: data.sortOrder,
       isPublished: data.isPublished,
     },
@@ -147,6 +149,7 @@ export async function updateAmenity(id: string, formData: FormData): Promise<voi
       name: data.name,
       description: data.description ?? null,
       iconName: data.iconName ?? null,
+      imageUrl: data.imageUrl || null,
       sortOrder: data.sortOrder,
       isPublished: data.isPublished,
     },
@@ -315,6 +318,8 @@ const FloorSchema = z.object({
   shortLabel: z.string().max(10).optional().nullable(),
   offeringType: z.enum(['RETAIL', 'ENTERTAINMENT', 'OFFICE', 'STUDIO_APARTMENT', 'HOTEL', 'DINING', 'OTHER']).optional().nullable(),
   description: z.string().max(2000).optional().nullable(),
+  imageUrl: z.string().max(500).optional().nullable(),
+  highlights: z.string().max(2000).optional().nullable(),
   sortOrder: z.coerce.number().int().default(0),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
   projectId: z.string().optional().nullable(),
@@ -348,6 +353,10 @@ export async function createFloor(formData: FormData): Promise<void> {
       shortLabel: data.shortLabel ?? null,
       offeringType: data.offeringType ?? null,
       description: data.description ?? null,
+      imageUrls: data.imageUrl ? [data.imageUrl] : [],
+      highlights: data.highlights
+        ? data.highlights.split('\n').map((s) => s.trim()).filter(Boolean)
+        : [],
       sortOrder: data.sortOrder,
       status: data.status,
     },
@@ -374,6 +383,10 @@ export async function updateFloor(id: string, formData: FormData): Promise<void>
       shortLabel: data.shortLabel ?? null,
       offeringType: data.offeringType ?? null,
       description: data.description ?? null,
+      imageUrls: data.imageUrl ? [data.imageUrl] : undefined,
+      highlights: data.highlights
+        ? data.highlights.split('\n').map((s) => s.trim()).filter(Boolean)
+        : undefined,
       sortOrder: data.sortOrder,
       status: data.status,
     },
