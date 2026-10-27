@@ -155,6 +155,8 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
     shortLabel: string
     offeringType: string
     description: string
+    imageUrl: string
+    highlights: string
     sortOrder: number
     status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
   }>({
@@ -163,6 +165,8 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
     shortLabel: '',
     offeringType: 'RETAIL',
     description: '',
+    imageUrl: '',
+    highlights: '',
     sortOrder: 0,
     status: 'PUBLISHED',
   })
@@ -178,6 +182,8 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
           shortLabel: found.shortLabel ?? '',
           offeringType: found.offeringType ?? 'OTHER',
           description: found.description ?? '',
+          imageUrl: found.imageUrls?.[0] ?? '',
+          highlights: found.highlights?.join('\n') ?? '',
           sortOrder: found.sortOrder,
           status: found.status,
         })
@@ -215,8 +221,10 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
       shortLabel: form.shortLabel.trim() || null,
       offeringType: (form.offeringType as OfferingType) || null,
       description: form.description.trim() || null,
-      highlights: [],
-      imageUrls: [],
+      highlights: form.highlights
+        ? form.highlights.split('\n').map((h) => h.trim()).filter(Boolean)
+        : [],
+      imageUrls: form.imageUrl ? [form.imageUrl.trim()] : [],
       sortOrder: form.sortOrder,
       status: form.status,
     }
@@ -333,6 +341,67 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
             rows={3}
             placeholder="Describe this floor's purpose and key features…"
             value={form.description}
+            onChange={handleChange}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="imageUrl" className={labelClass}>
+            Floor Visual Image Path or URL
+          </label>
+          <input
+            id="imageUrl"
+            name="imageUrl"
+            type="text"
+            placeholder="/images/retail-1.jpg or https://…"
+            value={form.imageUrl}
+            onChange={handleChange}
+            className={inputClass}
+          />
+          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+            <span className="text-white/40 self-center">Project Assets:</span>
+            {[
+              { label: 'Retail Flagship', path: '/images/retail-1.jpg' },
+              { label: 'Fine Dining & Skydeck', path: '/images/fine-dining-1.jpg' },
+              { label: 'Lord of the Drinks', path: '/images/lord-of-the-drinks.jpg' },
+              { label: 'Gaming Zone', path: '/images/gaming-zone-hero.jpg' },
+              { label: 'Executive Office', path: '/images/office-1.jpg' },
+              { label: 'Conference Office', path: '/images/office-2.jpg' },
+              { label: 'Studio Suite 1', path: '/images/studio-apartment-1.jpg' },
+              { label: 'Studio Suite 2', path: '/images/studio-apartment-2.jpg' },
+              { label: 'Studio Suite 3', path: '/images/studio-apartment-3.jpg' },
+              { label: 'Studio Suite 4', path: '/images/studio-apartment-4.jpg' },
+              { label: 'Building Front', path: '/images/building-front.jpg' },
+              { label: 'Building Aerial', path: '/images/building-aerial.jpg' },
+            ].map((img) => (
+              <button
+                key={img.path}
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, imageUrl: img.path }))}
+                className="px-2 py-0.5 rounded bg-white/5 hover:bg-[#c9a84c]/20 hover:text-[#c9a84c] border border-white/10 text-white/60 transition-colors"
+              >
+                {img.label}
+              </button>
+            ))}
+          </div>
+          {form.imageUrl && (
+            <div className="mt-3 relative w-full h-28 rounded border border-white/10 overflow-hidden bg-black/40">
+              <img src={form.imageUrl} alt="Floor Preview" className="w-full h-full object-cover" />
+            </div>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="highlights" className={labelClass}>
+            Floor Highlights (one per line)
+          </label>
+          <textarea
+            id="highlights"
+            name="highlights"
+            rows={3}
+            placeholder="30-metre arterial road frontage&#10;Double-height retail facades&#10;Direct plaza access"
+            value={form.highlights}
             onChange={handleChange}
             className={inputClass}
           />

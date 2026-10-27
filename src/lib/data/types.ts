@@ -72,6 +72,8 @@ export interface Offering {
   title: string
   shortDesc?: string | null
   description?: string | null
+  coverImage?: string | null
+  galleryUrls?: string[]
   floorInfo?: string | null
   highlights: string[]
   sortOrder: number

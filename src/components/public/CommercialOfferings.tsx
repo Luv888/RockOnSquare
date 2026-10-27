@@ -1,184 +1,380 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Store, Gamepad2, Building2, Hotel, Check, MessageCircle } from 'lucide-react'
+import Image from 'next/image'
+import {
+  Store,
+  Gamepad2,
+  Briefcase,
+  Home,
+  Check,
+  ArrowRight,
+  MessageCircle,
+  Layers,
+  Sparkles,
+} from 'lucide-react'
 import { buildWhatsAppUrl, defaultWhatsAppMessage } from '@/lib/notifications/whatsapp'
 
-const OFFERINGS = [
+interface VerticalItem {
+  id: string
+  title: string
+  tagline: string
+  icon: React.ElementType
+  levels: string
+  levelBadge: string
+  color: string
+  accentBorder: string
+  bgGlow: string
+  imageUrl: string
+  description: string
+  highlights: string[]
+  stackPosition: string
+}
+
+const VERTICALS: VerticalItem[] = [
   {
     id: 'retail',
-    title: 'Premium Retail',
+    title: 'Retail',
+    tagline: 'Where Brands Meet Footfall.',
     icon: Store,
-    colorClass: 'text-[#c9a84c]',
-    borderClass: 'border-[rgba(201,168,76,0.4)]',
-    bgClass: 'bg-[rgba(201,168,76,0.05)]',
-    floors: 'Ground Floor',
-    floorBadge: 'bg-[rgba(201,168,76,0.1)] text-[#c9a84c] border-[rgba(201,168,76,0.3)]',
+    levels: 'Ground & 1st Floor',
+    levelBadge: 'LEVEL 0 – 1',
+    color: '#c9a84c',
+    accentBorder: 'border-[#c9a84c]/50',
+    bgGlow: 'from-[#c9a84c]/20 to-transparent',
+    imageUrl: '/images/retail-1.jpg',
     description:
-      'High-visibility commercial spaces with exceptional frontage on Meerut Road. Premium granite finishes, maximum footfall positioning, and direct access make these spaces ideal for established and emerging retail brands.',
+      'Designed to capture attention and drive business, the retail spaces at ROCK ONE SQUARE feature high-visibility frontage on Meerut Road. With wide storefronts, modern architecture and a prime commercial location, this is where brands connect with customers every day.',
     highlights: [
-      'Ground floor visibility & access',
-      '30 metre road frontage',
-      'Premium granite & tile finishes',
-      'Maximum footfall corridor',
+      'Prime 30-metre arterial frontage on Meerut Road',
+      'High visibility and maximum footfall potential',
+      'Contemporary double-height retail architecture & grand atrium',
+      'Ideal for flagship brands, artisanal dining & daily essentials',
     ],
+    stackPosition: 'Street & Galleria Base',
   },
   {
     id: 'entertainment',
-    title: 'Entertainment Zone',
+    title: 'Entertainment',
+    tagline: 'Make Every Moment an Experience.',
     icon: Gamepad2,
-    colorClass: 'text-[#8b5cf6]',
-    borderClass: 'border-[rgba(139,92,246,0.4)]',
-    bgClass: 'bg-[rgba(139,92,246,0.05)]',
-    floors: '2nd – 3rd Floor',
-    floorBadge: 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]',
+    levels: '2nd & 3rd Floor',
+    levelBadge: 'LEVEL 2 – 3',
+    color: '#c084fc',
+    accentBorder: 'border-purple-400/50',
+    bgGlow: 'from-purple-500/20 to-transparent',
+    imageUrl: '/images/lord-of-the-drinks.jpg',
     description:
-      'The biggest gaming zone in Ghaziabad — a flagship entertainment destination combining cutting-edge gaming, premium dining, and leisure. For the first time in the region, "Lord of the Drinks" brings an exclusive bar and dining concept.',
+      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
     highlights: [
-      'Largest gaming zone in Ghaziabad',
-      '"Lord of the Drinks" dining concept',
-      'Premium bar concept (first in region)',
-      'Event & social spaces',
+      'A dynamic regional entertainment destination',
+      'Lord of the Drinks — for the first time in Ghaziabad',
+      'The biggest gaming zone in Ghaziabad with VR & arcade arenas',
+      'Curated dining, bowling & recreational lounge spaces',
     ],
+    stackPosition: 'Recreational Anchor',
   },
   {
-    id: 'offices',
+    id: 'modern-offices',
     title: 'Modern Offices',
-    icon: Building2,
-    colorClass: 'text-[#3b82f6]',
-    borderClass: 'border-[rgba(59,130,246,0.4)]',
-    bgClass: 'bg-[rgba(59,130,246,0.05)]',
-    floors: '4th Floor',
-    floorBadge: 'bg-[rgba(59,130,246,0.1)] text-[#3b82f6] border-[rgba(59,130,246,0.3)]',
+    tagline: 'A Better Perspective on Work.',
+    icon: Briefcase,
+    levels: '4th Floor',
+    levelBadge: 'LEVEL 4',
+    color: '#60a5fa',
+    accentBorder: 'border-blue-400/50',
+    bgGlow: 'from-blue-500/20 to-transparent',
+    imageUrl: '/images/office-1.jpg',
     description:
-      'Contemporary office spaces designed for the modern workforce — featuring integrated HVAC, high-speed connectivity infrastructure, professional reception, and direct access to the Rock One Square ecosystem.',
+      'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today’s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
     highlights: [
-      'Integrated HVAC systems',
-      'High-speed connectivity infrastructure',
-      'Professional common areas',
-      'Access to on-site amenities',
+      'Smart, efficient and contemporary workspaces',
+      'Integrated climate comfort & HVAC systems',
+      'High-speed digital connectivity infrastructure & optic fiber',
+      'Direct access to on-site dining, retail and leisure amenities',
     ],
+    stackPosition: 'Corporate Hub',
   },
   {
-    id: 'studios',
+    id: 'studio-apartments',
     title: 'Studio Apartments',
-    icon: Hotel,
-    colorClass: 'text-[#10b981]',
-    borderClass: 'border-[rgba(16,185,129,0.4)]',
-    bgClass: 'bg-[rgba(16,185,129,0.05)]',
-    floors: '5th – 9th Floor',
-    floorBadge: 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.3)]',
+    tagline: 'Compact Spaces. Elevated Living.',
+    icon: Home,
+    levels: '5th to 9th Floor',
+    levelBadge: 'LEVEL 5 – 9',
+    color: '#e4c870',
+    accentBorder: 'border-[#e4c870]/50',
+    bgGlow: 'from-[#e4c870]/20 to-transparent',
+    imageUrl: '/images/studio-apartment-1.jpg',
     description:
-      'Premium service apartments and studio units on the upper floors, offering panoramic views, full service facilities, and access to the complete Rock One Square commercial ecosystem — ideal for business travellers and urban professionals.',
+      'Designed for the aspirations of modern urban professionals, the studio apartments at ROCK ONE SQUARE bring together intelligent layouts, contemporary aesthetics and modern amenities. A thoughtfully planned living experience for those who value convenience, functionality and a well-connected address.',
     highlights: [
-      'Upper floor panoramic views',
-      'Service apartment facilities',
-      'Modern studio layouts',
-      'Access to commercial amenities',
+      'Contemporary urban living in thoughtfully designed spaces',
+      'Intelligent modular layouts with premium finishes',
+      'Panoramic National Capital Region horizon views',
+      'Seamless access to building retail, dining and services',
     ],
+    stackPosition: 'Elevated Residences',
   },
 ]
 
 export function CommercialOfferings() {
-  const [active, setActive] = useState(0)
-  const offering = OFFERINGS[active]
-  const Icon = offering.icon
-  const waUrl = buildWhatsAppUrl(defaultWhatsAppMessage(offering.title))
+  const [activeTab, setActiveTab] = useState<number>(0)
+  const current = VERTICALS[activeTab]
+  const Icon = current.icon
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const waUrl = buildWhatsAppUrl(
+    `Hello Rock One Square team,\n\nI am interested in exploring ${current.title} (${current.levels}) at Rock One Square.\nPlease share availability, floor plans, and pricing details.`
+  )
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
-    <section id="offerings" className="py-24 bg-[#080d18]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <p className="text-[#c9a84c] text-xs font-semibold uppercase tracking-widest mb-3">
-            Commercial Spaces
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-light text-white">
-            Four Verticals. One Address.
+    <section id="offerings" className="relative py-24 sm:py-32 bg-[#080d18] text-white overflow-hidden">
+      {/* Ambient background lighting */}
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-[#c9a84c]/5 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 text-[#e4c870] text-xs font-semibold uppercase tracking-widest mb-4">
+            <Layers className="w-3.5 h-3.5" />
+            Commercial Ecosystem
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight">
+            FOUR VERTICALS.{' '}
+            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
+              ONE ELEVATED EXPERIENCE.
+            </span>
           </h2>
+          <p className="mt-4 text-white/60 text-sm sm:text-base leading-relaxed">
+            Every square foot is engineered for purpose. Experience how retail, entertainment, modern workplaces,
+            and executive studios harmonize within a single master-planned destination.
+          </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {OFFERINGS.map((o, i) => {
-            const TabIcon = o.icon
+        {/* Tab Selection Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
+          {VERTICALS.map((item, idx) => {
+            const TabIcon = item.icon
+            const isActive = idx === activeTab
             return (
               <button
-                key={o.id}
-                onClick={() => setActive(i)}
-                className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-sm border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] ${
-                  i === active
-                    ? `${o.borderClass} ${o.bgClass} ${o.colorClass}`
-                    : 'border-white/10 text-white/50 hover:border-white/20 hover:text-white/70'
+                key={item.id}
+                type="button"
+                onClick={() => setActiveTab(idx)}
+                className={`p-4 rounded-xl border text-left transition-all duration-300 relative overflow-hidden group ${
+                  isActive
+                    ? 'bg-gradient-to-b from-[#0f172a] to-[#070b14] border-[#c9a84c] shadow-lg shadow-[#c9a84c]/10'
+                    : 'bg-[#0a0f1e]/60 border-white/10 hover:border-white/20 hover:bg-[#0a0f1e]'
                 }`}
               >
-                <TabIcon className="w-4 h-4" />
-                {o.title}
+                {isActive && (
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#c9a84c] to-[#e4c870]" />
+                )}
+                <div className="flex items-center justify-between mb-2">
+                  <div
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all ${
+                      isActive
+                        ? 'bg-[#c9a84c] text-[#060a14]'
+                        : 'bg-white/5 text-white/70 group-hover:bg-white/10'
+                    }`}
+                  >
+                    <TabIcon className="w-4 h-4" />
+                  </div>
+                  <span className="text-[10px] font-mono tracking-wider uppercase text-white/40">
+                    {item.levelBadge}
+                  </span>
+                </div>
+                <div className="font-medium text-sm text-white">{item.title}</div>
+                <div className="text-[11px] text-white/50 truncate mt-0.5">{item.levels}</div>
               </button>
             )
           })}
         </div>
 
-        {/* Detail Card */}
+        {/* Selected Vertical Detail Card */}
         <div
-          key={offering.id}
-          className={`rounded-sm border ${offering.borderClass} ${offering.bgClass} p-6 md:p-10 transition-all duration-300`}
+          key={current.id}
+          className="rounded-2xl border border-[#c9a84c]/30 bg-gradient-to-b from-[#0d1527] to-[#070b14] p-6 sm:p-10 lg:p-12 shadow-2xl relative overflow-hidden"
         >
-          <div className="grid md:grid-cols-2 gap-8 items-start">
-            {/* Left */}
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2.5 rounded-sm border ${offering.borderClass} ${offering.bgClass}`}>
-                  <Icon className={`w-6 h-6 ${offering.colorClass}`} />
+          {/* Subtle top corner glow */}
+          <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#c9a84c]/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            {/* Left Content (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-[#c9a84c]/10 border border-[#c9a84c]/30 text-[#c9a84c]">
+                  <Icon className="w-5 h-5" />
                 </div>
-                <span className={`text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-sm border ${offering.floorBadge}`}>
-                  {offering.floors}
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-[#c9a84c]/15 text-[#e4c870] border border-[#c9a84c]/30">
+                  {current.levels}
+                </span>
+                <span className="text-xs font-mono text-white/50 uppercase tracking-widest">
+                  &bull; {current.stackPosition}
                 </span>
               </div>
-              <h3 className={`font-display text-3xl md:text-4xl font-light mb-4 ${offering.colorClass}`}>
-                {offering.title}
-              </h3>
-              <p className="text-white/60 text-base leading-relaxed">{offering.description}</p>
-            </div>
 
-            {/* Right */}
-            <div>
-              <p className="text-white/30 text-xs font-semibold uppercase tracking-widest mb-4">Key Highlights</p>
-              <ul className="space-y-3 mb-8">
-                {offering.highlights.map((h) => (
-                  <li key={h} className="flex items-center gap-3 text-white/70 text-sm">
-                    <Check className={`w-4 h-4 flex-shrink-0 ${offering.colorClass}`} />
-                    {h}
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap gap-3">
+              <h3 className="font-serif text-3xl sm:text-4xl font-light text-white mb-2">
+                {current.title}
+              </h3>
+              <p className="text-lg font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] to-[#e4c870] mb-5">
+                {current.tagline}
+              </p>
+
+              <p className="text-white/70 text-sm sm:text-base leading-relaxed mb-6">
+                {current.description}
+              </p>
+
+              <div className="mb-8">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-[#c9a84c] mb-3 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Key Highlights
+                </h4>
+                <ul className="grid sm:grid-cols-2 gap-3">
+                  {current.highlights.map((h, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-white/80 leading-snug">
+                      <Check className="w-4 h-4 text-[#c9a84c] flex-shrink-0 mt-0.5" />
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3">
                 <button
-                  onClick={() => scrollTo('contact')}
-                  className="px-5 py-2.5 bg-[#c9a84c] text-[#0a0f1e] text-sm font-semibold rounded-sm hover:bg-[#e4c870] transition-colors"
+                  type="button"
+                  onClick={scrollToContact}
+                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-[#c9a84c] to-[#e4c870] hover:from-[#d8b75b] hover:to-[#f0d47f] text-[#060a14] font-semibold text-sm shadow-lg shadow-[#c9a84c]/20 transition-all flex items-center gap-2 transform active:scale-95"
                 >
-                  Enquire Now
+                  <span>Enquire for {current.title}</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
+
                 <a
                   href={waUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 border border-white/10 text-white/60 text-sm rounded-sm hover:border-white/30 hover:text-white transition-colors"
+                  className="px-5 py-3 rounded-lg bg-white/5 hover:bg-white/10 text-white/90 hover:text-white border border-white/15 text-sm font-medium transition-all flex items-center gap-2"
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  WhatsApp Us
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                  <span>WhatsApp Inquiry</span>
                 </a>
               </div>
-              <p className="mt-4 text-white/25 text-xs italic">
-                * Pricing is on request. Contact our sales team for availability and details.
-              </p>
+            </div>
+
+            {/* Right: Vertical Stacking Diagram & Visual Showcase (5 cols) */}
+            <div className="lg:col-span-5 flex flex-col gap-5">
+              {/* Vertical Visual Showcase */}
+              <div className="relative w-full h-48 sm:h-56 rounded-xl overflow-hidden border border-[#c9a84c]/30 bg-black group shadow-xl">
+                <Image
+                  src={current.imageUrl}
+                  alt={current.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-2.5 py-1 rounded bg-black/70 backdrop-blur-md border border-[#c9a84c]/40 text-[#e4c870] text-[11px] font-mono font-semibold">
+                    {current.title} &bull; Interior Perspective
+                  </span>
+                </div>
+                <div className="absolute bottom-3 inset-x-3 z-10 flex items-center justify-between text-xs">
+                  <span className="text-white/80 font-medium">{current.tagline}</span>
+                  <span className="text-[#c9a84c] font-mono text-[11px] font-bold">{current.levels}</span>
+                </div>
+              </div>
+
+              {/* Stacking Plan */}
+              <div className="bg-gradient-to-b from-[#0a0f1e] to-[#04070d] p-5 rounded-xl border border-[#c9a84c]/20 shadow-inner">
+                <div className="text-xs font-mono uppercase tracking-widest text-[#c9a84c] mb-4 flex items-center justify-between pb-3 border-b border-white/10">
+                  <span>Building Stacking Plan</span>
+                  <span className="text-white/40">11 Levels Total</span>
+                </div>
+
+              {/* Stack items */}
+              <div className="space-y-2">
+                {/* 10F Rooftop */}
+                <div className="p-2.5 rounded-lg border border-white/5 bg-white/[0.02] flex items-center justify-between text-xs text-white/50">
+                  <span className="font-mono text-[11px]">10F</span>
+                  <span className="font-medium text-white/70">Rooftop Skydeck & Hospitality</span>
+                  <span className="text-[10px] text-white/40">Exclusive</span>
+                </div>
+
+                {/* 5F-9F Studios */}
+                <div
+                  className={`p-3 rounded-lg border transition-all flex items-center justify-between text-xs ${
+                    current.id === 'studio-apartments'
+                      ? 'border-[#e4c870] bg-[#e4c870]/15 shadow-md shadow-[#e4c870]/10 text-white font-medium'
+                      : 'border-white/5 bg-white/[0.02] text-white/60'
+                  }`}
+                >
+                  <span className="font-mono text-[11px] text-[#e4c870]">5F &ndash; 9F</span>
+                  <span>Studio Apartments (7F Complete Milestone)</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
+                    Living
+                  </span>
+                </div>
+
+                {/* 4F Modern Offices */}
+                <div
+                  className={`p-3 rounded-lg border transition-all flex items-center justify-between text-xs ${
+                    current.id === 'modern-offices'
+                      ? 'border-blue-400 bg-blue-500/15 shadow-md shadow-blue-500/10 text-white font-medium'
+                      : 'border-white/5 bg-white/[0.02] text-white/60'
+                  }`}
+                >
+                  <span className="font-mono text-[11px] text-blue-400">4F</span>
+                  <span>Modern Offices & Suites</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-mono">
+                    Work
+                  </span>
+                </div>
+
+                {/* 2F-3F Entertainment */}
+                <div
+                  className={`p-3 rounded-lg border transition-all flex items-center justify-between text-xs ${
+                    current.id === 'entertainment'
+                      ? 'border-purple-400 bg-purple-500/15 shadow-md shadow-purple-500/10 text-white font-medium'
+                      : 'border-white/5 bg-white/[0.02] text-white/60'
+                  }`}
+                >
+                  <span className="font-mono text-[11px] text-purple-400">2F &ndash; 3F</span>
+                  <span>Entertainment & Lord of the Drinks</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
+                    Leisure
+                  </span>
+                </div>
+
+                {/* 0F-1F Retail */}
+                <div
+                  className={`p-3 rounded-lg border transition-all flex items-center justify-between text-xs ${
+                    current.id === 'retail'
+                      ? 'border-[#c9a84c] bg-[#c9a84c]/20 shadow-md shadow-[#c9a84c]/10 text-white font-medium'
+                      : 'border-white/5 bg-white/[0.02] text-white/60'
+                  }`}
+                >
+                  <span className="font-mono text-[11px] text-[#c9a84c]">GF &ndash; 1F</span>
+                  <span>Flagship Retail & 30m Frontage</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">
+                    Retail
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-white/40">
+                <span>Construction: 7 Floors Complete</span>
+                <span className="text-[#c9a84c]">Possession Soon</span>
+              </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   )

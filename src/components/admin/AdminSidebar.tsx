@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -26,11 +27,19 @@ export function AdminSidebar() {
   return (
     <aside className="flex flex-col w-60 min-h-screen bg-[#060a14] border-r border-white/5 flex-shrink-0">
       {/* Logo */}
-      <div className="px-5 py-6 border-b border-white/5">
-        <div className="font-display text-base font-semibold text-white leading-tight">
-          Rock <span className="text-[#c9a84c]">One</span> Square
-        </div>
-        <p className="text-white/25 text-[10px] uppercase tracking-widest mt-0.5">Admin Portal</p>
+      <div className="px-5 py-5 border-b border-white/5">
+        <Link href="/admin/dashboard" className="block focus:outline-none">
+          <div className="relative h-9 w-36 mb-1">
+            <Image
+              src="/images/logo.png"
+              alt="Rock One Square"
+              fill
+              className="object-contain object-left"
+              priority
+            />
+          </div>
+        </Link>
+        <p className="text-white/30 text-[10px] uppercase tracking-widest">Admin Portal</p>
       </div>
 
       {/* Nav */}

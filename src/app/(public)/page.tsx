@@ -8,6 +8,7 @@ import { AmenitiesSection } from '@/components/public/AmenitiesSection'
 import { ConstructionProgress } from '@/components/public/ConstructionProgress'
 import { FAQSection } from '@/components/public/FAQSection'
 import { ContactSection } from '@/components/public/ContactSection'
+import { ProjectGallery } from '@/components/public/ProjectGallery'
 import {
   getServerBanners,
   getServerAmenities,
@@ -34,6 +35,7 @@ export default async function HomePage() {
       <ProjectIntro />
       <CommercialOfferings />
       <FloorExplorer />
+      <ProjectGallery />
       <LocationSection />
       <AmenitiesSection amenities={amenities} />
       <ConstructionProgress updates={constructionUpdates} />

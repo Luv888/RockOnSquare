@@ -176,3 +176,18 @@ export const faqSchema = z.object({
   sortOrder: z.number().int().default(0),
   isPublished: z.boolean().default(false),
 })
+
+// ============================================================
+// GALLERY VALIDATION & DEDUPLICATION
+// ============================================================
+
+export const galleryItemSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(150),
+  category: z.enum(['ARCHITECTURE', 'ENTERTAINMENT', 'OFFICES', 'STUDIOS', 'RETAIL']),
+  categoryLabel: z.string().min(1).max(50),
+  imageUrl: z.string().min(1, 'Image path is required'),
+  caption: z.string().max(300).optional().or(z.literal('')),
+  details: z.string().max(1000).optional().or(z.literal('')),
+})
+
+export type GalleryItemInput = z.infer<typeof galleryItemSchema>

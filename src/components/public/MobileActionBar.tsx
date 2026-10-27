@@ -3,9 +3,10 @@
 import React from 'react'
 import { Phone, MessageCircle, FileText } from 'lucide-react'
 import { buildWhatsAppUrl, defaultWhatsAppMessage } from '@/lib/notifications/whatsapp'
+import { SITE_CONFIG } from '@/lib/config/site'
 
 export function MobileActionBar() {
-  const phone = process.env.NEXT_PUBLIC_SALES_PHONE
+  const phone = process.env.NEXT_PUBLIC_SALES_PHONE || SITE_CONFIG.contact.internationalNumber
   const waUrl = buildWhatsAppUrl(defaultWhatsAppMessage())
 
   const openEnquiry = () => {

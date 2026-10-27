@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Generate a unique enquiry reference ID.
- * Format: ROS-YYYYMMDD-XXXXX (where X is alphanumeric)
+ * Format: ROS-YYYYMMDD-XXXXX
  */
 export function generateReferenceId(): string {
   const date = new Date()
@@ -24,7 +24,7 @@ export function formatIndianNumber(n: number): string {
 }
 
 /**
- * Format area with unit
+ * Format area with unit.
  */
 export function formatArea(sqM?: number | null, sqFt?: number | null): string {
   if (sqFt) return `${formatIndianNumber(sqFt)} sq.ft`
@@ -33,7 +33,7 @@ export function formatArea(sqM?: number | null, sqFt?: number | null): string {
 }
 
 /**
- * Truncate text with ellipsis
+ * Truncate text with ellipsis.
  */
 export function truncate(text: string, length: number): string {
   if (text.length <= length) return text
@@ -41,7 +41,7 @@ export function truncate(text: string, length: number): string {
 }
 
 /**
- * Simple in-memory rate limiter for API routes (use Redis/Upstash in production)
+ * Simple in-memory rate limiter for API routes.
  */
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
 
@@ -71,27 +71,92 @@ export function clearRateLimit(key: string): void {
 }
 
 /**
- * Returns `target` only if it is a same-origin relative path, otherwise `fallback`.
- * Prevents open redirects via ?callbackUrl=https://evil.com or //evil.com.
+ * Canonical mappings for known duplicate image assets.
  */
-export function safeRedirectPath(target: string | null | undefined, fallback: string): string {
+export const ASSET_CANONICAL_MAP: Record<string, string> = {
+  '/images/modern-offices.jpg': '/images/office-1.jpg',
+  '/images/retail.jpg': '/images/retail-1.jpg',
+  '/images/dining-rooftop.jpg': '/images/fine-dining-1.jpg',
+  '/images/building-elevation.jpg': '/images/building-front.jpg',
+  '/images/studio-suite.jpg': '/images/office-2.jpg',
+  '/images/gaming-zone.jpg': '/images/gaming-entertainment.jpg',
+}
+
+/**
+ * Normalize image URLs for duplicate detection.
+ */
+export function normalizeImageUrl(url: string): string {
+  if (!url) return ''
+
+  let cleaned = url.trim().toLowerCase()
+  cleaned = cleaned.replace(/^https?:\/\/[^/]+/i, '')
+  cleaned = cleaned.split('?')[0].split('#')[0]
+
+  if (!cleaned.startsWith('/')) {
+    cleaned = '/' + cleaned
+  }
+
+  return ASSET_CANONICAL_MAP[cleaned] || cleaned
+}
+
+/**
+ * Deduplicate gallery items by normalized image URL.
+ * Preserves the first occurrence.
+ */
+export function deduplicateGalleryItems<T extends { imageUrl: string }>(
+  items: T[]
+): T[] {
+  const seen = new Set<string>()
+  const result: T[] = []
+
+  for (const item of items) {
+    const key = normalizeImageUrl(item.imageUrl)
+
+    if (!key || seen.has(key)) {
+      continue
+    }
+
+    seen.add(key)
+    result.push(item)
+  }
+
+  return result
+}
+
+/**
+ * Prevent open redirects by allowing only same-origin relative paths.
+ */
+export function safeRedirectPath(
+  target: string | null | undefined,
+  fallback: string
+): string {
   if (!target || !target.startsWith('/')) return fallback
+
   try {
     const base = 'http://internal.invalid'
     const url = new URL(target, base)
-    return url.origin === base ? url.pathname + url.search + url.hash : fallback
+
+    return url.origin === base
+      ? url.pathname + url.search + url.hash
+      : fallback
   } catch {
     return fallback
   }
 }
 
 /**
- * Client IP for rate limiting. Prefers x-real-ip, else the rightmost
- * X-Forwarded-For entry (added by our proxy) — the leftmost is client-controlled.
+ * Identify the client IP for rate limiting.
  */
 export function clientIp(headers: Headers): string | null {
   const realIp = headers.get('x-real-ip')?.trim()
+
   if (realIp) return realIp
-  const forwarded = headers.get('x-forwarded-for')?.split(',').map((s) => s.trim()).filter(Boolean)
+
+  const forwarded = headers
+    .get('x-forwarded-for')
+    ?.split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+
   return forwarded?.at(-1) || null
 }

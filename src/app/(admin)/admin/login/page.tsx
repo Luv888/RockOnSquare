@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import React, { useState, Suspense } from "react";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { safeRedirectPath } from "@/lib/utils";
@@ -56,9 +57,15 @@ function LoginForm() {
   return (
     <div className="w-full max-w-sm">
       {/* Logo */}
-      <div className="text-center mb-8">
-        <div className="font-display text-2xl font-semibold text-white mb-1">
-          Rock <span className="text-[#c9a84c]">One</span> Square
+      <div className="text-center mb-8 flex flex-col items-center">
+        <div className="relative h-12 w-44 mb-2">
+          <Image
+            src="/images/logo.png"
+            alt="Rock One Square"
+            fill
+            className="object-contain"
+            priority
+          />
         </div>
         <p className="text-white/30 text-xs uppercase tracking-widest">Admin Portal</p>
       </div>

@@ -101,6 +101,7 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
     name: '',
     description: '',
     iconName: '',
+    imageUrl: '',
     sortOrder: 0,
     isPublished: true,
   })
@@ -109,7 +110,7 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
   useEffect(() => {
     if (id) {
       const found = getStoredAmenities().find((a) => a.id === id)
-      if (found) setForm(found)
+      if (found) setForm({ ...found, imageUrl: found.imageUrl ?? '' })
       else setError('Amenity not found.')
     }
   }, [id])
@@ -130,6 +131,7 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
       name: form.name!,
       description: form.description ?? null,
       iconName: form.iconName ?? null,
+      imageUrl: form.imageUrl || null,
       sortOrder: form.sortOrder ?? 0,
       isPublished: form.isPublished ?? true,
     }
@@ -168,6 +170,34 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
           <label className={labelClass}>Lucide Icon Name</label>
           <input name="iconName" value={form.iconName ?? ''} onChange={handleChange} placeholder="e.g. Zap, Car, Shield" className={inputClass} />
           <p className="text-xs text-white/40 mt-1">Examples: Zap, Shield, Car, Wind, Camera, Gem, Package</p>
+        </div>
+        <div>
+          <label className={labelClass}>Amenity Image Path or URL</label>
+          <input name="imageUrl" value={form.imageUrl ?? ''} onChange={handleChange} type="text" placeholder="/images/retail-1.jpg or https://…" className={inputClass} />
+          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+            <span className="text-white/40 self-center">Project Assets:</span>
+            {[
+              { label: 'Retail Finishes', path: '/images/retail-1.jpg' },
+              { label: 'HVAC Office', path: '/images/office-1.jpg' },
+              { label: 'Building Elevation', path: '/images/building-front.jpg' },
+              { label: 'Aerial View', path: '/images/building-aerial.jpg' },
+              { label: 'Fine Dining', path: '/images/fine-dining-1.jpg' },
+            ].map((img) => (
+              <button
+                key={img.path}
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, imageUrl: img.path }))}
+                className="px-2 py-0.5 rounded bg-white/5 hover:bg-[#c9a84c]/20 hover:text-[#c9a84c] border border-white/10 text-white/60 transition-colors"
+              >
+                {img.label}
+              </button>
+            ))}
+          </div>
+          {form.imageUrl && (
+            <div className="mt-2 relative w-full h-24 rounded border border-white/10 overflow-hidden bg-black/40">
+              <img src={form.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+            </div>
+          )}
         </div>
         <div>
           <label className={labelClass}>Sort Order</label>
