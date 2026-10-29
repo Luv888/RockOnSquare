@@ -81,8 +81,8 @@ export const HERO_SLIDES: HeroSlide[] = [
     subtitle: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
     description:
       'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor entertainment level.',
-    imageUrl: '/images/gaming-zone-hero.jpg',
-    imagePosition: 'object-center lg:object-[center_45%]',
+    imageUrl: '/images/gaming-zone-bumper-cars.png',
+    imagePosition: 'object-center',
     showLogo: false,
     primaryCtaLabel: 'DISCOVER MORE',
     primaryCtaUrl: '#offerings',

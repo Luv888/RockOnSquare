@@ -365,7 +365,7 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
               { label: 'Retail Flagship', path: '/images/retail-1.jpg' },
               { label: 'Fine Dining & Skydeck', path: '/images/fine-dining-1.jpg' },
               { label: 'Entertainment & Dining', path: '/images/lord-of-the-drinks.jpg' },
-              { label: 'Gaming Zone', path: '/images/gaming-zone-hero.jpg' },
+              { label: 'Gaming Zone', path: '/images/gaming-zone-bumper-cars.png' },
               { label: 'Executive Office', path: '/images/office-1.jpg' },
               { label: 'Commercial Office', path: '/images/office-2.jpg' },
               { label: 'Studio Suite 1', path: '/images/studio-apartment-1.jpg' },

@@ -120,11 +120,24 @@ export async function getServerOfferings(): Promise<Offering[]> {
 
 // ─── Banners ─────────────────────────────────────────────────────────────────
 
+export function normalizeBannerRecord(b: Banner): Banner {
+  let imageUrl = b.imageUrl
+  if (
+    b.title.toLowerCase().includes('gaming') ||
+    b.description?.toLowerCase().includes('gaming zone') ||
+    b.sortOrder === 2 ||
+    (imageUrl && imageUrl.includes('gaming-zone'))
+  ) {
+    imageUrl = '/images/gaming-zone-bumper-cars.png'
+  }
+  return { ...b, imageUrl }
+}
+
 export async function getServerBanners(onlyPublished = true): Promise<Banner[]> {
   if (!isDbConfigured()) {
-    return INITIAL_BANNERS.filter((b) => !onlyPublished || b.status === "PUBLISHED").sort(
-      (a, b) => a.sortOrder - b.sortOrder
-    );
+    return INITIAL_BANNERS.filter((b) => !onlyPublished || b.status === "PUBLISHED")
+      .map(normalizeBannerRecord)
+      .sort((a, b) => a.sortOrder - b.sortOrder);
   }
   try {
     const db = await getDb();
@@ -133,28 +146,59 @@ export async function getServerBanners(onlyPublished = true): Promise<Banner[]> 
       orderBy: { sortOrder: "asc" },
     });
     if (!rows || rows.length === 0) {
-      return INITIAL_BANNERS.filter((b) => !onlyPublished || b.status === "PUBLISHED").sort(
-        (a, b) => a.sortOrder - b.sortOrder
-      );
+      return INITIAL_BANNERS.filter((b) => !onlyPublished || b.status === "PUBLISHED")
+        .map(normalizeBannerRecord)
+        .sort((a, b) => a.sortOrder - b.sortOrder);
     }
-    return rows.map((r) => ({
-      id: r.id,
-      title: r.title,
-      subtitle: r.subtitle,
-      description: r.description,
-      imageUrl: r.imageUrl,
-      ctaLabel: r.ctaLabel,
-      ctaUrl: r.ctaUrl,
-      secondaryCtaLabel: r.secondaryCtaLabel,
-      secondaryCtaUrl: r.secondaryCtaUrl,
-      badge: r.badge,
-      sortOrder: r.sortOrder,
-      status: r.status as Banner["status"],
-    }));
-  } catch {
-    return INITIAL_BANNERS.filter((b) => !onlyPublished || b.status === "PUBLISHED").sort(
-      (a, b) => a.sortOrder - b.sortOrder
+    const normalized = rows.map((r) =>
+      normalizeBannerRecord({
+        id: r.id,
+        title: r.title,
+        subtitle: r.subtitle,
+        description: r.description,
+        imageUrl: r.imageUrl,
+        ctaLabel: r.ctaLabel,
+        ctaUrl: r.ctaUrl,
+        secondaryCtaLabel: r.secondaryCtaLabel,
+        secondaryCtaUrl: r.secondaryCtaUrl,
+        badge: r.badge,
+        sortOrder: r.sortOrder,
+        status: r.status as Banner["status"],
+      })
     );
+
+    if (db) {
+      for (const original of rows) {
+        const norm = normalizeBannerRecord({
+          id: original.id,
+          title: original.title,
+          subtitle: original.subtitle,
+          description: original.description,
+          imageUrl: original.imageUrl,
+          ctaLabel: original.ctaLabel,
+          ctaUrl: original.ctaUrl,
+          secondaryCtaLabel: original.secondaryCtaLabel,
+          secondaryCtaUrl: original.secondaryCtaUrl,
+          badge: original.badge,
+          sortOrder: original.sortOrder,
+          status: original.status as Banner["status"],
+        });
+        if (norm.imageUrl !== original.imageUrl) {
+          db.banner
+            .update({
+              where: { id: original.id },
+              data: { imageUrl: norm.imageUrl },
+            })
+            .catch(() => {});
+        }
+      }
+    }
+
+    return normalized;
+  } catch {
+    return INITIAL_BANNERS.filter((b) => !onlyPublished || b.status === "PUBLISHED")
+      .map(normalizeBannerRecord)
+      .sort((a, b) => a.sortOrder - b.sortOrder);
   }
 }
 

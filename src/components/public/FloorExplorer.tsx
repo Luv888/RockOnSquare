@@ -214,7 +214,7 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
     categoryName: 'Entertainment & Gaming Hub',
     accentColor: '#c084fc',
     bgTint: 'rgba(192,132,252,0.14)',
-    imageUrl: '/images/gaming-zone-hero.jpg',
+    imageUrl: '/images/gaming-zone-bumper-cars.png',
     description:
       'A dynamic family recreation and entertainment hub featuring immersive gaming zones, interactive arcade attractions, and dedicated leisure spaces.',
     highlights: [

@@ -225,41 +225,61 @@ async function main() {
   // ============================================================
   const bannersData = [
     {
-      title: 'A Rock Solid Plan to Grow',
-      subtitle: 'Retail. Entertainment. Modern Offices. Studio Apartments.',
-      description: 'Rock One Square — The premium commercial destination at Raj Nagar Extension, Ghaziabad.',
-      ctaLabel: 'Explore the Project',
-      ctaUrl: '#offerings',
+      title: 'ROCK ONE SQUARE',
+      subtitle: 'DESIGNED TO ELEVATE EVERY EXPERIENCE.',
+      description: 'Retail. Entertainment. Modern Offices. Studio Apartments. One landmark address redefining commercial architecture in Raj Nagar Extension.',
+      imageUrl: '/images/building-front.jpg',
+      ctaLabel: 'Explore Building Explorer',
+      ctaUrl: '#explorer',
       secondaryCtaLabel: 'Book a Site Visit',
       secondaryCtaUrl: '#contact',
-      badge: 'New Launch',
+      badge: '7 FLOORS COMPLETE | POSSESSION SOON',
       sortOrder: 0,
       status: PublishStatus.PUBLISHED,
     },
     {
-      title: 'Lord of the Drinks',
-      subtitle: 'For the First Time in Ghaziabad',
-      description: 'A curated dining and entertainment ecosystem unlike anything in the region. Anchored by an exclusive premium bar and dining concept.',
-      ctaLabel: 'Discover More',
+      title: 'ENTERTAINMENT & DINING',
+      subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
+      description: 'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
+      imageUrl: '/images/lord-of-the-drinks.jpg',
+      badge: 'CURATED SOCIAL & DINING DESTINATION',
+      ctaLabel: 'Discover Entertainment',
       ctaUrl: '#offerings',
+      secondaryCtaLabel: 'Enquire for Dining Space',
+      secondaryCtaUrl: '#contact',
       sortOrder: 1,
       status: PublishStatus.PUBLISHED,
     },
     {
-      title: 'The Biggest Gaming Zone',
-      subtitle: 'In Ghaziabad',
-      description: 'Entertainment at its finest. Rock One Square brings an unparalleled gaming and leisure experience to Raj Nagar Extension.',
-      ctaLabel: 'View Offerings',
+      title: 'GAMING ZONE',
+      subtitle: 'ENTERTAINMENT. ENERGY. UNFORGETTABLE MOMENTS.',
+      description: 'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor.',
+      imageUrl: '/images/gaming-zone-bumper-cars.png',
+      badge: "GHAZIABAD'S LARGEST GAMING HUB",
+      ctaLabel: 'Explore Verticals',
       ctaUrl: '#offerings',
+      secondaryCtaLabel: 'Plan Your Visit',
+      secondaryCtaUrl: '#contact',
       sortOrder: 2,
       status: PublishStatus.PUBLISHED,
     },
   ]
 
   for (const banner of bannersData) {
-    const existing = await prisma.banner.findFirst({ where: { title: banner.title } })
+    const existing = await prisma.banner.findFirst({ where: { sortOrder: banner.sortOrder } })
     if (!existing) {
       await prisma.banner.create({ data: { ...banner, projectId: project.id } })
+    } else {
+      await prisma.banner.update({
+        where: { id: existing.id },
+        data: {
+          title: banner.title,
+          subtitle: banner.subtitle,
+          description: banner.description,
+          imageUrl: banner.imageUrl,
+          badge: banner.badge,
+        },
+      })
     }
   }
   console.log(`✅ Banners: ${bannersData.length}`)

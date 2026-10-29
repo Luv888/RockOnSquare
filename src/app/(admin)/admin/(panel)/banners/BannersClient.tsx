@@ -211,7 +211,7 @@ export function BannerFormClient({ id }: BannerFormProps) {
             {[
               { label: 'Building Elevation', path: '/images/building-front.jpg' },
               { label: 'Entertainment & Dining', path: '/images/lord-of-the-drinks.jpg' },
-              { label: 'Gaming Zone', path: '/images/gaming-zone-hero.jpg' },
+              { label: 'Gaming Zone', path: '/images/gaming-zone-bumper-cars.png' },
               { label: 'Retail', path: '/images/retail-1.jpg' },
               { label: 'Modern Offices', path: '/images/office-1.jpg' },
               { label: 'Studio Apartment', path: '/images/studio-apartment-1.jpg' },

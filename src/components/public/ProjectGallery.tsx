@@ -64,7 +64,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: 'Arcade Gaming Zone & VR Arena',
     category: 'ENTERTAINMENT',
     categoryLabel: 'Entertainment & Dining',
-    imageUrl: '/images/gaming-zone-hero.jpg',
+    imageUrl: '/images/gaming-zone-bumper-cars.png',
     aspect: 'wide',
     caption: 'Ghaziabad’s biggest gaming zone — immersive virtual reality and high-energy arcade gaming.',
     details: 'Designed as a family recreation and youth gaming destination spanning expansive floorplates on the 3rd level.',
