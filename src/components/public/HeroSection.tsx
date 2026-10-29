@@ -24,6 +24,8 @@ export interface HeroSlide {
   description: string
   imageUrl: string
   imagePosition: string
+  objectFit?: string
+  imageFilter?: string
   showLogo?: boolean
   primaryCtaLabel: string
   primaryCtaUrl: string
@@ -56,12 +58,12 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: 'banner-2',
     navNumber: '02',
-    navLabel: 'Lord of the Drinks',
-    badge: 'FOR THE FIRST TIME IN GHAZIABAD',
-    title: 'LORD OF THE DRINKS',
-    subtitle: 'AN ICONIC EXPERIENCE. A NEW ADDRESS.',
+    navLabel: 'Entertainment & Dining',
+    badge: 'CURATED SOCIAL & DINING DESTINATION',
+    title: 'ENTERTAINMENT & DINING',
+    subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
     description:
-      'For the first time in Ghaziabad — an iconic nightlife, culinary and social destination anchored by an exclusive premium bar concept on the entertainment levels.',
+      'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     imagePosition: 'object-center lg:object-[center_45%]',
     showLogo: false,
@@ -81,8 +83,10 @@ export const HERO_SLIDES: HeroSlide[] = [
     subtitle: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
     description:
       'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor entertainment level.',
-    imageUrl: '/images/gaming-zone-hero.jpg',
-    imagePosition: 'object-center lg:object-[center_45%]',
+    imageUrl: '/images/gaming-zone-bumper-cars.png',
+    imagePosition: 'object-center lg:object-[center_40%]',
+    objectFit: 'object-cover',
+    imageFilter: 'brightness-100 contrast-100',
     showLogo: false,
     primaryCtaLabel: 'DISCOVER MORE',
     primaryCtaUrl: '#offerings',
@@ -118,6 +122,8 @@ export function HeroSection({ banners }: HeroSectionProps) {
         description: b.description || fallback.description,
         imageUrl: b.imageUrl || fallback.imageUrl,
         imagePosition: fallback.imagePosition,
+        objectFit: fallback.objectFit,
+        imageFilter: fallback.imageFilter,
         showLogo: idx === 0,
         primaryCtaLabel: b.ctaLabel || fallback.primaryCtaLabel,
         primaryCtaUrl: b.ctaUrl || fallback.primaryCtaUrl,
@@ -243,9 +249,10 @@ export function HeroSection({ banners }: HeroSectionProps) {
                 src={s.imageUrl}
                 alt={`${s.title} visual background`}
                 fill
-                priority={idx === 0}
+                priority={idx === 0 || s.id === 'banner-3'}
+                quality={100}
                 sizes="100vw"
-                className={`object-cover ${s.imagePosition} filter brightness-[0.80] contrast-[1.08]`}
+                className={`${s.objectFit || 'object-cover'} ${s.imagePosition} ${s.imageFilter || 'filter brightness-[0.80] contrast-[1.08]'}`}
               />
 
               {/* Individualized Dark Vignette Overlay preserving subject visibility */}

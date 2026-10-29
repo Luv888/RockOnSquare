@@ -6,6 +6,7 @@ import {
   INITIAL_CONSTRUCTION_UPDATES,
   INITIAL_SITE_SETTINGS,
   INITIAL_ENQUIRIES,
+  normalizeFaqRecord,
 } from './initial-data'
 import type {
   Banner,
@@ -20,7 +21,7 @@ import type {
 const STORAGE_KEYS = {
   BANNERS: 'ros_demo_banners',
   AMENITIES: 'ros_demo_amenities',
-  FAQS: 'ros_demo_faqs',
+  FAQS: 'ros_demo_faqs_v2',
   FLOORS: 'ros_demo_floors',
   CONSTRUCTION: 'ros_demo_construction',
   LEADS: 'ros_demo_leads',
@@ -109,9 +110,9 @@ export function deleteAmenity(id: string): void {
 // ─── FAQS ────────────────────────────────────────────────────────────────
 
 export function getStoredFAQs(): FAQ[] {
-  return getItem<FAQ>(STORAGE_KEYS.FAQS, INITIAL_FAQS).sort(
-    (a, b) => a.sortOrder - b.sortOrder
-  )
+  return getItem<FAQ>(STORAGE_KEYS.FAQS, INITIAL_FAQS)
+    .map(normalizeFaqRecord)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
 }
 
 export function saveFAQ(faq: FAQ): void {

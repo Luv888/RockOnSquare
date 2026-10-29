@@ -210,8 +210,8 @@ export function BannerFormClient({ id }: BannerFormProps) {
             <span className="text-white/40 self-center">Quick Select:</span>
             {[
               { label: 'Building Elevation', path: '/images/building-front.jpg' },
-              { label: 'Lord of the Drinks', path: '/images/lord-of-the-drinks.jpg' },
-              { label: 'Gaming Zone', path: '/images/gaming-zone-hero.jpg' },
+              { label: 'Entertainment & Dining', path: '/images/lord-of-the-drinks.jpg' },
+              { label: 'Gaming Zone', path: '/images/gaming-zone-bumper-cars.png' },
               { label: 'Retail', path: '/images/retail-1.jpg' },
               { label: 'Modern Offices', path: '/images/office-1.jpg' },
               { label: 'Studio Apartment', path: '/images/studio-apartment-1.jpg' },

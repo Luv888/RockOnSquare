@@ -65,12 +65,12 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-purple-500/20 to-transparent',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     description:
-      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
+      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With expansive gaming zones, interactive arcade attractions, and curated dining experiences, the destination is designed to make leisure more engaging.',
     highlights: [
       'A dynamic regional entertainment destination',
-      'Lord of the Drinks — for the first time in Ghaziabad',
+      'Interactive gaming experiences and arcade attractions',
       'The biggest gaming zone in Ghaziabad with VR & arcade arenas',
-      'Curated dining, bowling & recreational lounge spaces',
+      'Curated dining and recreational leisure spaces',
     ],
     stackPosition: 'Recreational Anchor',
   },
@@ -89,7 +89,7 @@ const VERTICALS: VerticalItem[] = [
       'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today’s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
     highlights: [
       'Smart, efficient and contemporary workspaces',
-      'Integrated climate comfort & HVAC systems',
+      'Climate comfort & HVAC systems',
       'High-speed digital connectivity infrastructure & optic fiber',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
@@ -345,7 +345,7 @@ export function CommercialOfferings() {
                   }`}
                 >
                   <span className="font-mono text-[11px] text-purple-400">2F &ndash; 3F</span>
-                  <span>Entertainment & Lord of the Drinks</span>
+                  <span>Entertainment & Gaming Hub</span>
                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
                     Leisure
                   </span>

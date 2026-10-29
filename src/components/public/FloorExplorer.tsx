@@ -125,11 +125,11 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
       'Structural milestone achieved: 7 Floors Fully Cast & Complete',
       'Expansive private balconies with open panoramic outlooks',
       'High-grade RCC framed earthquake-resistant structure',
-      'High-speed elevator service banks & emergency stairwells',
+      'Elevator service banks & emergency stairwells',
     ],
     specs: {
       height: '3.3m Floor-to-Ceiling',
-      access: '8 High-Speed Elevators',
+      access: '8 Elevators',
       footfall: 'Residential Milestone Level',
     },
     isComplete: true,
@@ -192,12 +192,12 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
     bgTint: 'rgba(96,165,250,0.12)',
     imageUrl: '/images/office-1.jpg',
     description:
-      'Smart corporate workspaces designed for professionals, consultants, tech enterprises, and expanding businesses. Flexible floorplates with integrated climate comfort.',
+      'Smart corporate workspaces designed for professionals, consultants, tech enterprises, and expanding businesses. Flexible floorplates with climate comfort.',
     highlights: [
       'Contemporary corporate layouts with column-efficient planning',
-      'Integrated energy-efficient HVAC climate control systems',
-      'Dual optical-fiber backbone for ultra-high-speed data connectivity',
-      'Executive conference facilities & professional business reception',
+      'Energy-efficient HVAC climate control systems',
+      'Dual optical-fiber backbone for high-speed data connectivity',
+      'Smart corporate office planning and dedicated reception',
     ],
     specs: {
       height: '3.6m Clear Ceiling Height',
@@ -214,14 +214,14 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
     categoryName: 'Entertainment & Gaming Hub',
     accentColor: '#c084fc',
     bgTint: 'rgba(192,132,252,0.14)',
-    imageUrl: '/images/gaming-zone-hero.jpg',
+    imageUrl: '/images/gaming-zone-bumper-cars.png',
     description:
-      'The premier recreational anchor of Ghaziabad: featuring Lord of the Drinks (first time in Ghaziabad) and the largest gaming zone in the entire district.',
+      'A dynamic family recreation and entertainment hub featuring immersive gaming zones, interactive arcade attractions, and dedicated leisure spaces.',
     highlights: [
-      'Lord of the Drinks — premier flagship venue for Ghaziabad',
-      'The biggest gaming zone in Ghaziabad with VR, arcade & bowling',
-      'High-energy culinary lounges & weekend entertainment events',
-      'Modern health club, wellness studio & recreation spaces',
+      'Interactive gaming experiences and virtual reality arenas',
+      'The biggest gaming zone in Ghaziabad with modern arcade attractions',
+      'Family entertainment and leisure activities across expansive floorplates',
+      'Direct connectivity via central atrium escalators and elevators',
     ],
     specs: {
       height: '4.2m High Entertainment Clearance',
@@ -240,10 +240,10 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
     bgTint: 'rgba(251,146,60,0.12)',
     imageUrl: '/images/fine-dining-1.jpg',
     description:
-      'A culinary destination combining gourmet specialty dining, vibrant casual cafés, open-air terrace seating, and dedicated food service infrastructure.',
+      'A culinary destination combining gourmet specialty dining, vibrant casual cafés, curated indoor seating, and dedicated food service infrastructure.',
     highlights: [
       'Curated cluster of fine dining and artisanal casual restaurants',
-      'Al-fresco outdoor terrace seating overlooking Meerut Road',
+      'Spacious indoor dining layouts with vibrant social ambiance',
       'Specialized commercial kitchen exhaust and gas-bank infrastructure',
       'Direct escalator transit linking seamlessly from the retail floors',
     ],

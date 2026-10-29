@@ -16,6 +16,8 @@ import {
   getServerConstructionUpdates,
 } from '@/lib/data/server-data'
 
+export const revalidate = 60
+
 async function getPageData() {
   const [banners, amenities, faqs, constructionUpdates] = await Promise.all([
     getServerBanners(true),
