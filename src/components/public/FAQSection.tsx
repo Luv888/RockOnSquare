@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ArrowUpRight } from 'lucide-react'
 import { getStoredFAQs, subscribeToDataChanges } from '@/lib/data/local-storage'
+import { normalizeFaqRecord } from '@/lib/data/initial-data'
 
 interface FAQ {
   id: string
@@ -19,13 +20,13 @@ const DEFAULT_FAQS: FAQ[] = [
   },
   {
     id: '2',
-    question: 'What commercial spaces are available?',
-    answer: 'Rock One Square offers four commercial verticals: Premium Retail (Ground Floor), Entertainment Zone with gaming and dining (2nd–3rd Floor), Modern Offices (4th Floor), and Service Apartments / Studio Units (5th–9th Floor). Contact our sales team for current availability.',
+    question: 'What are the four verticals available at Rock One Square?',
+    answer: 'Rock One Square brings together four key verticals: Premium Retail, Food & Beverage, Entertainment, and Studio Apartments. Contact our sales team for details about available spaces.',
   },
   {
     id: '3',
     question: 'What amenities are included?',
-    answer: 'The development features dual power supply with DG backup, integrated HVAC, advanced fire safety systems, 24×7 CCTV surveillance, 8 high-speed elevators, extensive basement parking with modern wayfinding, premium granite finishes, dedicated service areas, and a grand entrance.',
+    answer: 'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.',
   },
   {
     id: '4',
@@ -40,7 +41,7 @@ const DEFAULT_FAQS: FAQ[] = [
   {
     id: '6',
     question: 'How can I contact the sales team?',
-    answer: 'Use the enquiry form at the bottom of this page, call us during business hours (Monday to Saturday, 10 AM–7 PM), or message us on WhatsApp for an immediate response.',
+    answer: 'Use the enquiry form at the bottom of this page, call us during business hours (Monday to Sunday, 10 AM–9 PM), or message us on WhatsApp.',
   },
   {
     id: '7',
@@ -49,8 +50,8 @@ const DEFAULT_FAQS: FAQ[] = [
   },
   {
     id: '8',
-    question: 'What is the RERA status of Rock One Square?',
-    answer: 'RERA registration details will be published on this website and the UP RERA portal upon regulatory approval. Please contact our sales team for the current registration status before making any financial commitments.',
+    question: 'What is the RERA status?',
+    answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.",
   },
 ]
 
@@ -59,16 +60,24 @@ interface FAQSectionProps {
 }
 
 export function FAQSection({ faqs }: FAQSectionProps) {
-  const [items, setItems] = useState<FAQ[]>(faqs && faqs.length > 0 ? faqs : DEFAULT_FAQS)
+  const [items, setItems] = useState<FAQ[]>(() => {
+    const initial = faqs && faqs.length > 0 ? faqs : DEFAULT_FAQS
+    return initial.map(normalizeFaqRecord)
+  })
 
   useEffect(() => {
-    const stored = getStoredFAQs()
-    if (stored && stored.length > 0) setItems(stored)
+    if (faqs && faqs.length > 0) {
+      setItems(faqs.map(normalizeFaqRecord))
+    } else {
+      const stored = getStoredFAQs()
+      if (stored && stored.length > 0) setItems(stored.map(normalizeFaqRecord))
+    }
+
     return subscribeToDataChanges(() => {
       const updated = getStoredFAQs()
-      if (updated && updated.length > 0) setItems(updated)
+      if (updated && updated.length > 0) setItems(updated.map(normalizeFaqRecord))
     })
-  }, [])
+  }, [faqs])
 
   return (
     <section id="faq" className="py-24 bg-[#0a0f1e]">
@@ -98,8 +107,30 @@ export function FAQSection({ faqs }: FAQSectionProps) {
                 </Accordion.Trigger>
               </Accordion.Header>
               <Accordion.Content className="overflow-hidden data-[state=open]:animate-[accordion-down_150ms_ease-out] data-[state=closed]:animate-[accordion-up_150ms_ease-out]">
-                <div className="px-5 pb-4 text-white/55 text-sm leading-relaxed">
-                  {faq.answer}
+                <div className="px-5 pb-4 text-white/55 text-sm leading-relaxed space-y-3">
+                  <p>{faq.answer}</p>
+                  {(faq.question.toLowerCase().includes('rera') || faq.answer.includes('ReraTracker')) && (
+                    <div className="pt-2 border-t border-white/5 flex flex-wrap items-center gap-3">
+                      <a
+                        href="https://reratracker.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-[#c9a84c] hover:text-[#e4c870] transition-colors bg-[#c9a84c]/10 border border-[#c9a84c]/20 hover:border-[#c9a84c]/40 px-3 py-1.5 rounded"
+                      >
+                        <span>Check RERA Details on ReraTracker</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 flex-shrink-0" />
+                      </a>
+                      <a
+                        href="https://up-rera.in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white transition-colors"
+                      >
+                        <span>Uttar Pradesh RERA Portal</span>
+                        <ArrowUpRight className="w-3 h-3 flex-shrink-0" />
+                      </a>
+                    </div>
+                  )}
                 </div>
               </Accordion.Content>
             </Accordion.Item>

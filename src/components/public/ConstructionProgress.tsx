@@ -53,7 +53,7 @@ const MILESTONES: Milestone[] = [
     status: 'COMPLETED',
     dateLabel: 'Completed',
     description:
-      '2nd & 3rd level high-load entertainment floors cast (Lord of the Drinks & Gaming Zone layout), followed by 4th Floor modern office suites slab.',
+      '2nd & 3rd level high-load entertainment floors cast (Family Entertainment & Gaming Zone layout), followed by 4th Floor modern office suites slab.',
     floorsIndicator: '2nd, 3rd & 4th Floors',
   },
   {
@@ -83,7 +83,7 @@ const MILESTONES: Milestone[] = [
     status: 'UPCOMING',
     dateLabel: 'Possession Soon',
     description:
-      'Curtain wall double glazing, integrated central HVAC installation, interior lobby finishes, and handover to commercial occupants and residents.',
+      'Curtain wall double glazing, central HVAC installation, interior lobby finishes, and handover to commercial occupants and residents.',
     floorsIndicator: 'Handover & Possession',
   },
 ]

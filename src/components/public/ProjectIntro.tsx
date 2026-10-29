@@ -20,8 +20,8 @@ export function ProjectIntro() {
     {
       icon: Gamepad2,
       label: 'Entertainment',
-      highlight: 'Lord of the Drinks & Gaming',
-      desc: 'First Lord of the Drinks in Ghaziabad and the district’s largest gaming arena.',
+      highlight: 'Gaming Zone & Recreation',
+      desc: 'The district’s largest gaming arena with immersive arcade and family entertainment.',
     },
     {
       icon: Briefcase,

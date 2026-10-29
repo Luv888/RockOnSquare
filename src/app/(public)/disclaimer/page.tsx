@@ -37,7 +37,7 @@ export default function DisclaimerPage() {
           </p>
 
           <p>
-            <strong className="text-white">RERA:</strong> RERA registration details will be published upon regulatory approval. Prospective buyers are encouraged to verify the project&apos;s RERA status on the UP RERA portal (<a href="https://up-rera.in" className="text-[#c9a84c] hover:underline">up-rera.in</a>) before making any purchase decisions.
+            <strong className="text-white">RERA:</strong> You can check the project&apos;s RERA registration information using <a href="https://reratracker.com/" target="_blank" rel="noopener noreferrer" className="text-[#c9a84c] hover:underline">ReraTracker</a>. For official confirmation of registration status, please verify the project&apos;s registration details on the official Uttar Pradesh RERA portal (<a href="https://up-rera.in" target="_blank" rel="noopener noreferrer" className="text-[#c9a84c] hover:underline">up-rera.in</a>) before making any purchase decisions.
           </p>
 
           <p>

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * server-data.ts
  * Reads data from MongoDB via Prisma.
  * Falls back to initial-data.ts when DB is unavailable (dev mode without DB).
@@ -13,6 +13,7 @@ import {
   INITIAL_CONSTRUCTION_UPDATES,
   INITIAL_SITE_SETTINGS,
   INITIAL_ENQUIRIES,
+  normalizeFaqRecord,
 } from "./initial-data";
 import type {
   Banner,
@@ -194,34 +195,63 @@ export async function getServerAmenities(onlyPublished = true): Promise<Amenity[
 
 // ─── FAQs ────────────────────────────────────────────────────────────────────
 
+export { normalizeFaqRecord }
+
 export async function getServerFAQs(onlyPublished = true): Promise<FAQ[]> {
   if (!isDbConfigured()) {
-    return INITIAL_FAQS.filter((f) => !onlyPublished || f.isPublished).sort(
-      (a, b) => a.sortOrder - b.sortOrder
-    );
+    return INITIAL_FAQS.filter((f) => !onlyPublished || f.isPublished)
+      .map(normalizeFaqRecord)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
   }
   try {
-    const db = await getDb();
+    const db = await getDb()
     const rows = await db?.fAQ.findMany({
       where: onlyPublished ? { isPublished: true } : {},
-      orderBy: { sortOrder: "asc" },
-    });
+      orderBy: { sortOrder: 'asc' },
+    })
     if (!rows || rows.length === 0) {
-      return INITIAL_FAQS.filter((f) => !onlyPublished || f.isPublished).sort(
-        (a, b) => a.sortOrder - b.sortOrder
-      );
+      return INITIAL_FAQS.filter((f) => !onlyPublished || f.isPublished)
+        .map(normalizeFaqRecord)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
     }
-    return rows.map((r) => ({
-      id: r.id,
-      question: r.question,
-      answer: r.answer,
-      sortOrder: r.sortOrder,
-      isPublished: r.isPublished,
-    }));
+
+    const normalized = rows.map((r) =>
+      normalizeFaqRecord({
+        id: r.id,
+        question: r.question,
+        answer: r.answer,
+        sortOrder: r.sortOrder,
+        isPublished: r.isPublished,
+      })
+    )
+
+    // Self-healing database update:
+    // If any DB row was outdated, asynchronously update it in MongoDB so database records stay updated
+    if (db) {
+      for (const original of rows) {
+        const norm = normalizeFaqRecord({
+          id: original.id,
+          question: original.question,
+          answer: original.answer,
+          sortOrder: original.sortOrder,
+          isPublished: original.isPublished,
+        })
+        if (norm.question !== original.question || norm.answer !== original.answer) {
+          db.fAQ
+            .update({
+              where: { id: original.id },
+              data: { question: norm.question, answer: norm.answer },
+            })
+            .catch(() => {})
+        }
+      }
+    }
+
+    return normalized
   } catch {
-    return INITIAL_FAQS.filter((f) => !onlyPublished || f.isPublished).sort(
-      (a, b) => a.sortOrder - b.sortOrder
-    );
+    return INITIAL_FAQS.filter((f) => !onlyPublished || f.isPublished)
+      .map(normalizeFaqRecord)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
   }
 }
 

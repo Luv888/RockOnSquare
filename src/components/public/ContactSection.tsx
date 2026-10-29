@@ -237,7 +237,7 @@ export function ContactSection() {
 
               <div className="flex items-center gap-3 text-sm text-white/50">
                 <Clock className="w-4 h-4 text-[#c9a84c] flex-shrink-0" />
-                Monday – Saturday, 10:00 AM – 7:00 PM
+                Monday to Sunday, 10 AM–9 PM
               </div>
 
               <a

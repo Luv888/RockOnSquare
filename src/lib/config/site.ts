@@ -34,7 +34,7 @@ export const SITE_CONFIG = {
     whatsappNumber: '919999092951',
     whatsappHref: 'https://wa.me/919999092951',
     email: 'sales@rockonesquare.com',
-    hours: 'Monday – Sunday: 10:00 AM – 7:00 PM IST',
+    hours: 'Monday to Sunday, 10 AM–9 PM',
   },
 
   // Official Location & Directions

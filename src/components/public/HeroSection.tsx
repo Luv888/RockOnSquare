@@ -56,12 +56,12 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: 'banner-2',
     navNumber: '02',
-    navLabel: 'Lord of the Drinks',
-    badge: 'FOR THE FIRST TIME IN GHAZIABAD',
-    title: 'LORD OF THE DRINKS',
-    subtitle: 'AN ICONIC EXPERIENCE. A NEW ADDRESS.',
+    navLabel: 'Entertainment & Dining',
+    badge: 'CURATED SOCIAL & DINING DESTINATION',
+    title: 'ENTERTAINMENT & DINING',
+    subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
     description:
-      'For the first time in Ghaziabad — an iconic nightlife, culinary and social destination anchored by an exclusive premium bar concept on the entertainment levels.',
+      'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     imagePosition: 'object-center lg:object-[center_45%]',
     showLogo: false,

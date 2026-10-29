@@ -62,13 +62,13 @@ export const INITIAL_OFFERINGS: Offering[] = [
     title: 'Entertainment',
     shortDesc: 'Make Every Moment an Experience.',
     description:
-      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
+      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With expansive gaming zones, interactive arcade attractions, and curated dining experiences, the destination is designed to make leisure more engaging.',
     floorInfo: '2nd & 3rd Floor',
     highlights: [
-      'A dynamic entertainment destination',
-      'Lord of the Drinks — for the first time in Ghaziabad',
+      'A dynamic family entertainment destination',
+      'Interactive gaming experiences and arcade attractions',
       'The biggest gaming zone in Ghaziabad',
-      'Curated dining, bowling & recreational lounge spaces',
+      'Curated dining and recreational leisure spaces',
     ],
     sortOrder: 1,
     status: 'PUBLISHED',
@@ -85,7 +85,7 @@ export const INITIAL_OFFERINGS: Offering[] = [
     floorInfo: '4th Floor',
     highlights: [
       'Smart, efficient and contemporary workspaces',
-      'Integrated climate comfort & HVAC systems',
+      'Climate comfort & HVAC systems',
       'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
@@ -144,9 +144,9 @@ export const INITIAL_FLOORS: Floor[] = [
       'Anchor retail stores, lifestyle outlets, and escalator connectivity from the central atrium. Seamless vertical transit and dedicated shopping corridors.',
     highlights: [
       'Atrium-facing anchor retail stores',
-      'Escalator connectivity & 8 high-speed elevators',
+      'Escalator connectivity & 8 elevators',
       'Wide lifestyle shopping corridors',
-      'Integrated HVAC climate comfort',
+      'HVAC climate comfort',
     ],
     imageUrls: ['/images/retail-1.jpg'],
     sortOrder: 1,
@@ -160,10 +160,10 @@ export const INITIAL_FLOORS: Floor[] = [
     shortLabel: '2F',
     offeringType: 'DINING',
     description:
-      'Curated culinary destination featuring fine dining, quick-service eateries, outdoor terrace decks, and social seating zones.',
+      'Curated culinary destination featuring fine dining, quick-service eateries, and spacious indoor social dining zones.',
     highlights: [
       'Curated gourmet restaurant cluster',
-      'Outdoor culinary terrace spaces',
+      'Contemporary indoor restaurant and café spaces',
       'Dedicated exhaust & kitchen infrastructure',
       'Expansive seating with atrium views',
     ],
@@ -179,14 +179,14 @@ export const INITIAL_FLOORS: Floor[] = [
     shortLabel: '3F',
     offeringType: 'ENTERTAINMENT',
     description:
-      'The premier entertainment destination of Ghaziabad: anchored by "Lord of the Drinks" (first time in the region) and the biggest gaming zone in Ghaziabad.',
+      'A dynamic family recreation and entertainment hub featuring expansive gaming zones, interactive arcade attractions, and dedicated leisure spaces.',
     highlights: [
-      'Lord of the Drinks — first time in Ghaziabad',
+      'Indoor recreational activities and arcade-style attractions',
+      'Interactive gaming experiences and virtual reality zones',
       'The biggest gaming zone in Ghaziabad',
-      'State-of-the-art VR, arcade & bowling lanes',
-      'Fitness club & wellness facilities',
+      'High-capacity central escalator and elevator access',
     ],
-    imageUrls: ['/images/gaming-zone-hero.jpg', '/images/lord-of-the-drinks.jpg', '/images/gaming-entertainment.jpg'],
+    imageUrls: ['/images/gaming-zone-hero.jpg', '/images/gaming-entertainment.jpg'],
     sortOrder: 3,
     status: 'PUBLISHED',
   },
@@ -198,12 +198,12 @@ export const INITIAL_FLOORS: Floor[] = [
     shortLabel: '4F',
     offeringType: 'OFFICE',
     description:
-      'Smart corporate suites and contemporary workspaces with integrated HVAC, acoustic treatment, and professional executive reception.',
+      'Smart corporate suites and contemporary workspaces with HVAC climate control, acoustic treatment, and professional executive reception.',
     highlights: [
       'Contemporary corporate office layouts',
-      'Integrated HVAC climate control',
+      'HVAC climate control',
       'High-speed optic fiber connectivity',
-      'Executive conference & meeting facilities',
+      'Flexible commercial office space allocations',
     ],
     imageUrls: ['/images/office-1.jpg', '/images/office-2.jpg'],
     sortOrder: 4,
@@ -260,7 +260,7 @@ export const INITIAL_FLOORS: Floor[] = [
       '7 Floors Complete — structure executed',
       'Premium specifications & wide balconies',
       'Acoustic double-glazed windows',
-      'High-speed elevator service banks',
+      'Elevator service banks',
     ],
     imageUrls: ['/images/studio-apartment-3.jpg'],
     sortOrder: 7,
@@ -344,8 +344,8 @@ export const INITIAL_AMENITIES: Amenity[] = [
   },
   {
     id: 'amenity-3',
-    name: 'Integrated HVAC',
-    description: 'Centralised climate comfort with integrated HVAC system engineered for commercial efficiency.',
+    name: 'HVAC',
+    description: 'Centralised climate comfort with HVAC systems engineered for commercial zones.',
     iconName: 'Wind',
     sortOrder: 2,
     isPublished: true,
@@ -368,18 +368,10 @@ export const INITIAL_AMENITIES: Amenity[] = [
   },
   {
     id: 'amenity-6',
-    name: '8 High-Speed Elevators',
-    description: 'Seamless vertical movement with 8 high-speed elevator banks for visitors, tenants, and services.',
+    name: '8 Elevators',
+    description: "Eight elevators designed to provide convenient vertical access between the building's different levels.",
     iconName: 'ArrowUpDown',
     sortOrder: 5,
-    isPublished: true,
-  },
-  {
-    id: 'amenity-7',
-    name: 'Basement Parking',
-    description: 'Convenient and extensive basement parking equipped with modern wayfinding signage.',
-    iconName: 'Car',
-    sortOrder: 6,
     isPublished: true,
   },
   {
@@ -387,7 +379,7 @@ export const INITIAL_AMENITIES: Amenity[] = [
     name: 'Service Areas',
     description: 'Efficient back-of-house operations with a discreet dedicated service area positioned at the rear.',
     iconName: 'Package',
-    sortOrder: 7,
+    sortOrder: 6,
     isPublished: true,
   },
   {
@@ -395,18 +387,69 @@ export const INITIAL_AMENITIES: Amenity[] = [
     name: 'Grand Entrance',
     description: 'Architecturally striking entrance statement with expansive pedestrian plaza and double-height lobby.',
     iconName: 'DoorOpen',
-    sortOrder: 8,
+    sortOrder: 7,
     isPublished: true,
   },
   {
     id: 'amenity-10',
-    name: 'Multi-Level Parking',
-    description: 'Structured multi-level vehicle management ensuring effortless parking for retail shoppers and residents.',
-    iconName: 'ParkingCircle',
-    sortOrder: 9,
+    name: 'Valet & Mechanical Parking',
+    description: 'Convenient parking arrangements designed to support visitors, shoppers, tenants, and commercial operations.',
+    iconName: 'Car',
+    sortOrder: 8,
     isPublished: true,
   },
 ]
+
+export function normalizeFaqRecord<T extends { id: string; question: string; answer: string; sortOrder?: number; isPublished?: boolean }>(f: T): T {
+  let { question, answer } = f
+
+  // 1. Commercial Verticals FAQ
+  if (
+    question.toLowerCase().includes('what commercial spaces are available') ||
+    question.toLowerCase().includes('commercial spaces are available') ||
+    question.toLowerCase().includes('what are the four verticals')
+  ) {
+    question = 'What are the four verticals available at Rock One Square?'
+    answer =
+      'Rock One Square brings together four key verticals: Premium Retail, Food & Beverage, Entertainment, and Studio Apartments. Contact our sales team for details about available spaces.'
+  }
+
+  // 2. Sales Contact FAQ business hours
+  if (
+    question.toLowerCase().includes('contact the sales team') ||
+    answer.toLowerCase().includes('business hours')
+  ) {
+    question = 'How can I contact the sales team?'
+    answer =
+      'Use the enquiry form at the bottom of this page, call us during business hours (Monday to Sunday, 10 AM–9 PM), or message us on WhatsApp.'
+  }
+
+  // 3. Amenities FAQ
+  if (question.toLowerCase().includes('what amenities are included')) {
+    question = 'What amenities are included?'
+    answer =
+      'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.'
+  }
+
+  // 4. RERA FAQ
+  if (question.toLowerCase().includes('rera status')) {
+    question = 'What is the RERA status?'
+    answer =
+      "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal."
+  }
+
+  // Universal cleanup for any leftover outdated terms in active content
+  answer = answer
+    .replace(/(Monday\s*(to|-|–)\s*Saturday,?\s*10(?::00)?\s*AM\s*(-|–)\s*7(?::00)?\s*PM)/gi, 'Monday to Sunday, 10 AM–9 PM')
+    .replace(/Integrated HVAC/gi, 'HVAC')
+    .replace(/integrated HVAC/gi, 'HVAC')
+    .replace(/8 High-Speed Elevators/gi, '8 Elevators')
+    .replace(/8 high-speed elevators/gi, 'eight elevators')
+    .replace(/high-speed elevators/gi, 'elevators')
+    .replace(/extensive basement parking,?/gi, '')
+
+  return { ...f, question, answer }
+}
 
 export const INITIAL_FAQS: FAQ[] = [
   {
@@ -418,37 +461,51 @@ export const INITIAL_FAQS: FAQ[] = [
   },
   {
     id: 'faq-2',
-    question: 'What are the four principal commercial verticals at Rock One Square?',
-    answer: 'Rock One Square integrates four distinct verticals under one landmark address: Retail (Ground & 1st Floor), Entertainment (2nd & 3rd Floor featuring Lord of the Drinks and the biggest gaming zone in Ghaziabad), Modern Offices (4th Floor), and Studio Apartments (5th to 9th Floor).',
+    question: 'What are the four verticals available at Rock One Square?',
+    answer: 'Rock One Square brings together four key verticals: Premium Retail, Food & Beverage, Entertainment, and Studio Apartments. Contact our sales team for details about available spaces.',
     sortOrder: 1,
     isPublished: true,
   },
   {
     id: 'faq-3',
-    question: 'What is the current construction status of the project?',
-    answer: '7 floors are complete and structural work is progressing ahead of schedule. The development is on track towards its possession milestones.',
+    question: 'What amenities are included?',
+    answer: 'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.',
     sortOrder: 2,
     isPublished: true,
   },
   {
     id: 'faq-4',
-    question: 'What connectivity benefits does the location offer?',
-    answer: 'The project features direct access to Meerut Road, close proximity to the Delhi–Meerut Expressway, connectivity to Aerocity as referenced in the project plan, proximity to the upcoming cricket stadium, and connectivity through the Namo Bharat RRTS corridor.',
+    question: 'How can I book a site visit?',
+    answer: 'Click the "Book a Site Visit" button on this page, fill out the enquiry form, call our sales team directly, or reach us on WhatsApp. Our team will confirm a convenient time for your visit.',
     sortOrder: 3,
     isPublished: true,
   },
   {
     id: 'faq-5',
-    question: 'How can I book a site visit or enquire about a floor?',
-    answer: 'You can use the interactive Building Explorer on this page to select your desired level and click "Enquire About This Floor", fill out the enquiry form, or reach our sales team directly via WhatsApp or phone.',
+    question: 'How can I get the project brochure?',
+    answer: 'You can request the project brochure by submitting an enquiry form or contacting our sales team directly. We will send you the latest project documentation to your email or WhatsApp.',
     sortOrder: 4,
     isPublished: true,
   },
   {
     id: 'faq-6',
-    question: 'Who is the developer behind Rock One Square?',
-    answer: 'Rock One Square is developed by Senflore Hospitality LLP, committed to creating landmark commercial and hospitality destinations in NCR.',
+    question: 'How can I contact the sales team?',
+    answer: 'Use the enquiry form at the bottom of this page, call us during business hours (Monday to Sunday, 10 AM–9 PM), or message us on WhatsApp.',
     sortOrder: 5,
+    isPublished: true,
+  },
+  {
+    id: 'faq-7',
+    question: 'What is the current construction status?',
+    answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites and rooftop, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.',
+    sortOrder: 6,
+    isPublished: true,
+  },
+  {
+    id: 'faq-8',
+    question: 'What is the RERA status?',
+    answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.",
+    sortOrder: 7,
     isPublished: true,
   },
 ]
@@ -472,10 +529,10 @@ export const INITIAL_BANNERS: Banner[] = [
   {
     id: 'banner-2',
     projectId: 'proj-rock-one-square',
-    title: 'LORD OF THE DRINKS',
-    subtitle: 'AN ELEVATED DESTINATION FOR MEMORABLE EXPERIENCES.',
-    description: 'For the first time in Ghaziabad — an iconic nightlife, culinary and social destination anchored by an exclusive premium bar concept on the entertainment levels.',
-    badge: 'FIRST TIME IN GHAZIABAD',
+    title: 'ENTERTAINMENT & DINING',
+    subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
+    description: 'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
+    badge: 'CURATED SOCIAL & DINING DESTINATION',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     ctaLabel: 'Discover Entertainment',
     ctaUrl: '#offerings',
@@ -527,6 +584,7 @@ export const INITIAL_SITE_SETTINGS: SiteSetting[] = [
   { id: 'setting-5', key: 'contact.phone', label: 'Sales Phone', value: '+919999092951', group: 'Contact', isPublic: true },
   { id: 'setting-6', key: 'contact.whatsapp', label: 'WhatsApp Number', value: '919999092951', group: 'Contact', isPublic: false },
   { id: 'setting-7', key: 'location.mapsUrl', label: 'Google Maps Link', value: 'https://share.google/CG0Amb2c0gFphTZIf', group: 'Location', isPublic: true },
+  { id: 'setting-8', key: 'contact.hours', label: 'Business Hours', value: 'Monday to Sunday, 10 AM–9 PM', group: 'Contact', isPublic: true },
 ]
 
 export const INITIAL_ENQUIRIES: Enquiry[] = []

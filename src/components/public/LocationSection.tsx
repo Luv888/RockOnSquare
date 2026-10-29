@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { MapPin, Navigation, Compass, Train, Car, Plane, Trophy, Building, ArrowUpRight } from 'lucide-react'
+import { MapPin, Navigation, Compass, Train, Car, Building, ArrowUpRight, Landmark, Store } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/config/site'
 
 interface ConnectivityPoint {
@@ -50,26 +50,26 @@ const CONNECTIVITY_PILLARS: ConnectivityPoint[] = [
     highlight: '160 km/h high-speed regional transit corridor',
   },
   {
-    id: 'cricket-stadium',
-    name: 'International Cricket Stadium',
-    category: 'Sports & Culture',
-    icon: Trophy,
-    travelTime: '5 Mins',
-    distance: '~2.2 km (Rajnagar Extension)',
+    id: 'rdc-rajnagar',
+    name: 'RDC Raj Nagar Commercial & Banking Hub',
+    category: 'Financial & Business District',
+    icon: Landmark,
+    travelTime: '8–10 Mins',
+    distance: '~4.0 km',
     description:
-      'Proximity to Ghaziabad’s marquee upcoming International Cricket Stadium, expected to bring immense weekend footfall and hospitality demand.',
-    highlight: 'Prime destination for sports tourism & hospitality',
+      'Ghaziabad’s premier commercial and financial district, housing leading public and private bank branches, corporate offices, and professional business centers.',
+    highlight: 'Key banking, corporate finance, and commercial hub',
   },
   {
-    id: 'aerocity',
-    name: 'Aerocity Ghaziabad & Hindon Airport',
-    category: 'Aviation & Business',
-    icon: Plane,
-    travelTime: '15–20 Mins',
-    distance: '~9.5 km',
+    id: 'rajnagar-ext-market',
+    name: 'Raj Nagar Extension Commercial Center',
+    category: 'Retail & Commercial Market',
+    icon: Store,
+    travelTime: '3–5 Mins',
+    distance: '~1.5 km',
     description:
-      'Direct connectivity to Hindon Civil Terminal and the planned Aerocity hospitality and commercial ecosystem in western Ghaziabad.',
-    highlight: 'Proximity to emerging commercial and aviation hub',
+      'Established high-street retail destination and commercial market serving dense residential townships in the immediate catchment corridor.',
+    highlight: 'High-density consumer footfall and local retail catchment',
   },
 ]
 
