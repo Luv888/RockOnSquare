@@ -24,6 +24,8 @@ export interface HeroSlide {
   description: string
   imageUrl: string
   imagePosition: string
+  objectFit?: string
+  imageFilter?: string
   showLogo?: boolean
   primaryCtaLabel: string
   primaryCtaUrl: string
@@ -82,7 +84,9 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor entertainment level.',
     imageUrl: '/images/gaming-zone-bumper-cars.png',
-    imagePosition: 'object-center',
+    imagePosition: 'object-center lg:object-[center_40%]',
+    objectFit: 'object-cover',
+    imageFilter: 'brightness-100 contrast-100',
     showLogo: false,
     primaryCtaLabel: 'DISCOVER MORE',
     primaryCtaUrl: '#offerings',
@@ -118,6 +122,8 @@ export function HeroSection({ banners }: HeroSectionProps) {
         description: b.description || fallback.description,
         imageUrl: b.imageUrl || fallback.imageUrl,
         imagePosition: fallback.imagePosition,
+        objectFit: fallback.objectFit,
+        imageFilter: fallback.imageFilter,
         showLogo: idx === 0,
         primaryCtaLabel: b.ctaLabel || fallback.primaryCtaLabel,
         primaryCtaUrl: b.ctaUrl || fallback.primaryCtaUrl,
@@ -243,9 +249,10 @@ export function HeroSection({ banners }: HeroSectionProps) {
                 src={s.imageUrl}
                 alt={`${s.title} visual background`}
                 fill
-                priority={idx === 0}
+                priority={idx === 0 || s.id === 'banner-3'}
+                quality={100}
                 sizes="100vw"
-                className={`object-cover ${s.imagePosition} filter brightness-[0.80] contrast-[1.08]`}
+                className={`${s.objectFit || 'object-cover'} ${s.imagePosition} ${s.imageFilter || 'filter brightness-[0.80] contrast-[1.08]'}`}
               />
 
               {/* Individualized Dark Vignette Overlay preserving subject visibility */}
