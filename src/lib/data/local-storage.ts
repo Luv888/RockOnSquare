@@ -7,6 +7,7 @@ import {
   INITIAL_SITE_SETTINGS,
   INITIAL_ENQUIRIES,
   normalizeFaqRecord,
+  normalizeBannerRecord,
 } from './initial-data'
 import type {
   Banner,
@@ -19,13 +20,13 @@ import type {
 } from './types'
 
 const STORAGE_KEYS = {
-  BANNERS: 'ros_demo_banners',
-  AMENITIES: 'ros_demo_amenities',
-  FAQS: 'ros_demo_faqs_v2',
-  FLOORS: 'ros_demo_floors',
-  CONSTRUCTION: 'ros_demo_construction',
+  BANNERS: 'ros_demo_banners_v3',
+  AMENITIES: 'ros_demo_amenities_v3',
+  FAQS: 'ros_demo_faqs_v3',
+  FLOORS: 'ros_demo_floors_v3',
+  CONSTRUCTION: 'ros_demo_construction_v3',
   LEADS: 'ros_demo_leads',
-  SETTINGS: 'ros_demo_settings',
+  SETTINGS: 'ros_demo_settings_v3',
 } as const
 
 function isBrowser(): boolean {
@@ -62,9 +63,9 @@ function setItem<T>(key: string, data: T[]): void {
 // ─── BANNERS ─────────────────────────────────────────────────────────────
 
 export function getStoredBanners(): Banner[] {
-  return getItem<Banner>(STORAGE_KEYS.BANNERS, INITIAL_BANNERS).sort(
-    (a, b) => a.sortOrder - b.sortOrder
-  )
+  return getItem<Banner>(STORAGE_KEYS.BANNERS, INITIAL_BANNERS)
+    .map(normalizeBannerRecord)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
 }
 
 export function saveBanner(banner: Banner): void {
@@ -239,6 +240,52 @@ export function saveSetting(key: string, value: string): void {
     })
   }
   setItem(STORAGE_KEYS.SETTINGS, all)
+}
+
+// ─── SERVER DATA SYNCHRONIZATION ──────────────────────────────────────────
+
+export function syncStoredBanners(serverBanners: Banner[]): void {
+  if (!isBrowser() || !serverBanners?.length) return
+  const normalized = serverBanners.map(normalizeBannerRecord)
+  window.localStorage.setItem(STORAGE_KEYS.BANNERS, JSON.stringify(normalized))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.BANNERS } }))
+}
+
+export function syncStoredAmenities(serverAmenities: Amenity[]): void {
+  if (!isBrowser() || !serverAmenities?.length) return
+  window.localStorage.setItem(STORAGE_KEYS.AMENITIES, JSON.stringify(serverAmenities))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.AMENITIES } }))
+}
+
+export function syncStoredFAQs(serverFaqs: FAQ[]): void {
+  if (!isBrowser() || !serverFaqs?.length) return
+  const normalized = serverFaqs.map(normalizeFaqRecord)
+  window.localStorage.setItem(STORAGE_KEYS.FAQS, JSON.stringify(normalized))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.FAQS } }))
+}
+
+export function syncStoredFloors(serverFloors: Floor[]): void {
+  if (!isBrowser() || !serverFloors?.length) return
+  window.localStorage.setItem(STORAGE_KEYS.FLOORS, JSON.stringify(serverFloors))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.FLOORS } }))
+}
+
+export function syncStoredConstructionUpdates(serverUpdates: ConstructionUpdate[]): void {
+  if (!isBrowser() || !serverUpdates?.length) return
+  window.localStorage.setItem(STORAGE_KEYS.CONSTRUCTION, JSON.stringify(serverUpdates))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.CONSTRUCTION } }))
+}
+
+export function syncStoredLeads(serverLeads: Enquiry[]): void {
+  if (!isBrowser() || !serverLeads) return
+  window.localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(serverLeads))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.LEADS } }))
+}
+
+export function syncStoredSettings(serverSettings: SiteSetting[]): void {
+  if (!isBrowser() || !serverSettings?.length) return
+  window.localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(serverSettings))
+  window.dispatchEvent(new CustomEvent('ros_data_updated', { detail: { key: STORAGE_KEYS.SETTINGS } }))
 }
 
 // ─── UTILS ───────────────────────────────────────────────────────────────

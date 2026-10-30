@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { MessageCircle, Phone, ChevronLeft } from 'lucide-react'
 import {
   getStoredLeads,
   updateLeadStatus,
+  syncStoredLeads,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { updateLeadStatusAction } from '@/lib/actions/admin'
 import type { Enquiry } from '@/lib/data/types'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -58,17 +60,25 @@ const STATUSES = [
 
 // ─── Leads List Client ──────────────────────────────────────────
 
-export function LeadsListClient() {
+export function LeadsListClient({ initialLeads }: { initialLeads?: Enquiry[] }) {
   const searchParams = useSearchParams()
   const statusParam = searchParams.get('status') || ''
   const pageParam = parseInt(searchParams.get('page') || '1') || 1
 
-  const [allLeads, setAllLeads] = useState<Enquiry[]>([])
+  const [allLeads, setAllLeads] = useState<Enquiry[]>(() => {
+    if (initialLeads && initialLeads.length > 0) return initialLeads
+    return getStoredLeads()
+  })
 
   useEffect(() => {
-    setAllLeads(getStoredLeads())
+    if (initialLeads && initialLeads.length > 0) {
+      syncStoredLeads(initialLeads)
+      setAllLeads(initialLeads)
+    } else {
+      setAllLeads(getStoredLeads())
+    }
     return subscribeToDataChanges(() => setAllLeads(getStoredLeads()))
-  }, [])
+  }, [initialLeads])
 
   const filtered = statusParam
     ? allLeads.filter((e) => e.status === statusParam)
@@ -158,52 +168,46 @@ export function LeadsListClient() {
                     </a>
                   </td>
                   <td className="px-4 py-3 text-white/50 text-xs">{e.email || '—'}</td>
-                  <td className="px-4 py-3 text-white/60 whitespace-nowrap">
+                  <td className="px-4 py-3 text-white/60 text-xs whitespace-nowrap">
                     {TYPE_LABELS[e.enquiryType] || e.enquiryType}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
-                      className={`px-2 py-0.5 rounded-sm text-xs border ${
-                        STATUS_COLORS[e.status] || 'bg-white/10 text-white/40'
+                      className={`inline-block border text-xs font-medium px-2 py-0.5 rounded ${
+                        STATUS_COLORS[e.status] ?? 'bg-white/10 text-white/40'
                       }`}
                     >
                       {e.status.replace(/_/g, ' ')}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-white/40 text-xs whitespace-nowrap">
-                    {new Date(e.createdAt).toLocaleDateString('en-IN', {
+                    {new Intl.DateTimeFormat('en-IN', {
                       day: 'numeric',
                       month: 'short',
-                    })}
+                      year: 'numeric',
+                    }).format(new Date(e.createdAt))}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-2">
+                      <Link
+                        href={`/admin/leads/${e.id}`}
+                        className="text-[#c9a84c] text-xs hover:underline"
+                      >
+                        View
+                      </Link>
                       {waNumber && (
                         <a
-                          href={`https://wa.me/${waNumber}?text=${encodeURIComponent(
-                            `Hi ${e.fullName}, this is regarding your enquiry ${e.referenceId} at Rock One Square.`
+                          href={`https://wa.me/${e.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
+                            `Hello ${e.fullName}, thank you for your enquiry regarding Rock One Square (Ref: ${e.referenceId}). How can we assist you today?`
                           )}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 text-white/30 hover:text-green-400 transition-colors"
+                          className="text-green-400 hover:text-green-300 transition-colors p-1"
                           title="WhatsApp"
                         >
-                          <MessageCircle className="w-4 h-4" />
+                          <MessageCircle className="w-3.5 h-3.5" />
                         </a>
                       )}
-                      <a
-                        href={`tel:${e.phone}`}
-                        className="p-1.5 text-white/30 hover:text-[#c9a84c] transition-colors"
-                        title="Call"
-                      >
-                        <Phone className="w-4 h-4" />
-                      </a>
-                      <Link
-                        href={`/admin/leads/${e.id}`}
-                        className="px-2 py-1 text-xs text-[#c9a84c] hover:underline"
-                      >
-                        Details
-                      </Link>
                     </div>
                   </td>
                 </tr>
@@ -215,15 +219,15 @@ export function LeadsListClient() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-6">
+        <div className="flex justify-center gap-2 mt-6">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <Link
               key={p}
-              href={`/admin/leads?${statusParam ? `status=${statusParam}&` : ''}page=${p}`}
-              className={`w-8 h-8 flex items-center justify-center rounded-sm text-sm ${
+              href={`/admin/leads?page=${p}${statusParam ? `&status=${statusParam}` : ''}`}
+              className={`px-3 py-1.5 text-xs rounded border transition-colors ${
                 p === currentPage
-                  ? 'bg-[#c9a84c] text-[#0a0f1e] font-semibold'
-                  : 'border border-white/10 text-white/40 hover:text-white hover:border-white/20'
+                  ? 'border-[#c9a84c] text-[#c9a84c] bg-[#c9a84c]/10'
+                  : 'border-white/10 text-white/40 hover:text-white'
               }`}
             >
               {p}
@@ -248,19 +252,29 @@ function DetailRow({ label, value }: { label: string; value: React.ReactNode }) 
   )
 }
 
-export function LeadDetailClient({ id }: { id: string }) {
-  const [enquiry, setEnquiry] = useState<Enquiry | null>(null)
-  const [status, setStatus] = useState('')
+export function LeadDetailClient({ id, initialLead }: { id: string; initialLead?: Enquiry | null }) {
+  const router = useRouter()
+  const [enquiry, setEnquiry] = useState<Enquiry | null>(() => {
+    if (initialLead) return initialLead
+    return null
+  })
+  const [status, setStatus] = useState(() => initialLead?.status || '')
   const [noteText, setNoteText] = useState('')
   const [savedMsg, setSavedMsg] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const found = getStoredLeads().find((l) => l.id === id)
-    if (found) {
-      setEnquiry(found)
-      setStatus(found.status)
+    if (initialLead) {
+      setEnquiry(initialLead)
+      setStatus(initialLead.status)
+    } else {
+      const found = getStoredLeads().find((l) => l.id === id)
+      if (found) {
+        setEnquiry(found)
+        setStatus(found.status)
+      }
     }
-  }, [id])
+  }, [id, initialLead])
 
   if (!enquiry) {
     return (
@@ -277,15 +291,19 @@ export function LeadDetailClient({ id }: { id: string }) {
     )
   }
 
-  const handleUpdate = (e: React.FormEvent) => {
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     updateLeadStatus(id, status, noteText)
+    await updateLeadStatusAction(id, status, noteText)
     const updated = getStoredLeads().find((l) => l.id === id)
     if (updated) {
       setEnquiry({ ...updated })
     }
     setNoteText('')
     setSavedMsg('Status updated successfully!')
+    setLoading(false)
+    router.refresh()
     setTimeout(() => setSavedMsg(''), 3000)
   }
 
@@ -378,57 +396,61 @@ export function LeadDetailClient({ id }: { id: string }) {
               <h2 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-3">
                 Preferred Date / Time
               </h2>
-              <p className="text-white/80 text-sm">
-                {enquiry.preferredDate
-                  ? new Intl.DateTimeFormat('en-IN', {
-                      dateStyle: 'full',
-                    }).format(new Date(enquiry.preferredDate))
-                  : ''}
-                {enquiry.preferredTime ? ` (${enquiry.preferredTime})` : ''}
-              </p>
+              <dl>
+                {enquiry.preferredDate && (
+                  <DetailRow
+                    label="Date"
+                    value={new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium' }).format(
+                      new Date(enquiry.preferredDate)
+                    )}
+                  />
+                )}
+                {enquiry.preferredTime && (
+                  <DetailRow label="Time" value={enquiry.preferredTime} />
+                )}
+              </dl>
             </section>
           )}
 
-          {enquiry.notes && enquiry.notes.length > 0 && (
-            <section className="bg-white/5 rounded-lg border border-white/10 p-6">
-              <h2 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">
-                Notes ({enquiry.notes.length})
-              </h2>
+          {/* Notes list */}
+          <section className="bg-white/5 rounded-lg border border-white/10 p-6">
+            <h2 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">
+              Notes History ({enquiry.notes?.length ?? 0})
+            </h2>
+            {!enquiry.notes || enquiry.notes.length === 0 ? (
+              <p className="text-white/30 text-sm">No notes added yet.</p>
+            ) : (
               <ul className="space-y-4">
                 {enquiry.notes.map((n) => (
-                  <li key={n.id} className="border-l-2 border-[#c9a84c]/40 pl-4">
-                    <p className="text-white/80 text-sm leading-relaxed">{n.note}</p>
-                    <p className="text-white/30 text-xs mt-1.5">
-                      {n.userName ?? 'System'} ·{' '}
+                  <li key={n.id} className="border-b border-white/5 pb-3 last:border-0 last:pb-0">
+                    <p className="text-white/80 text-sm whitespace-pre-wrap">{n.note}</p>
+                    <p className="text-white/30 text-xs mt-1">
+                      {n.userName} ·{' '}
                       {new Intl.DateTimeFormat('en-IN', {
-                        dateStyle: 'medium',
+                        dateStyle: 'short',
                         timeStyle: 'short',
                       }).format(new Date(n.createdAt))}
                     </p>
                   </li>
                 ))}
               </ul>
-            </section>
-          )}
+            )}
+          </section>
         </div>
 
-        {/* Right — Update Status */}
-        <div className="lg:col-span-1">
-          <section className="bg-white/5 rounded-lg border border-white/10 p-6 sticky top-6">
+        {/* Right — Update Status & Add Note */}
+        <div className="space-y-6">
+          <section className="bg-white/5 rounded-lg border border-white/10 p-6">
             <h2 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">
               Update Status
             </h2>
             <form onSubmit={handleUpdate} className="space-y-4">
               <div>
-                <label htmlFor="status" className="block text-sm font-medium text-white/70 mb-1">
-                  Status
-                </label>
+                <label className="block text-xs font-medium text-white/50 mb-1">Status</label>
                 <select
-                  id="status"
-                  name="status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full bg-[#0a0f1e] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c]"
+                  className="w-full bg-[#0a0f1e] border border-white/10 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-[#c9a84c]"
                 >
                   {STATUS_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -439,27 +461,59 @@ export function LeadDetailClient({ id }: { id: string }) {
               </div>
 
               <div>
-                <label htmlFor="notes" className="block text-sm font-medium text-white/70 mb-1">
-                  Add a Note (optional)
+                <label className="block text-xs font-medium text-white/50 mb-1">
+                  Add Note (optional)
                 </label>
                 <textarea
-                  id="notes"
-                  name="notes"
                   rows={3}
                   value={noteText}
                   onChange={(e) => setNoteText(e.target.value)}
-                  placeholder="Add a note (optional)"
-                  className="w-full bg-[#0a0f1e] border border-white/10 rounded px-3 py-2 text-white placeholder-white/30 focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c] resize-y"
+                  placeholder="e.g. Called customer, requested callback tomorrow…"
+                  className="w-full bg-[#0a0f1e] border border-white/10 rounded px-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#c9a84c] resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors"
+                disabled={loading}
+                className="w-full bg-[#c9a84c] text-black font-semibold text-sm py-2 rounded hover:bg-[#e4c870] transition-colors disabled:opacity-50"
               >
-                Update Status
+                Save Update
               </button>
             </form>
+          </section>
+
+          {/* Quick Actions */}
+          <section className="bg-white/5 rounded-lg border border-white/10 p-6 space-y-3">
+            <h2 className="text-sm font-semibold text-white/60 uppercase tracking-wider">
+              Quick Contact
+            </h2>
+            <a
+              href={`tel:${enquiry.phone}`}
+              className="flex items-center gap-2 w-full px-3 py-2 border border-white/10 rounded text-sm text-white/70 hover:text-white hover:border-white/20 transition-colors"
+            >
+              <Phone className="w-4 h-4 text-[#c9a84c]" />
+              Call {enquiry.phone}
+            </a>
+            {enquiry.email && (
+              <a
+                href={`mailto:${enquiry.email}?subject=Regarding your enquiry for Rock One Square`}
+                className="flex items-center gap-2 w-full px-3 py-2 border border-white/10 rounded text-sm text-white/70 hover:text-white hover:border-white/20 transition-colors"
+              >
+                Email Customer
+              </a>
+            )}
+            <a
+              href={`https://wa.me/${enquiry.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
+                `Hello ${enquiry.fullName}, thank you for your enquiry regarding Rock One Square (Ref: ${enquiry.referenceId}). How can we assist you today?`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 w-full px-3 py-2 border border-green-500/30 rounded text-sm text-green-400 hover:border-green-500/60 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Chat on WhatsApp
+            </a>
           </section>
         </div>
       </div>

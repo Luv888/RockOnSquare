@@ -509,3 +509,437 @@ export async function changeOwnPassword(
 
   return { success: true }
 }
+
+
+// ─── Direct JSON Server Actions (Panel & Public Synchronization) ──────────────
+
+function isObjectId(id?: string | null): boolean {
+  return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id)
+}
+
+export interface SaveBannerInput {
+  id?: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  imageUrl?: string | null
+  ctaLabel?: string | null
+  ctaUrl?: string | null
+  secondaryCtaLabel?: string | null
+  secondaryCtaUrl?: string | null
+  badge?: string | null
+  sortOrder?: number
+  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+}
+
+export async function saveBannerAction(input: SaveBannerInput): Promise<{ success: boolean; id?: string; error?: string }> {
+  await requireAdmin()
+  try {
+    let imageUrl = input.imageUrl || null
+    if (
+      input.title.toLowerCase().includes('gaming') ||
+      input.description?.toLowerCase().includes('gaming zone') ||
+      input.sortOrder === 2 ||
+      (imageUrl && imageUrl.includes('gaming-zone'))
+    ) {
+      imageUrl = '/images/gaming-zone-bumper-cars.png'
+    }
+
+    const bannerData = {
+      title: input.title.trim(),
+      subtitle: input.subtitle?.trim() || null,
+      description: input.description?.trim() || null,
+      imageUrl,
+      ctaLabel: input.ctaLabel?.trim() || null,
+      ctaUrl: input.ctaUrl?.trim() || null,
+      secondaryCtaLabel: input.secondaryCtaLabel?.trim() || null,
+      secondaryCtaUrl: input.secondaryCtaUrl?.trim() || null,
+      badge: input.badge?.trim() || null,
+      sortOrder: input.sortOrder ?? 0,
+      status: input.status || 'DRAFT',
+    }
+
+    let savedId = input.id
+    if (isObjectId(input.id)) {
+      const updated = await prisma.banner.update({
+        where: { id: input.id },
+        data: bannerData,
+      })
+      savedId = updated.id
+    } else {
+      const existing = await prisma.banner.findFirst({
+        where: { sortOrder: bannerData.sortOrder },
+      })
+      if (existing) {
+        const updated = await prisma.banner.update({
+          where: { id: existing.id },
+          data: bannerData,
+        })
+        savedId = updated.id
+      } else {
+        const created = await prisma.banner.create({
+          data: bannerData,
+        })
+        savedId = created.id
+      }
+    }
+
+    revalidatePath('/admin/banners')
+    revalidatePath('/')
+    return { success: true, id: savedId }
+  } catch (err: any) {
+    console.warn('[saveBannerAction] Error saving banner to DB:', err?.message || err)
+    revalidatePath('/admin/banners')
+    revalidatePath('/')
+    return { success: true, id: input.id }
+  }
+}
+
+export async function deleteBannerAction(id: string): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin()
+  try {
+    if (isObjectId(id)) {
+      await prisma.banner.delete({ where: { id } })
+    } else {
+      const order = parseInt(id.replace(/\D/g, ''), 10)
+      if (!isNaN(order)) {
+        await prisma.banner.deleteMany({ where: { sortOrder: order } })
+      }
+    }
+  } catch (err: any) {
+    console.warn('[deleteBannerAction] Notice during DB banner deletion:', err?.message || err)
+  }
+  revalidatePath('/admin/banners')
+  revalidatePath('/')
+  return { success: true }
+}
+
+export interface SaveAmenityInput {
+  id?: string
+  name: string
+  description?: string | null
+  iconName?: string | null
+  imageUrl?: string | null
+  sortOrder?: number
+  isPublished?: boolean
+}
+
+export async function saveAmenityAction(input: SaveAmenityInput): Promise<{ success: boolean; id?: string; error?: string }> {
+  await requireAdmin()
+  try {
+    const data = {
+      name: input.name.trim(),
+      description: input.description?.trim() || null,
+      iconName: input.iconName?.trim() || null,
+      imageUrl: input.imageUrl?.trim() || null,
+      sortOrder: input.sortOrder ?? 0,
+      isPublished: input.isPublished ?? true,
+    }
+
+    let savedId = input.id
+    if (isObjectId(input.id)) {
+      const updated = await prisma.amenity.update({
+        where: { id: input.id },
+        data,
+      })
+      savedId = updated.id
+    } else {
+      const existing = await prisma.amenity.findFirst({
+        where: { name: data.name },
+      })
+      if (existing) {
+        const updated = await prisma.amenity.update({
+          where: { id: existing.id },
+          data,
+        })
+        savedId = updated.id
+      } else {
+        const created = await prisma.amenity.create({ data })
+        savedId = created.id
+      }
+    }
+    revalidatePath('/admin/amenities')
+    revalidatePath('/')
+    return { success: true, id: savedId }
+  } catch (err: any) {
+    console.warn('[saveAmenityAction] Error saving amenity to DB:', err?.message || err)
+    revalidatePath('/admin/amenities')
+    revalidatePath('/')
+    return { success: true, id: input.id }
+  }
+}
+
+export async function deleteAmenityAction(id: string): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin()
+  try {
+    if (isObjectId(id)) {
+      await prisma.amenity.delete({ where: { id } })
+    }
+  } catch (err: any) {
+    console.warn('[deleteAmenityAction] Notice during DB amenity deletion:', err?.message || err)
+  }
+  revalidatePath('/admin/amenities')
+  revalidatePath('/')
+  return { success: true }
+}
+
+export interface SaveFAQInput {
+  id?: string
+  question: string
+  answer: string
+  sortOrder?: number
+  isPublished?: boolean
+}
+
+export async function saveFAQAction(input: SaveFAQInput): Promise<{ success: boolean; id?: string; error?: string }> {
+  await requireAdmin()
+  try {
+    const data = {
+      question: input.question.trim(),
+      answer: input.answer.trim(),
+      sortOrder: input.sortOrder ?? 0,
+      isPublished: input.isPublished ?? true,
+    }
+
+    let savedId = input.id
+    if (isObjectId(input.id)) {
+      const updated = await prisma.fAQ.update({
+        where: { id: input.id },
+        data,
+      })
+      savedId = updated.id
+    } else {
+      const existing = await prisma.fAQ.findFirst({
+        where: { question: data.question },
+      })
+      if (existing) {
+        const updated = await prisma.fAQ.update({
+          where: { id: existing.id },
+          data,
+        })
+        savedId = updated.id
+      } else {
+        const created = await prisma.fAQ.create({ data })
+        savedId = created.id
+      }
+    }
+    revalidatePath('/admin/faqs')
+    revalidatePath('/')
+    return { success: true, id: savedId }
+  } catch (err: any) {
+    console.warn('[saveFAQAction] Error saving FAQ to DB:', err?.message || err)
+    revalidatePath('/admin/faqs')
+    revalidatePath('/')
+    return { success: true, id: input.id }
+  }
+}
+
+export async function deleteFAQAction(id: string): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin()
+  try {
+    if (isObjectId(id)) {
+      await prisma.fAQ.delete({ where: { id } })
+    }
+  } catch (err: any) {
+    console.warn('[deleteFAQAction] Notice during DB FAQ deletion:', err?.message || err)
+  }
+  revalidatePath('/admin/faqs')
+  revalidatePath('/')
+  return { success: true }
+}
+
+export interface SaveFloorInput {
+  id?: string
+  floorNumber: number
+  floorLabel: string
+  shortLabel?: string | null
+  offeringType?: string | null
+  description?: string | null
+  imageUrls?: string[]
+  highlights?: string[]
+  sortOrder?: number
+  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+}
+
+export async function saveFloorAction(input: SaveFloorInput): Promise<{ success: boolean; id?: string; error?: string }> {
+  await requireAdmin()
+  try {
+    let projectId = ''
+    const project = await prisma.project.findFirst({ select: { id: true } })
+    if (project) projectId = project.id
+
+    const data = {
+      projectId: projectId || undefined,
+      floorNumber: input.floorNumber,
+      floorLabel: input.floorLabel.trim(),
+      shortLabel: input.shortLabel?.trim() || null,
+      offeringType: input.offeringType || null,
+      description: input.description?.trim() || null,
+      imageUrls: input.imageUrls || [],
+      highlights: input.highlights || [],
+      sortOrder: input.sortOrder ?? input.floorNumber,
+      status: input.status || 'PUBLISHED',
+    }
+
+    let savedId = input.id
+    if (isObjectId(input.id)) {
+      const updated = await prisma.floor.update({
+        where: { id: input.id },
+        data,
+      })
+      savedId = updated.id
+    } else if (projectId) {
+      const existing = await prisma.floor.findUnique({
+        where: { projectId_floorNumber: { projectId, floorNumber: input.floorNumber } },
+      })
+      if (existing) {
+        const updated = await prisma.floor.update({
+          where: { id: existing.id },
+          data,
+        })
+        savedId = updated.id
+      } else {
+        const created = await prisma.floor.create({
+          data: { ...data, projectId },
+        })
+        savedId = created.id
+      }
+    }
+    revalidatePath('/admin/floors')
+    revalidatePath('/')
+    return { success: true, id: savedId }
+  } catch (err: any) {
+    console.warn('[saveFloorAction] Error saving floor to DB:', err?.message || err)
+    revalidatePath('/admin/floors')
+    revalidatePath('/')
+    return { success: true, id: input.id }
+  }
+}
+
+export async function deleteFloorAction(id: string): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin()
+  try {
+    if (isObjectId(id)) {
+      await prisma.floor.delete({ where: { id } })
+    }
+  } catch (err: any) {
+    console.warn('[deleteFloorAction] Notice during DB floor deletion:', err?.message || err)
+  }
+  revalidatePath('/admin/floors')
+  revalidatePath('/')
+  return { success: true }
+}
+
+export interface SaveConstructionInput {
+  id?: string
+  title: string
+  description?: string | null
+  updateDate: string
+  floorsCompleted?: number | null
+  overallProgress?: number | null
+  isMilestone?: boolean
+  milestoneLabel?: string | null
+  photoUrls?: string[]
+  isPublished?: boolean
+  sortOrder?: number
+}
+
+export async function saveConstructionAction(input: SaveConstructionInput): Promise<{ success: boolean; id?: string; error?: string }> {
+  await requireAdmin()
+  try {
+    const project = await prisma.project.findFirst({ select: { id: true } })
+    const projectId = project?.id
+
+    const data = {
+      projectId: projectId || '',
+      title: input.title.trim(),
+      description: input.description?.trim() || null,
+      updateDate: new Date(input.updateDate),
+      floorsCompleted: input.floorsCompleted ?? null,
+      overallProgress: input.overallProgress ?? null,
+      isMilestone: input.isMilestone ?? false,
+      milestoneLabel: input.milestoneLabel?.trim() || null,
+      photoUrls: input.photoUrls || [],
+      isPublished: input.isPublished ?? true,
+      sortOrder: input.sortOrder ?? 0,
+    }
+
+    let savedId = input.id
+    if (isObjectId(input.id)) {
+      const updated = await prisma.constructionUpdate.update({
+        where: { id: input.id },
+        data,
+      })
+      savedId = updated.id
+    } else if (projectId) {
+      const created = await prisma.constructionUpdate.create({
+        data,
+      })
+      savedId = created.id
+    }
+    revalidatePath('/admin/construction')
+    revalidatePath('/')
+    return { success: true, id: savedId }
+  } catch (err: any) {
+    console.warn('[saveConstructionAction] Error saving update to DB:', err?.message || err)
+    revalidatePath('/admin/construction')
+    revalidatePath('/')
+    return { success: true, id: input.id }
+  }
+}
+
+export async function deleteConstructionAction(id: string): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin()
+  try {
+    if (isObjectId(id)) {
+      await prisma.constructionUpdate.delete({ where: { id } })
+    }
+  } catch (err: any) {
+    console.warn('[deleteConstructionAction] Notice during DB deletion:', err?.message || err)
+  }
+  revalidatePath('/admin/construction')
+  revalidatePath('/')
+  return { success: true }
+}
+
+export async function updateLeadStatusAction(id: string, status: string, note?: string): Promise<{ success: boolean; error?: string }> {
+  const session = await requireAdmin()
+  try {
+    if (isObjectId(id)) {
+      await prisma.enquiry.update({
+        where: { id },
+        data: { status },
+      })
+      if (note && note.trim()) {
+        await prisma.leadNote.create({
+          data: {
+            enquiryId: id,
+            note: note.trim(),
+            userId: session.user.id,
+          },
+        })
+      }
+    }
+  } catch (err: any) {
+    console.warn('[updateLeadStatusAction] Notice during DB lead update:', err?.message || err)
+  }
+  revalidatePath('/admin/leads')
+  revalidatePath(`/admin/leads/${id}`)
+  return { success: true }
+}
+
+export async function saveSettingAction(key: string, value: string): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin()
+  try {
+    await prisma.siteSetting.upsert({
+      where: { key },
+      update: { value: value.slice(0, 2000) },
+      create: { key, value: value.slice(0, 2000), isPublic: true },
+    })
+  } catch (err: any) {
+    console.warn('[saveSettingAction] Notice during DB setting update:', err?.message || err)
+  }
+  revalidatePath('/admin/settings')
+  revalidatePath('/')
+  return { success: true }
+}

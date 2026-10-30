@@ -8,8 +8,10 @@ import {
   getStoredConstructionUpdates,
   saveConstructionUpdate,
   deleteConstructionUpdate,
+  syncStoredConstructionUpdates,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { saveConstructionAction, deleteConstructionAction } from '@/lib/actions/admin'
 import type { ConstructionUpdate } from '@/lib/data/types'
 
 const inputClass =
@@ -18,18 +20,29 @@ const labelClass = 'block text-sm font-medium text-white/70 mb-1'
 
 // ─── Construction List ────────────────────────────────────────
 
-export function ConstructionListClient() {
-  const [updates, setUpdates] = useState<ConstructionUpdate[]>([])
+export function ConstructionListClient({ initialUpdates }: { initialUpdates?: ConstructionUpdate[] }) {
+  const router = useRouter()
+  const [updates, setUpdates] = useState<ConstructionUpdate[]>(() => {
+    if (initialUpdates && initialUpdates.length > 0) return initialUpdates
+    return getStoredConstructionUpdates()
+  })
 
   useEffect(() => {
-    setUpdates(getStoredConstructionUpdates())
+    if (initialUpdates && initialUpdates.length > 0) {
+      syncStoredConstructionUpdates(initialUpdates)
+      setUpdates(initialUpdates)
+    } else {
+      setUpdates(getStoredConstructionUpdates())
+    }
     return subscribeToDataChanges(() => setUpdates(getStoredConstructionUpdates()))
-  }, [])
+  }, [initialUpdates])
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Delete this construction update?')) return
     deleteConstructionUpdate(id)
-    setUpdates(getStoredConstructionUpdates())
+    setUpdates((prev) => prev.filter((u) => u.id !== id))
+    await deleteConstructionAction(id)
+    router.refresh()
   }
 
   return (
@@ -89,45 +102,74 @@ export function ConstructionListClient() {
 
 interface ConstructionFormProps {
   id?: string
+  initialUpdate?: ConstructionUpdate | null
 }
 
-export function ConstructionFormClient({ id }: ConstructionFormProps) {
+export function ConstructionFormClient({ id, initialUpdate }: ConstructionFormProps) {
   const router = useRouter()
   const isNew = !id
 
   const todayISO = new Date().toISOString().slice(0, 10)
 
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    updateDate: todayISO,
-    floorsCompleted: '',
-    overallProgress: '',
-    isMilestone: false,
-    milestoneLabel: '',
-    isPublished: true,
+  const [form, setForm] = useState(() => {
+    if (initialUpdate) {
+      return {
+        title: initialUpdate.title,
+        description: initialUpdate.description ?? '',
+        updateDate: new Date(initialUpdate.updateDate).toISOString().slice(0, 10),
+        floorsCompleted: initialUpdate.floorsCompleted != null ? String(initialUpdate.floorsCompleted) : '',
+        overallProgress: initialUpdate.overallProgress != null ? String(initialUpdate.overallProgress) : '',
+        isMilestone: initialUpdate.isMilestone,
+        milestoneLabel: initialUpdate.milestoneLabel ?? '',
+        isPublished: initialUpdate.isPublished,
+      }
+    }
+    return {
+      title: '',
+      description: '',
+      updateDate: todayISO,
+      floorsCompleted: '',
+      overallProgress: '',
+      isMilestone: false,
+      milestoneLabel: '',
+      isPublished: true,
+    }
   })
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (id) {
-      const found = getStoredConstructionUpdates().find((u) => u.id === id)
-      if (found) {
+      if (initialUpdate) {
         setForm({
-          title: found.title,
-          description: found.description ?? '',
-          updateDate: new Date(found.updateDate).toISOString().slice(0, 10),
-          floorsCompleted: found.floorsCompleted != null ? String(found.floorsCompleted) : '',
-          overallProgress: found.overallProgress != null ? String(found.overallProgress) : '',
-          isMilestone: found.isMilestone,
-          milestoneLabel: found.milestoneLabel ?? '',
-          isPublished: found.isPublished,
+          title: initialUpdate.title,
+          description: initialUpdate.description ?? '',
+          updateDate: new Date(initialUpdate.updateDate).toISOString().slice(0, 10),
+          floorsCompleted: initialUpdate.floorsCompleted != null ? String(initialUpdate.floorsCompleted) : '',
+          overallProgress: initialUpdate.overallProgress != null ? String(initialUpdate.overallProgress) : '',
+          isMilestone: initialUpdate.isMilestone,
+          milestoneLabel: initialUpdate.milestoneLabel ?? '',
+          isPublished: initialUpdate.isPublished,
         })
       } else {
-        setError('Construction update not found.')
+        const found = getStoredConstructionUpdates().find((u) => u.id === id)
+        if (found) {
+          setForm({
+            title: found.title,
+            description: found.description ?? '',
+            updateDate: new Date(found.updateDate).toISOString().slice(0, 10),
+            floorsCompleted: found.floorsCompleted != null ? String(found.floorsCompleted) : '',
+            overallProgress: found.overallProgress != null ? String(found.overallProgress) : '',
+            isMilestone: found.isMilestone,
+            milestoneLabel: found.milestoneLabel ?? '',
+            isPublished: found.isPublished,
+          })
+        } else {
+          setError('Construction update not found.')
+        }
       }
     }
-  }, [id])
+  }, [id, initialUpdate, todayISO])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, type, value } = e.target
@@ -138,10 +180,12 @@ export function ConstructionFormClient({ id }: ConstructionFormProps) {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.title.trim()) { setError('Title is required.'); return }
     if (!form.updateDate) { setError('Date is required.'); return }
+    setLoading(true)
+
     const update: ConstructionUpdate = {
       id: id || `cu-${Date.now()}`,
       projectId: 'proj-rock-one-square',
@@ -156,14 +200,32 @@ export function ConstructionFormClient({ id }: ConstructionFormProps) {
       isPublished: form.isPublished,
       sortOrder: 0,
     }
+
     saveConstructionUpdate(update)
+
+    await saveConstructionAction({
+      id,
+      title: update.title,
+      description: update.description,
+      updateDate: new Date(update.updateDate).toISOString(),
+      floorsCompleted: update.floorsCompleted,
+      overallProgress: update.overallProgress,
+      isMilestone: update.isMilestone,
+      milestoneLabel: update.milestoneLabel,
+      isPublished: update.isPublished,
+    })
+
     router.push('/admin/construction')
+    router.refresh()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!id || !confirm('Permanently delete this update?')) return
+    setLoading(true)
     deleteConstructionUpdate(id)
+    await deleteConstructionAction(id)
     router.push('/admin/construction')
+    router.refresh()
   }
 
   if (error && id) return <div className="p-6 border border-red-500/20 rounded-sm text-red-400 text-sm">{error}</div>
@@ -221,7 +283,7 @@ export function ConstructionFormClient({ id }: ConstructionFormProps) {
           </div>
         )}
         <div className="flex items-center gap-3 pt-2">
-          <button type="submit" className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors">
+          <button type="submit" disabled={loading} className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors disabled:opacity-50">
             <Save className="w-4 h-4" />{isNew ? 'Create Update' : 'Save Changes'}
           </button>
           <Link href="/admin/construction" className="px-6 py-2 rounded border border-white/20 text-white hover:bg-white/5 transition-colors">Cancel</Link>
@@ -232,7 +294,7 @@ export function ConstructionFormClient({ id }: ConstructionFormProps) {
         <div className="mt-8 rounded-lg border border-red-500/30 p-6">
           <h2 className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
           <p className="text-white/50 text-sm mb-4">Permanently delete this construction update.</p>
-          <button onClick={handleDelete} className="bg-red-600 text-white px-6 py-2 rounded font-medium hover:bg-red-700 transition-colors">Delete Update</button>
+          <button onClick={handleDelete} disabled={loading} className="bg-red-600 text-white px-6 py-2 rounded font-medium hover:bg-red-700 transition-colors disabled:opacity-50">Delete Update</button>
         </div>
       )}
     </div>

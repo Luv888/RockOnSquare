@@ -56,6 +56,9 @@ export function Footer() {
               <p className="font-serif italic text-base text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] to-[#e4c870] leading-snug">
                 DESIGNED TO ELEVATE EVERY EXPERIENCE.
               </p>
+              <p className="font-mono text-[11px] uppercase tracking-wider text-[#e4c870]/90 mt-1">
+                Retail. Entertainment. Modern Offices. Studio Apartments.
+              </p>
               <p className="text-white/50 text-xs mt-1">One Landmark Address. A World of Possibilities.</p>
             </div>
 

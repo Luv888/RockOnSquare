@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import Link from "next/link";
 import { requireSuperAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db/prisma";
@@ -11,6 +11,8 @@ import {
   Settings,
   Clock,
 } from "lucide-react";
+
+export const dynamic = 'force-dynamic';
 
 async function getSuperAdminStats() {
   try {

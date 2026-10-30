@@ -1,9 +1,11 @@
-﻿import React from "react";
+import React from "react";
 import { prisma } from "@/lib/db/prisma";
 import { updatePrivilegedSetting } from "@/lib/actions/superadmin";
 import { requireSuperAdmin } from "@/lib/auth/guards";
 import { Settings, Shield } from "lucide-react";
 import { ChangePasswordForm } from "@/components/admin/ChangePasswordForm";
+
+export const dynamic = 'force-dynamic';
 
 async function getSettings() {
   try {

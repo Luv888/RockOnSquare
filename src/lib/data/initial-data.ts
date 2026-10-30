@@ -46,7 +46,7 @@ export const INITIAL_OFFERINGS: Offering[] = [
       'Designed for brands that aspire to stand out, the retail spaces at ROCK ONE SQUARE combine a prominent commercial presence with the potential to attract attention and footfall. With a 30-metre-wide arterial road in front, retail takes centre stage in a destination designed around visibility and engagement.',
     floorInfo: 'Ground & 1st Floor',
     highlights: [
-      '30-metre-wide arterial road frontage',
+      '30-metre-wide arterial road frontage.',
       'Prominent double-height atrium visibility',
       'High footfall pedestrian plaza',
       'Direct arterial road access with dedicated parking',
@@ -62,12 +62,12 @@ export const INITIAL_OFFERINGS: Offering[] = [
     title: 'Entertainment',
     shortDesc: 'Make Every Moment an Experience.',
     description:
-      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With expansive gaming zones, interactive arcade attractions, and curated dining experiences, the destination is designed to make leisure more engaging.',
+      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
     floorInfo: '2nd & 3rd Floor',
     highlights: [
-      'A dynamic family entertainment destination',
+      'A dynamic entertainment destination.',
+      'Lord of the Drinks & the biggest gaming zone in Ghaziabad',
       'Interactive gaming experiences and arcade attractions',
-      'The biggest gaming zone in Ghaziabad',
       'Curated dining and recreational leisure spaces',
     ],
     sortOrder: 1,
@@ -84,8 +84,8 @@ export const INITIAL_OFFERINGS: Offering[] = [
       'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today\'s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
     floorInfo: '4th Floor',
     highlights: [
-      'Smart, efficient and contemporary workspaces',
-      'Climate comfort & HVAC systems',
+      'Smart, efficient and contemporary workspaces.',
+      'Integrated climate comfort & HVAC systems',
       'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
@@ -103,7 +103,7 @@ export const INITIAL_OFFERINGS: Offering[] = [
       'Designed for the aspirations of modern urban professionals, the studio apartments at ROCK ONE SQUARE bring together intelligent layouts, contemporary aesthetics and modern amenities. A thoughtfully planned living experience for those who value convenience, functionality and a well-connected address.',
     floorInfo: '5th to 9th Floor',
     highlights: [
-      'Contemporary urban living in thoughtfully designed spaces',
+      'Contemporary urban living in thoughtfully designed spaces.',
       'Intelligent modular layouts with premium finishes',
       'Panoramic National Capital Region horizon views',
       'Seamless access to building retail, dining and services',
@@ -329,76 +329,81 @@ export const INITIAL_AMENITIES: Amenity[] = [
   {
     id: 'amenity-1',
     name: 'Premium Finishes',
-    description: 'Granite and premium tile finishes throughout designated common areas, lobbies, and corridors.',
+    description: 'Granite and tile finishes across designated areas.',
     iconName: 'Gem',
     sortOrder: 0,
     isPublished: true,
   },
   {
     id: 'amenity-2',
-    name: 'Dual Power Supply',
-    description: 'Reliable power support with dual power supply and automatic DG backup for uninterrupted operations.',
+    name: 'Reliable Power Support',
+    description: 'Dual power supply with DG backup.',
     iconName: 'Zap',
     sortOrder: 1,
     isPublished: true,
   },
   {
     id: 'amenity-3',
-    name: 'HVAC',
-    description: 'Centralised climate comfort with HVAC systems engineered for commercial zones.',
+    name: 'Integrated Climate Comfort',
+    description: 'Integrated HVAC system.',
     iconName: 'Wind',
     sortOrder: 2,
     isPublished: true,
   },
   {
     id: 'amenity-4',
-    name: 'Advanced Fire Safety',
-    description: 'Safety by design: advanced multi-tier firefighting systems, sprinklers, and emergency egress.',
+    name: 'Safety by Design',
+    description: 'Advanced firefighting systems.',
     iconName: 'Shield',
     sortOrder: 3,
     isPublished: true,
   },
   {
     id: 'amenity-5',
-    name: '24×7 CCTV',
-    description: 'Round-the-clock monitoring and surveillance across all levels, access gates, and parking areas.',
+    name: 'Round-the-Clock Monitoring',
+    description: '24×7 CCTV surveillance.',
     iconName: 'Camera',
     sortOrder: 4,
     isPublished: true,
   },
   {
     id: 'amenity-6',
-    name: '8 Elevators',
-    description: "Eight elevators designed to provide convenient vertical access between the building's different levels.",
+    name: 'Seamless Vertical Movement',
+    description: '8 high-speed elevators.',
     iconName: 'ArrowUpDown',
     sortOrder: 5,
     isPublished: true,
   },
   {
-    id: 'amenity-8',
-    name: 'Service Areas',
-    description: 'Efficient back-of-house operations with a discreet dedicated service area positioned at the rear.',
-    iconName: 'Package',
+    id: 'amenity-7',
+    name: 'Convenient Parking',
+    description: 'Extensive basement parking with modern wayfinding.',
+    iconName: 'Car',
     sortOrder: 6,
     isPublished: true,
   },
   {
-    id: 'amenity-9',
-    name: 'Grand Entrance',
-    description: 'Architecturally striking entrance statement with expansive pedestrian plaza and double-height lobby.',
-    iconName: 'DoorOpen',
+    id: 'amenity-8',
+    name: 'Efficient Service Access',
+    description: 'Discreet service area at the rear.',
+    iconName: 'Package',
     sortOrder: 7,
     isPublished: true,
   },
-  {
-    id: 'amenity-10',
-    name: 'Valet & Mechanical Parking',
-    description: 'Convenient parking arrangements designed to support visitors, shoppers, tenants, and commercial operations.',
-    iconName: 'Car',
-    sortOrder: 8,
-    isPublished: true,
-  },
 ]
+
+export function normalizeBannerRecord(b: Banner): Banner {
+  let imageUrl = b.imageUrl
+  if (
+    b.title.toLowerCase().includes('gaming') ||
+    b.description?.toLowerCase().includes('gaming zone') ||
+    b.sortOrder === 2 ||
+    (imageUrl && imageUrl.includes('gaming-zone'))
+  ) {
+    imageUrl = '/images/gaming-zone-bumper-cars.png'
+  }
+  return { ...b, imageUrl }
+}
 
 export function normalizeFaqRecord<T extends { id: string; question: string; answer: string; sortOrder?: number; isPublished?: boolean }>(f: T): T {
   let { question, answer } = f
@@ -428,7 +433,7 @@ export function normalizeFaqRecord<T extends { id: string; question: string; ans
   if (question.toLowerCase().includes('what amenities are included')) {
     question = 'What amenities are included?'
     answer =
-      'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.'
+      'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.'
   }
 
   // 4. RERA FAQ
@@ -438,15 +443,9 @@ export function normalizeFaqRecord<T extends { id: string; question: string; ans
       "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal."
   }
 
-  // Universal cleanup for any leftover outdated terms in active content
+  // Universal cleanup for business hours
   answer = answer
     .replace(/(Monday\s*(to|-|–)\s*Saturday,?\s*10(?::00)?\s*AM\s*(-|–)\s*7(?::00)?\s*PM)/gi, 'Monday to Sunday, 10 AM–9 PM')
-    .replace(/Integrated HVAC/gi, 'HVAC')
-    .replace(/integrated HVAC/gi, 'HVAC')
-    .replace(/8 High-Speed Elevators/gi, '8 Elevators')
-    .replace(/8 high-speed elevators/gi, 'eight elevators')
-    .replace(/high-speed elevators/gi, 'elevators')
-    .replace(/extensive basement parking,?/gi, '')
 
   return { ...f, question, answer }
 }
@@ -469,7 +468,7 @@ export const INITIAL_FAQS: FAQ[] = [
   {
     id: 'faq-3',
     question: 'What amenities are included?',
-    answer: 'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.',
+    answer: 'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.',
     sortOrder: 2,
     isPublished: true,
   },
@@ -516,7 +515,7 @@ export const INITIAL_BANNERS: Banner[] = [
     projectId: 'proj-rock-one-square',
     title: 'ROCK ONE SQUARE',
     subtitle: 'DESIGNED TO ELEVATE EVERY EXPERIENCE.',
-    description: 'Retail. Entertainment. Modern Offices. Studio Apartments. One landmark address redefining commercial architecture in Raj Nagar Extension.',
+    description: 'Retail. Entertainment. Modern Offices. Studio Apartments.',
     badge: '7 FLOORS COMPLETE | POSSESSION SOON',
     imageUrl: '/images/building-front.jpg',
     ctaLabel: 'Explore Building Explorer',
@@ -529,10 +528,10 @@ export const INITIAL_BANNERS: Banner[] = [
   {
     id: 'banner-2',
     projectId: 'proj-rock-one-square',
-    title: 'ENTERTAINMENT & DINING',
-    subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
-    description: 'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
-    badge: 'CURATED SOCIAL & DINING DESTINATION',
+    title: 'LORD OF THE DRINKS',
+    subtitle: 'AN ICONIC EXPERIENCE. A NEW ADDRESS.',
+    description: 'An iconic dining experience arrives in Raj Nagar Extension with Lord of the Drinks. A vibrant commercial destination bringing together curated fine dining and memorable social moments.',
+    badge: 'FOR THE FIRST TIME IN GHAZIABAD',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     ctaLabel: 'Discover Entertainment',
     ctaUrl: '#offerings',
@@ -544,10 +543,10 @@ export const INITIAL_BANNERS: Banner[] = [
   {
     id: 'banner-3',
     projectId: 'proj-rock-one-square',
-    title: 'GAMING ZONE',
-    subtitle: 'ENTERTAINMENT. ENERGY. UNFORGETTABLE MOMENTS.',
-    description: 'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor.',
-    badge: "GHAZIABAD'S LARGEST GAMING HUB",
+    title: 'THE BIGGEST GAMING ZONE IN GHAZIABAD',
+    subtitle: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
+    description: 'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor entertainment level.',
+    badge: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
     imageUrl: '/images/gaming-zone-bumper-cars.png',
     ctaLabel: 'Explore Verticals',
     ctaUrl: '#offerings',
@@ -562,14 +561,14 @@ export const INITIAL_CONSTRUCTION_UPDATES: ConstructionUpdate[] = [
   {
     id: 'cu-1',
     projectId: 'proj-rock-one-square',
-    title: 'The Vision Is Taking Shape — 7 Floors Complete',
+    title: 'The Vision Is Taking Shape',
     description:
       'The vision of ROCK ONE SQUARE is steadily becoming reality, with construction progressing ahead of schedule. Every completed floor brings this landmark destination closer to welcoming a new generation of businesses, experiences and modern urban lifestyles.',
     updateDate: '2025-02-15T00:00:00.000Z',
     floorsCompleted: 7,
     overallProgress: 64,
     isMilestone: true,
-    milestoneLabel: '7 Floors Complete',
+    milestoneLabel: '7 FLOORS COMPLETE.',
     photoUrls: [],
     isPublished: true,
     sortOrder: 0,

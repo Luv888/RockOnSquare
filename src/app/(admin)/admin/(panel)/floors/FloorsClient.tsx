@@ -8,8 +8,10 @@ import {
   getStoredFloors,
   saveFloor,
   deleteFloor,
+  syncStoredFloors,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { saveFloorAction, deleteFloorAction } from '@/lib/actions/admin'
 import type { Floor, OfferingType } from '@/lib/data/types'
 
 const TYPE_COLORS: Record<string, string> = {
@@ -36,13 +38,22 @@ const inputClass =
   'w-full bg-[#0a0f1e] border border-white/10 rounded px-3 py-2 text-white placeholder-white/30 focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c]'
 const labelClass = 'block text-sm font-medium text-white/70 mb-1'
 
-export function FloorsListClient() {
-  const [floors, setFloors] = useState<Floor[]>([])
+export function FloorsListClient({ initialFloors }: { initialFloors?: Floor[] }) {
+  const router = useRouter()
+  const [floors, setFloors] = useState<Floor[]>(() => {
+    if (initialFloors && initialFloors.length > 0) return initialFloors
+    return getStoredFloors()
+  })
 
   useEffect(() => {
-    setFloors(getStoredFloors())
+    if (initialFloors && initialFloors.length > 0) {
+      syncStoredFloors(initialFloors)
+      setFloors(initialFloors)
+    } else {
+      setFloors(getStoredFloors())
+    }
     return subscribeToDataChanges(() => setFloors(getStoredFloors()))
-  }, [])
+  }, [initialFloors])
 
   return (
     <div>
@@ -80,59 +91,65 @@ export function FloorsListClient() {
                 <th className="text-left px-4 py-3 text-white/50 font-medium">Floor #</th>
                 <th className="text-left px-4 py-3 text-white/50 font-medium">Label</th>
                 <th className="text-left px-4 py-3 text-white/50 font-medium">Type</th>
+                <th className="text-left px-4 py-3 text-white/50 font-medium">Description</th>
                 <th className="text-left px-4 py-3 text-white/50 font-medium">Status</th>
-                <th className="text-right px-4 py-3 text-white/50 font-medium">Actions</th>
+                <th className="text-right px-4 py-3 text-white/50 font-medium">Action</th>
               </tr>
             </thead>
-            <tbody>
-              {floors.map((floor) => {
-                const typeKey = floor.offeringType ?? 'OTHER'
-                const typeColor = TYPE_COLORS[typeKey] ?? TYPE_COLORS.OTHER
-                return (
-                  <tr
-                    key={floor.id}
-                    className="border-b border-white/5 hover:bg-white/[0.02] transition-colors"
-                  >
-                    <td className="px-4 py-3 text-white font-mono">
-                      {floor.floorNumber}
-                    </td>
-                    <td className="px-4 py-3 text-white">{floor.floorLabel}</td>
-                    <td className="px-4 py-3">
+            <tbody className="divide-y divide-white/5">
+              {floors.map((floor) => (
+                <tr
+                  key={floor.id}
+                  className="hover:bg-white/[0.02] transition-colors"
+                >
+                  <td className="px-4 py-3 font-mono font-medium text-[#c9a84c]">
+                    {floor.floorNumber === 0 ? 'GF' : `${floor.floorNumber}F`}
+                  </td>
+                  <td className="px-4 py-3 text-white font-medium">
+                    {floor.floorLabel}
+                    {floor.shortLabel && (
+                      <span className="ml-2 text-xs text-white/40">({floor.shortLabel})</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {floor.offeringType ? (
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded text-xs border ${typeColor}`}
+                        className={`text-xs px-2 py-0.5 rounded border font-medium ${
+                          TYPE_COLORS[floor.offeringType] || TYPE_COLORS.OTHER
+                        }`}
                       >
-                        {TYPE_LABELS[typeKey] ?? typeKey}
+                        {TYPE_LABELS[floor.offeringType] || floor.offeringType}
                       </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {floor.status === 'PUBLISHED' ? (
-                        <span className="inline-flex items-center gap-1 text-emerald-400 text-xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-                          Published
-                        </span>
-                      ) : floor.status === 'ARCHIVED' ? (
-                        <span className="inline-flex items-center gap-1 text-amber-400 text-xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
-                          Archived
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-white/40 text-xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white/20 inline-block" />
-                          Draft
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <Link
-                        href={`/admin/floors/${floor.id}`}
-                        className="inline-flex items-center gap-1 text-[#c9a84c] hover:text-[#e4c870] text-xs transition-colors"
-                      >
-                        Edit <ChevronRight size={14} />
-                      </Link>
-                    </td>
-                  </tr>
-                )
-              })}
+                    ) : (
+                      <span className="text-white/30 text-xs">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-white/60 max-w-xs truncate text-xs">
+                    {floor.description || '—'}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded ${
+                        floor.status === 'PUBLISHED'
+                          ? 'bg-green-500/20 text-green-400'
+                          : floor.status === 'ARCHIVED'
+                          ? 'bg-red-500/20 text-red-400'
+                          : 'bg-white/10 text-white/50'
+                      }`}
+                    >
+                      {floor.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Link
+                      href={`/admin/floors/${floor.id}`}
+                      className="text-[#c9a84c] hover:underline text-xs inline-flex items-center gap-1"
+                    >
+                      Edit <ChevronRight size={12} />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -141,11 +158,14 @@ export function FloorsListClient() {
   )
 }
 
-interface FloorFormClientProps {
+// ─── Floor Form (Create / Edit) ──────────────────────────────
+
+interface FloorFormProps {
   id?: string
+  initialFloor?: Floor | null
 }
 
-export function FloorFormClient({ id }: FloorFormClientProps) {
+export function FloorFormClient({ id, initialFloor }: FloorFormProps) {
   const router = useRouter()
   const isNew = !id
 
@@ -159,39 +179,69 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
     highlights: string
     sortOrder: number
     status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
-  }>({
-    floorNumber: 0,
-    floorLabel: '',
-    shortLabel: '',
-    offeringType: 'RETAIL',
-    description: '',
-    imageUrl: '',
-    highlights: '',
-    sortOrder: 0,
-    status: 'PUBLISHED',
+  }>(() => {
+    if (initialFloor) {
+      return {
+        floorNumber: initialFloor.floorNumber,
+        floorLabel: initialFloor.floorLabel,
+        shortLabel: initialFloor.shortLabel ?? '',
+        offeringType: initialFloor.offeringType ?? 'OTHER',
+        description: initialFloor.description ?? '',
+        imageUrl: initialFloor.imageUrls?.[0] ?? '',
+        highlights: initialFloor.highlights?.join('\n') ?? '',
+        sortOrder: initialFloor.sortOrder,
+        status: initialFloor.status,
+      }
+    }
+    return {
+      floorNumber: 0,
+      floorLabel: '',
+      shortLabel: '',
+      offeringType: 'RETAIL',
+      description: '',
+      imageUrl: '',
+      highlights: '',
+      sortOrder: 0,
+      status: 'PUBLISHED',
+    }
   })
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (id) {
-      const found = getStoredFloors().find((f) => f.id === id)
-      if (found) {
+      if (initialFloor) {
         setForm({
-          floorNumber: found.floorNumber,
-          floorLabel: found.floorLabel,
-          shortLabel: found.shortLabel ?? '',
-          offeringType: found.offeringType ?? 'OTHER',
-          description: found.description ?? '',
-          imageUrl: found.imageUrls?.[0] ?? '',
-          highlights: found.highlights?.join('\n') ?? '',
-          sortOrder: found.sortOrder,
-          status: found.status,
+          floorNumber: initialFloor.floorNumber,
+          floorLabel: initialFloor.floorLabel,
+          shortLabel: initialFloor.shortLabel ?? '',
+          offeringType: initialFloor.offeringType ?? 'OTHER',
+          description: initialFloor.description ?? '',
+          imageUrl: initialFloor.imageUrls?.[0] ?? '',
+          highlights: initialFloor.highlights?.join('\n') ?? '',
+          sortOrder: initialFloor.sortOrder,
+          status: initialFloor.status,
         })
       } else {
-        setError('Floor not found.')
+        const found = getStoredFloors().find((f) => f.id === id)
+        if (found) {
+          setForm({
+            floorNumber: found.floorNumber,
+            floorLabel: found.floorLabel,
+            shortLabel: found.shortLabel ?? '',
+            offeringType: found.offeringType ?? 'OTHER',
+            description: found.description ?? '',
+            imageUrl: found.imageUrls?.[0] ?? '',
+            highlights: found.highlights?.join('\n') ?? '',
+            sortOrder: found.sortOrder,
+            status: found.status,
+          })
+        } else {
+          setError('Floor not found.')
+        }
       }
     }
-  }, [id])
+  }, [id, initialFloor])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -206,12 +256,13 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.floorLabel.trim()) {
       setError('Floor label is required.')
       return
     }
+    setLoading(true)
 
     const floorData: Floor = {
       id: id || `floor-${Date.now()}`,
@@ -230,13 +281,31 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
     }
 
     saveFloor(floorData)
+
+    await saveFloorAction({
+      id,
+      floorNumber: floorData.floorNumber,
+      floorLabel: floorData.floorLabel,
+      shortLabel: floorData.shortLabel,
+      offeringType: floorData.offeringType,
+      description: floorData.description,
+      imageUrls: floorData.imageUrls,
+      highlights: floorData.highlights,
+      sortOrder: floorData.sortOrder,
+      status: floorData.status,
+    })
+
     router.push('/admin/floors')
+    router.refresh()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!id || !confirm('Permanently delete this floor?')) return
+    setLoading(true)
     deleteFloor(id)
+    await deleteFloorAction(id)
     router.push('/admin/floors')
+    router.refresh()
   }
 
   if (error && id) {
@@ -442,7 +511,8 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
         <div className="flex gap-3 pt-4">
           <button
             type="submit"
-            className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors"
+            disabled={loading}
+            className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             {isNew ? 'Add Floor' : 'Save Changes'}
@@ -464,8 +534,9 @@ export function FloorFormClient({ id }: FloorFormClientProps) {
           </p>
           <button
             type="button"
+            disabled={loading}
             onClick={handleDelete}
-            className="bg-red-900/40 text-red-400 border border-red-900/50 px-4 py-2 rounded hover:bg-red-900/60 text-sm"
+            className="bg-red-900/40 text-red-400 border border-red-900/50 px-4 py-2 rounded hover:bg-red-900/60 text-sm disabled:opacity-50"
           >
             Delete Floor
           </button>

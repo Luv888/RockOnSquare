@@ -1,6 +1,8 @@
-﻿import React from "react";
+import React from "react";
 import { requireSuperAdmin } from "@/lib/auth/guards";
 import { SuperAdminSidebar } from "@/components/superadmin/SuperAdminSidebar";
+
+export const dynamic = 'force-dynamic'
 
 export default async function SuperAdminPagesLayout({
   children,
