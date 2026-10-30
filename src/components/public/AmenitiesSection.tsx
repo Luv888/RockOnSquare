@@ -320,10 +320,10 @@ export function AmenitiesSection({ amenities }: AmenitiesSectionProps = {}) {
             </span>
           </h2>
           <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
-            An elevated experience comes from thoughtful planning, convenient movement and the building facilities designed to support everyday use.
+            An elevated experience is created through more than design alone. It comes from the details that make everyday movement, work and living more convenient.
           </p>
           <p className="mt-2 text-white/60 text-xs sm:text-sm leading-relaxed">
-            ROCK ONE SQUARE&apos;s amenities and specifications are displayed using the project&apos;s confirmed technical details.
+            At ROCK ONE SQUARE, functional planning and essential building systems come together to support a seamless experience for visitors, businesses and residents.
           </p>
         </div>
 

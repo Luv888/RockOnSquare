@@ -16,7 +16,7 @@ export const INITIAL_PROJECT: Project = {
   name: 'Rock One Square',
   tagline: 'DESIGNED TO ELEVATE EVERY EXPERIENCE.',
   description:
-    'Spread across one acre, ROCK ONE SQUARE is a mixed-use destination bringing together four distinct verticals — Retail, Entertainment, Modern Offices and Studio Apartments — under one landmark address. From retail spaces and entertainment to contemporary workspaces and modern urban living, the development is planned to bring different experiences together in one destination.',
+    'Spread across one acre, ROCK ONE SQUARE is a thoughtfully planned mixed-use destination that brings together four distinct verticals — Retail, Entertainment, Modern Offices and Studio Apartments — under one landmark address. From vibrant retail spaces and immersive entertainment to contemporary workspaces and modern urban living, every level is designed to create a more enriching experience.',
   developerName: 'Senflore Hospitality LLP',
   address: 'Raj Nagar Extension',
   city: 'Ghaziabad',
@@ -43,12 +43,12 @@ export const INITIAL_OFFERINGS: Offering[] = [
     title: 'Retail',
     shortDesc: 'Visibility That Creates Opportunity.',
     description:
-      'Designed for businesses seeking a prominent commercial presence, the retail spaces at ROCK ONE SQUARE bring shopping and commercial activity into a mixed-use destination. With road-facing visibility and access to the surrounding area, the retail offering is planned to support business exposure and customer engagement.',
+      'Designed for brands that aspire to stand out, the retail spaces at ROCK ONE SQUARE combine a prominent commercial presence with the potential to attract attention and footfall. With a 30-metre-wide arterial road in front, retail takes centre stage in a destination designed around visibility and engagement.',
     floorInfo: 'Ground & 1st Floor',
     highlights: [
-      'Commercial retail spaces.',
-      'Road-facing visibility & commercial exposure',
+      '30-metre-wide arterial road frontage.',
       'Prominent double-height atrium visibility',
+      'High footfall pedestrian plaza',
       'Direct arterial road access with dedicated parking',
     ],
     sortOrder: 0,
@@ -62,13 +62,13 @@ export const INITIAL_OFFERINGS: Offering[] = [
     title: 'Entertainment',
     shortDesc: 'Make Every Moment an Experience.',
     description:
-      'ROCK ONE SQUARE brings entertainment into its mixed-use development, creating a destination where visitors can explore leisure and recreational experiences. Lord of the Drinks and the proposed gaming zone are intended to be key attractions, subject to their confirmed project status and opening plans.',
+      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
     floorInfo: '2nd & 3rd Floor',
     highlights: [
-      'Entertainment within a mixed-use destination.',
-      'Lord of the Drinks & the proposed gaming zone attractions',
-      'Interactive gaming experiences and arcade spaces',
-      'Curated dining and recreational leisure zones',
+      'A dynamic entertainment destination.',
+      'Lord of the Drinks & the biggest gaming zone in Ghaziabad',
+      'Interactive gaming experiences and arcade attractions',
+      'Curated dining and recreational leisure spaces',
     ],
     sortOrder: 1,
     status: 'PUBLISHED',
@@ -81,12 +81,12 @@ export const INITIAL_OFFERINGS: Offering[] = [
     title: 'Modern Offices',
     shortDesc: 'A Better Perspective on Work.',
     description:
-      'The modern office spaces at ROCK ONE SQUARE are intended for professionals, entrepreneurs and businesses seeking a contemporary commercial address. The office offering brings workplace requirements into a development that also includes retail, entertainment and residential-style studio apartments.',
+      'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today\'s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
     floorInfo: '4th Floor',
     highlights: [
-      'Modern commercial office spaces.',
-      'Contemporary corporate layouts & workplace requirements',
+      'Smart, efficient and contemporary workspaces.',
       'Integrated climate comfort & HVAC systems',
+      'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
     sortOrder: 2,
@@ -100,11 +100,11 @@ export const INITIAL_OFFERINGS: Offering[] = [
     title: 'Studio Apartments',
     shortDesc: 'Compact Spaces. Elevated Living.',
     description:
-      "The studio apartments at ROCK ONE SQUARE are planned for people seeking compact urban living within a mixed-use development. Their positioning complements the project's commercial and entertainment offerings, bringing multiple everyday needs together at one address.",
+      'Designed for the aspirations of modern urban professionals, the studio apartments at ROCK ONE SQUARE bring together intelligent layouts, contemporary aesthetics and modern amenities. A thoughtfully planned living experience for those who value convenience, functionality and a well-connected address.',
     floorInfo: '5th to 9th Floor',
     highlights: [
-      'Studio apartments within a mixed-use development.',
-      'Compact urban living with intelligent modular layouts',
+      'Contemporary urban living in thoughtfully designed spaces.',
+      'Intelligent modular layouts with premium finishes',
       'Panoramic National Capital Region horizon views',
       'Seamless access to building retail, dining and services',
     ],
@@ -563,7 +563,7 @@ export const INITIAL_CONSTRUCTION_UPDATES: ConstructionUpdate[] = [
     projectId: 'proj-rock-one-square',
     title: 'The Vision Is Taking Shape',
     description:
-      'ROCK ONE SQUARE is taking shape as construction progresses. RCC framing and concrete slabs through the 7th floor are fully executed, bringing this landmark destination closer to welcoming a new generation of businesses, experiences and modern urban lifestyles.',
+      'The vision of ROCK ONE SQUARE is steadily becoming reality, with construction progressing ahead of schedule. Every completed floor brings this landmark destination closer to welcoming a new generation of businesses, experiences and modern urban lifestyles.',
     updateDate: '2025-02-15T00:00:00.000Z',
     floorsCompleted: 7,
     overallProgress: 64,
