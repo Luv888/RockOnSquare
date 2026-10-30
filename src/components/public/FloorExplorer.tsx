@@ -440,17 +440,16 @@ export function FloorExplorer() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 text-[#e4c870] text-xs font-semibold uppercase tracking-widest mb-4">
             <Building2 className="w-3.5 h-3.5" />
-            Signature Building Explorer
+            Floor-by-Floor Explorer
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight">
-            11 Levels of Purpose.{' '}
+            Find the Space That{' '}
             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
-              Engineered for Excellence.
+              Fits Your Needs.
             </span>
           </h2>
-          <p className="mt-4 text-white/60 text-sm sm:text-base leading-relaxed">
-            Step into the interactive elevator console to inspect each floor of Rock One Square. From high-visibility
-            flagship retail to Ghaziabad&apos;s premier entertainment hub and executive studio residences.
+          <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
+            Browse the available floors, understand the property&apos;s layout and explore relevant commercial or residential-style spaces across Rock One Square.
           </p>
           <div className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-[#c9a84c]/90 bg-[#0a0f1e]/80 px-4 py-1.5 rounded-full border border-[#c9a84c]/20">
             <ShieldCheck className="w-3.5 h-3.5 text-[#c9a84c]" />

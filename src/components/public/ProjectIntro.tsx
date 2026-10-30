@@ -63,19 +63,19 @@ export function ProjectIntro() {
             </h2>
 
             <p className="text-white/80 text-base sm:text-lg font-light leading-relaxed">
-              Some destinations offer a place to shop. Others offer a place to work, unwind or call home. <strong className="text-white font-medium">ROCK ONE SQUARE</strong> brings them all together.
+              Some destinations offer a place to shop. Others offer a place to work, unwind or call home. <strong className="text-white font-medium">ROCK ONE SQUARE</strong> brings them together.
             </p>
 
             <p className="text-white/70 text-sm sm:text-base leading-relaxed">
-              Spread across one acre, ROCK ONE SQUARE is a thoughtfully planned mixed-use destination that brings together four distinct verticals &mdash; Retail, Entertainment, Modern Offices and Studio Apartments &mdash; under one landmark address.
+              Spread across one acre, ROCK ONE SQUARE is a mixed-use destination bringing together four distinct verticals &mdash; Retail, Entertainment, Modern Offices and Studio Apartments &mdash; under one landmark address.
             </p>
 
             <p className="text-white/60 text-sm sm:text-base leading-relaxed">
-              From vibrant retail spaces and immersive entertainment to contemporary workspaces and modern urban living, every level is designed to create a more enriching experience.
+              From retail spaces and entertainment to contemporary workspaces and modern urban living, the development is planned to bring different experiences together in one destination.
             </p>
 
             <p className="text-white/60 text-sm sm:text-base leading-relaxed">
-              A destination where everyday moments become memorable, business finds new opportunities and modern lifestyles find their perfect setting.
+              A place where businesses can explore new opportunities and modern lifestyles find a convenient setting.
             </p>
 
             {/* Brand Callout */}
