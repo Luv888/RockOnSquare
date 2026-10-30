@@ -44,11 +44,11 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-[#c9a84c]/20 to-transparent',
     imageUrl: '/images/retail-1.jpg',
     description:
-      'Designed for brands that aspire to stand out, the retail spaces at ROCK ONE SQUARE combine a prominent commercial presence with the potential to attract attention and footfall. With a 30-metre-wide arterial road in front, retail takes centre stage in a destination designed around visibility and engagement.',
+      'Designed for businesses seeking a prominent commercial presence, the retail spaces at ROCK ONE SQUARE bring shopping and commercial activity into a mixed-use destination. With road-facing visibility and access to the surrounding area, the retail offering is planned to support business exposure and customer engagement.',
     highlights: [
-      'Key Highlight: 30-metre-wide arterial road frontage.',
+      'Key Highlight: Commercial retail spaces.',
+      'Road-facing visibility & commercial exposure',
       'Prominent double-height atrium visibility',
-      'High footfall pedestrian plaza',
       'Direct arterial road access with dedicated parking',
     ],
     stackPosition: 'Street & Galleria Base',
@@ -65,12 +65,12 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-purple-500/20 to-transparent',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     description:
-      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
+      'ROCK ONE SQUARE brings entertainment into its mixed-use development, creating a destination where visitors can explore leisure and recreational experiences. Lord of the Drinks and the proposed gaming zone are intended to be key attractions, subject to their confirmed project status and opening plans.',
     highlights: [
-      'Key Highlight: A dynamic entertainment destination.',
-      'Lord of the Drinks & the biggest gaming zone in Ghaziabad',
-      'Interactive gaming experiences and arcade attractions',
-      'Curated dining and recreational leisure spaces',
+      'Key Highlight: Entertainment within a mixed-use destination.',
+      'Lord of the Drinks & the proposed gaming zone attractions',
+      'Interactive gaming experiences and arcade spaces',
+      'Curated dining and recreational leisure zones',
     ],
     stackPosition: 'Recreational Anchor',
   },
@@ -86,11 +86,11 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-blue-500/20 to-transparent',
     imageUrl: '/images/office-1.jpg',
     description:
-      'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today’s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
+      'The modern office spaces at ROCK ONE SQUARE are intended for professionals, entrepreneurs and businesses seeking a contemporary commercial address. The office offering brings workplace requirements into a development that also includes retail, entertainment and residential-style studio apartments.',
     highlights: [
-      'Key Highlight: Smart, efficient and contemporary workspaces.',
+      'Key Highlight: Modern commercial office spaces.',
+      'Contemporary corporate layouts & workplace requirements',
       'Integrated climate comfort & HVAC systems',
-      'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
     stackPosition: 'Corporate Hub',
@@ -107,10 +107,10 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-[#e4c870]/20 to-transparent',
     imageUrl: '/images/studio-apartment-1.jpg',
     description:
-      'Designed for the aspirations of modern urban professionals, the studio apartments at ROCK ONE SQUARE bring together intelligent layouts, contemporary aesthetics and modern amenities. A thoughtfully planned living experience for those who value convenience, functionality and a well-connected address.',
+      "The studio apartments at ROCK ONE SQUARE are planned for people seeking compact urban living within a mixed-use development. Their positioning complements the project's commercial and entertainment offerings, bringing multiple everyday needs together at one address.",
     highlights: [
-      'Key Highlight: Contemporary urban living in thoughtfully designed spaces.',
-      'Intelligent modular layouts with premium finishes',
+      'Key Highlight: Studio apartments within a mixed-use development.',
+      'Compact urban living with intelligent modular layouts',
       'Panoramic National Capital Region horizon views',
       'Seamless access to building retail, dining and services',
     ],

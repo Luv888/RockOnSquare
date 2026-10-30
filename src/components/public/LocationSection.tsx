@@ -100,10 +100,10 @@ export function LocationSection() {
             </span>
           </h2>
           <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
-            The future of NCR is being shaped by expanding infrastructure, evolving connectivity and emerging urban destinations. Raj Nagar Extension is increasingly becoming part of this growth story.
+            Raj Nagar Extension is part of the evolving Ghaziabad urban landscape. ROCK ONE SQUARE is positioned to serve businesses, visitors and residents seeking a mixed-use destination in this area.
           </p>
           <p className="mt-2 text-white/60 text-xs sm:text-sm leading-relaxed">
-            Strategically located in this evolving corridor, ROCK ONE SQUARE brings business, entertainment and modern living closer to the opportunities emerging across the region.
+            Its location can be presented in terms of access to surrounding roads, regional infrastructure and nearby destinations, provided each connection is accurately represented.
           </p>
         </div>
 
