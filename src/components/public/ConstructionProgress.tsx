@@ -139,7 +139,7 @@ export function ConstructionProgress({ updates }: ConstructionProgressProps = {}
             </span>
           </h2>
           <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
-            ROCK ONE SQUARE is taking shape as construction progresses. Follow the milestone roadmap and verify our latest site progress in Raj Nagar Extension.
+            The vision of ROCK ONE SQUARE is steadily becoming reality, with construction progressing ahead of schedule. Every completed floor brings this landmark destination closer to welcoming a new generation of businesses, experiences and modern urban lifestyles.
           </p>
         </div>
 
