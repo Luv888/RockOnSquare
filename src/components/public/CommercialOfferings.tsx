@@ -35,7 +35,7 @@ const VERTICALS: VerticalItem[] = [
   {
     id: 'retail',
     title: 'Retail',
-    tagline: 'Where Brands Meet Footfall.',
+    tagline: 'Visibility That Creates Opportunity.',
     icon: Store,
     levels: 'Ground & 1st Floor',
     levelBadge: 'LEVEL 0 – 1',
@@ -44,12 +44,12 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-[#c9a84c]/20 to-transparent',
     imageUrl: '/images/retail-1.jpg',
     description:
-      'Designed to capture attention and drive business, the retail spaces at ROCK ONE SQUARE feature high-visibility frontage on Meerut Road. With wide storefronts, modern architecture and a prime commercial location, this is where brands connect with customers every day.',
+      'Designed for brands that aspire to stand out, the retail spaces at ROCK ONE SQUARE combine a prominent commercial presence with the potential to attract attention and footfall. With a 30-metre-wide arterial road in front, retail takes centre stage in a destination designed around visibility and engagement.',
     highlights: [
-      'Prime 30-metre arterial frontage on Meerut Road',
-      'High visibility and maximum footfall potential',
-      'Contemporary double-height retail architecture & grand atrium',
-      'Ideal for flagship brands, artisanal dining & daily essentials',
+      'Key Highlight: 30-metre-wide arterial road frontage.',
+      'Prominent double-height atrium visibility',
+      'High footfall pedestrian plaza',
+      'Direct arterial road access with dedicated parking',
     ],
     stackPosition: 'Street & Galleria Base',
   },
@@ -65,11 +65,11 @@ const VERTICALS: VerticalItem[] = [
     bgGlow: 'from-purple-500/20 to-transparent',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     description:
-      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With expansive gaming zones, interactive arcade attractions, and curated dining experiences, the destination is designed to make leisure more engaging.',
+      'Bringing people together through excitement, recreation and memorable moments, ROCK ONE SQUARE creates a vibrant entertainment destination for Ghaziabad. With Lord of the Drinks and the biggest gaming zone in Ghaziabad planned as key attractions, the destination is designed to make leisure more engaging.',
     highlights: [
-      'A dynamic regional entertainment destination',
+      'Key Highlight: A dynamic entertainment destination.',
+      'Lord of the Drinks & the biggest gaming zone in Ghaziabad',
       'Interactive gaming experiences and arcade attractions',
-      'The biggest gaming zone in Ghaziabad with VR & arcade arenas',
       'Curated dining and recreational leisure spaces',
     ],
     stackPosition: 'Recreational Anchor',
@@ -88,9 +88,9 @@ const VERTICALS: VerticalItem[] = [
     description:
       'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today’s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
     highlights: [
-      'Smart, efficient and contemporary workspaces',
-      'Climate comfort & HVAC systems',
-      'High-speed digital connectivity infrastructure & optic fiber',
+      'Key Highlight: Smart, efficient and contemporary workspaces.',
+      'Integrated climate comfort & HVAC systems',
+      'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
     stackPosition: 'Corporate Hub',
@@ -109,7 +109,7 @@ const VERTICALS: VerticalItem[] = [
     description:
       'Designed for the aspirations of modern urban professionals, the studio apartments at ROCK ONE SQUARE bring together intelligent layouts, contemporary aesthetics and modern amenities. A thoughtfully planned living experience for those who value convenience, functionality and a well-connected address.',
     highlights: [
-      'Contemporary urban living in thoughtfully designed spaces',
+      'Key Highlight: Contemporary urban living in thoughtfully designed spaces.',
       'Intelligent modular layouts with premium finishes',
       'Panoramic National Capital Region horizon views',
       'Seamless access to building retail, dining and services',

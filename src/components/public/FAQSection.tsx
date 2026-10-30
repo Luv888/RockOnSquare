@@ -26,7 +26,7 @@ const DEFAULT_FAQS: FAQ[] = [
   {
     id: '3',
     question: 'What amenities are included?',
-    answer: 'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.',
+    answer: 'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.',
   },
   {
     id: '4',

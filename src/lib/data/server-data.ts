@@ -14,6 +14,7 @@ import {
   INITIAL_SITE_SETTINGS,
   INITIAL_ENQUIRIES,
   normalizeFaqRecord,
+  normalizeBannerRecord,
 } from "./initial-data";
 import type {
   Banner,
@@ -120,18 +121,7 @@ export async function getServerOfferings(): Promise<Offering[]> {
 
 // ─── Banners ─────────────────────────────────────────────────────────────────
 
-export function normalizeBannerRecord(b: Banner): Banner {
-  let imageUrl = b.imageUrl
-  if (
-    b.title.toLowerCase().includes('gaming') ||
-    b.description?.toLowerCase().includes('gaming zone') ||
-    b.sortOrder === 2 ||
-    (imageUrl && imageUrl.includes('gaming-zone'))
-  ) {
-    imageUrl = '/images/gaming-zone-bumper-cars.png'
-  }
-  return { ...b, imageUrl }
-}
+export { normalizeBannerRecord }
 
 export async function getServerBanners(onlyPublished = true): Promise<Banner[]> {
   if (!isDbConfigured()) {

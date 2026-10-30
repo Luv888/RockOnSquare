@@ -4,6 +4,8 @@ import { getServerAmenities, getServerBanners, getServerLeads } from '@/lib/data
 import { requireAdmin } from '@/lib/auth/guards'
 import { Users, Layout, HardHat, Star, TrendingUp, Clock, AlertCircle } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 async function getDashboardStats() {
   const [banners, amenities, enquiries] = await Promise.all([
     getServerBanners(false),
@@ -45,10 +47,9 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      {/* Demo Notice */}
       <div className="mb-6 px-4 py-3 border border-[rgba(201,168,76,0.25)] rounded-sm bg-[rgba(201,168,76,0.06)] text-xs text-white/50">
-        <span className="text-[#c9a84c] font-medium">Demo Mode —</span>{' '}
-        Data is stored in browser localStorage. Stats refresh on page reload. Changes to banners, FAQs, amenities, and construction updates reflect on the public site after refresh.
+        <span className="text-[#c9a84c] font-medium">Authoritative Dashboard —</span>{' '}
+        Real-time metrics synchronized with MongoDB and site operations.
       </div>
 
       <div className="mb-8">
@@ -135,9 +136,6 @@ export default async function DashboardPage() {
             </table>
           </div>
         )}
-        <p className="mt-3 text-white/25 text-xs italic">
-          Note: Dashboard stats are based on initial demo data. Visit Leads to see localStorage-updated enquiries.
-        </p>
       </div>
     </div>
   )

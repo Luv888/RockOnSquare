@@ -8,8 +8,10 @@ import {
   getStoredAmenities,
   saveAmenity,
   deleteAmenity,
+  syncStoredAmenities,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { saveAmenityAction, deleteAmenityAction } from '@/lib/actions/admin'
 import type { Amenity } from '@/lib/data/types'
 
 const inputClass =
@@ -18,18 +20,29 @@ const labelClass = 'block text-sm font-medium text-white/70 mb-1'
 
 // ─── Amenities List ───────────────────────────────────────────
 
-export function AmenitiesListClient() {
-  const [amenities, setAmenities] = useState<Amenity[]>([])
+export function AmenitiesListClient({ initialAmenities }: { initialAmenities?: Amenity[] }) {
+  const router = useRouter()
+  const [amenities, setAmenities] = useState<Amenity[]>(() => {
+    if (initialAmenities && initialAmenities.length > 0) return initialAmenities
+    return getStoredAmenities()
+  })
 
   useEffect(() => {
-    setAmenities(getStoredAmenities())
+    if (initialAmenities && initialAmenities.length > 0) {
+      syncStoredAmenities(initialAmenities)
+      setAmenities(initialAmenities)
+    } else {
+      setAmenities(getStoredAmenities())
+    }
     return subscribeToDataChanges(() => setAmenities(getStoredAmenities()))
-  }, [])
+  }, [initialAmenities])
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Delete this amenity?')) return
     deleteAmenity(id)
-    setAmenities(getStoredAmenities())
+    setAmenities((prev) => prev.filter((a) => a.id !== id))
+    await deleteAmenityAction(id)
+    router.refresh()
   }
 
   return (
@@ -91,29 +104,38 @@ export function AmenitiesListClient() {
 
 interface AmenityFormProps {
   id?: string
+  initialAmenity?: Amenity | null
 }
 
-export function AmenityFormClient({ id }: AmenityFormProps) {
+export function AmenityFormClient({ id, initialAmenity }: AmenityFormProps) {
   const router = useRouter()
   const isNew = !id
 
-  const [form, setForm] = useState<Partial<Amenity>>({
-    name: '',
-    description: '',
-    iconName: '',
-    imageUrl: '',
-    sortOrder: 0,
-    isPublished: true,
+  const [form, setForm] = useState<Partial<Amenity>>(() => {
+    if (initialAmenity) return { ...initialAmenity, imageUrl: initialAmenity.imageUrl ?? '' }
+    return {
+      name: '',
+      description: '',
+      iconName: '',
+      imageUrl: '',
+      sortOrder: 0,
+      isPublished: true,
+    }
   })
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (id) {
-      const found = getStoredAmenities().find((a) => a.id === id)
-      if (found) setForm({ ...found, imageUrl: found.imageUrl ?? '' })
-      else setError('Amenity not found.')
+      if (initialAmenity) {
+        setForm({ ...initialAmenity, imageUrl: initialAmenity.imageUrl ?? '' })
+      } else {
+        const found = getStoredAmenities().find((a) => a.id === id)
+        if (found) setForm({ ...found, imageUrl: found.imageUrl ?? '' })
+        else setError('Amenity not found.')
+      }
     }
-  }, [id])
+  }, [id, initialAmenity])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -123,11 +145,12 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name?.trim()) { setError('Name is required.'); return }
+    setLoading(true)
     const amenity: Amenity = {
-      id: id || `amenity-${Date.now()}`,
+      id: id || form.id || `amenity-${Date.now()}`,
       name: form.name!,
       description: form.description ?? null,
       iconName: form.iconName ?? null,
@@ -135,14 +158,30 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
       sortOrder: form.sortOrder ?? 0,
       isPublished: form.isPublished ?? true,
     }
+
     saveAmenity(amenity)
+
+    await saveAmenityAction({
+      id: id || form.id,
+      name: amenity.name,
+      description: amenity.description,
+      iconName: amenity.iconName,
+      imageUrl: amenity.imageUrl,
+      sortOrder: amenity.sortOrder,
+      isPublished: amenity.isPublished,
+    })
+
     router.push('/admin/amenities')
+    router.refresh()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!id || !confirm('Permanently delete this amenity?')) return
+    setLoading(true)
     deleteAmenity(id)
+    await deleteAmenityAction(id)
     router.push('/admin/amenities')
+    router.refresh()
   }
 
   if (error && id) return <div className="p-6 border border-red-500/20 rounded-sm text-red-400 text-sm">{error}</div>
@@ -169,7 +208,7 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
         <div>
           <label className={labelClass}>Lucide Icon Name</label>
           <input name="iconName" value={form.iconName ?? ''} onChange={handleChange} placeholder="e.g. Zap, Car, Shield" className={inputClass} />
-          <p className="text-xs text-white/40 mt-1">Examples: Zap, Shield, Car, Wind, Camera, Gem, Package</p>
+          <p className="text-xs text-white/40 mt-1">Examples: Zap, Shield, Car, Wind, Camera, Gem, Package, ArrowUpDown</p>
         </div>
         <div>
           <label className={labelClass}>Amenity Image Path or URL</label>
@@ -211,7 +250,7 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
           </select>
         </div>
         <div className="flex items-center gap-3 pt-2">
-          <button type="submit" className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors">
+          <button type="submit" disabled={loading} className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors disabled:opacity-50">
             <Save className="w-4 h-4" />{isNew ? 'Create Amenity' : 'Save Changes'}
           </button>
           <Link href="/admin/amenities" className="px-6 py-2 rounded border border-white/20 text-white hover:bg-white/5 transition-colors">Cancel</Link>
@@ -222,7 +261,7 @@ export function AmenityFormClient({ id }: AmenityFormProps) {
         <div className="mt-8 rounded-lg border border-red-500/30 p-6">
           <h2 className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
           <p className="text-white/50 text-sm mb-4">Permanently delete this amenity.</p>
-          <button onClick={handleDelete} className="bg-red-600 text-white px-6 py-2 rounded font-medium hover:bg-red-700 transition-colors">Delete Amenity</button>
+          <button onClick={handleDelete} disabled={loading} className="bg-red-600 text-white px-6 py-2 rounded font-medium hover:bg-red-700 transition-colors disabled:opacity-50">Delete Amenity</button>
         </div>
       )}
     </div>

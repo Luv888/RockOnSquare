@@ -49,9 +49,9 @@ async function main() {
     create: {
       slug: 'rock-one-square',
       name: 'Rock One Square',
-      tagline: 'A Rock Solid Plan to Grow',
+      tagline: 'DESIGNED TO ELEVATE EVERY EXPERIENCE.',
       description:
-        'Rock One Square is a landmark mixed-use commercial destination spread across approximately one acre in Raj Nagar Extension, Ghaziabad. The development combines premium retail, world-class entertainment, modern offices, and premium studio apartments.',
+        'Spread across one acre, ROCK ONE SQUARE is a thoughtfully planned mixed-use destination that brings together four distinct verticals — Retail, Entertainment, Modern Offices and Studio Apartments — under one landmark address. From vibrant retail spaces and immersive entertainment to contemporary workspaces and modern urban living, every level is designed to create a more enriching experience.',
       developerName: 'Senflore Hospitality LLP',
       address: 'Raj Nagar Extension',
       city: 'Ghaziabad',
@@ -160,15 +160,14 @@ async function main() {
   // AMENITIES
   // ============================================================
   const amenitiesData = [
-    { name: 'Premium Finishes', description: 'Granite and premium tile throughout all common areas', iconName: 'Gem', sortOrder: 0 },
-    { name: 'Dual Power Supply', description: 'Uninterrupted power with DG backup for critical systems', iconName: 'Zap', sortOrder: 1 },
-    { name: 'HVAC', description: 'Centralised climate control across commercial zones', iconName: 'Wind', sortOrder: 2 },
-    { name: 'Advanced Fire Safety', description: 'Multi-zone fire detection and suppression systems', iconName: 'Shield', sortOrder: 3 },
-    { name: '24×7 CCTV', description: 'Comprehensive surveillance across all levels and access points', iconName: 'Camera', sortOrder: 4 },
-    { name: '8 Elevators', description: "Eight elevators designed to provide convenient vertical access between the building's different levels.", iconName: 'ArrowUpDown', sortOrder: 5 },
-    { name: 'Service Areas', description: 'Dedicated back-of-house operations and service entry points', iconName: 'Package', sortOrder: 6 },
-    { name: 'Grand Entrance', description: 'Architecturally impressive entrance statement and lobby', iconName: 'DoorOpen', sortOrder: 7 },
-    { name: 'Valet & Mechanical Parking', description: 'Convenient parking arrangements designed to support visitors, shoppers, tenants, and commercial operations.', iconName: 'Car', sortOrder: 8 },
+    { name: 'Premium Finishes', description: 'Granite and tile finishes across designated areas.', iconName: 'Gem', sortOrder: 0 },
+    { name: 'Reliable Power Support', description: 'Dual power supply with DG backup.', iconName: 'Zap', sortOrder: 1 },
+    { name: 'Integrated Climate Comfort', description: 'Integrated HVAC system.', iconName: 'Wind', sortOrder: 2 },
+    { name: 'Safety by Design', description: 'Advanced firefighting systems.', iconName: 'Shield', sortOrder: 3 },
+    { name: 'Round-the-Clock Monitoring', description: '24×7 CCTV surveillance.', iconName: 'Camera', sortOrder: 4 },
+    { name: 'Seamless Vertical Movement', description: '8 high-speed elevators.', iconName: 'ArrowUpDown', sortOrder: 5 },
+    { name: 'Convenient Parking', description: 'Extensive basement parking with modern wayfinding.', iconName: 'Car', sortOrder: 6 },
+    { name: 'Efficient Service Access', description: 'Discreet service area at the rear.', iconName: 'Package', sortOrder: 7 },
   ]
 
   for (const a of amenitiesData) {
@@ -184,13 +183,14 @@ async function main() {
   // FAQS
   // ============================================================
   const faqsData = [
-    { question: 'Where is Rock One Square located?', answer: 'Rock One Square is located in Raj Nagar Extension, Ghaziabad, Uttar Pradesh — a rapidly growing commercial corridor with direct frontage on Meerut Road and strong connectivity to the Delhi-NCR region.', sortOrder: 0 },
+    { question: 'Where is Rock One Square located?', answer: 'Rock One Square is located in Raj Nagar Extension, Ghaziabad, Uttar Pradesh — with direct frontage on a 30-metre-wide arterial road connected to Meerut Road and the Delhi–Meerut Expressway corridor.', sortOrder: 0 },
     { question: 'What are the four verticals available at Rock One Square?', answer: 'Rock One Square brings together four key verticals: Premium Retail, Food & Beverage, Entertainment, and Studio Apartments. Contact our sales team for details about available spaces.', sortOrder: 1 },
-    { question: 'What amenities are included?', answer: 'The development features dual power supply with DG backup, HVAC, advanced fire safety systems, 24×7 CCTV surveillance, eight elevators, premium granite finishes, dedicated service areas, and a grand entrance.', sortOrder: 2 },
+    { question: 'What amenities are included?', answer: 'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.', sortOrder: 2 },
     { question: 'How can I book a site visit?', answer: 'Click the "Book a Site Visit" button on this page, fill out the enquiry form, call our sales team directly, or reach us on WhatsApp. Our team will confirm a convenient time for your visit.', sortOrder: 3 },
     { question: 'How can I get the project brochure?', answer: 'You can request the project brochure by submitting an enquiry or contacting our sales team directly. We will send you the latest project documentation to your email or WhatsApp.', sortOrder: 4 },
     { question: 'How can I contact the sales team?', answer: 'Use the enquiry form at the bottom of this page, call us during business hours (Monday to Sunday, 10 AM–9 PM), or message us on WhatsApp.', sortOrder: 5 },
-    { question: 'What is the RERA status?', answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.", sortOrder: 6 },
+    { question: 'What is the current construction status?', answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites and rooftop, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.', sortOrder: 6 },
+    { question: 'What is the RERA status?', answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.", sortOrder: 7 },
   ]
 
   // Remove legacy outdated questions from the database
@@ -227,7 +227,7 @@ async function main() {
     {
       title: 'ROCK ONE SQUARE',
       subtitle: 'DESIGNED TO ELEVATE EVERY EXPERIENCE.',
-      description: 'Retail. Entertainment. Modern Offices. Studio Apartments. One landmark address redefining commercial architecture in Raj Nagar Extension.',
+      description: 'Retail. Entertainment. Modern Offices. Studio Apartments.',
       imageUrl: '/images/building-front.jpg',
       ctaLabel: 'Explore Building Explorer',
       ctaUrl: '#explorer',
@@ -238,11 +238,11 @@ async function main() {
       status: PublishStatus.PUBLISHED,
     },
     {
-      title: 'ENTERTAINMENT & DINING',
-      subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
-      description: 'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
+      title: 'LORD OF THE DRINKS',
+      subtitle: 'AN ICONIC EXPERIENCE. A NEW ADDRESS.',
+      description: 'An iconic dining experience arrives in Raj Nagar Extension with Lord of the Drinks. A vibrant commercial destination bringing together curated fine dining and memorable social moments.',
       imageUrl: '/images/lord-of-the-drinks.jpg',
-      badge: 'CURATED SOCIAL & DINING DESTINATION',
+      badge: 'FOR THE FIRST TIME IN GHAZIABAD',
       ctaLabel: 'Discover Entertainment',
       ctaUrl: '#offerings',
       secondaryCtaLabel: 'Enquire for Dining Space',
@@ -251,11 +251,11 @@ async function main() {
       status: PublishStatus.PUBLISHED,
     },
     {
-      title: 'GAMING ZONE',
-      subtitle: 'ENTERTAINMENT. ENERGY. UNFORGETTABLE MOMENTS.',
-      description: 'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor.',
+      title: 'THE BIGGEST GAMING ZONE IN GHAZIABAD',
+      subtitle: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
+      description: 'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor entertainment level.',
       imageUrl: '/images/gaming-zone-bumper-cars.png',
-      badge: "GHAZIABAD'S LARGEST GAMING HUB",
+      badge: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
       ctaLabel: 'Explore Verticals',
       ctaUrl: '#offerings',
       secondaryCtaLabel: 'Plan Your Visit',

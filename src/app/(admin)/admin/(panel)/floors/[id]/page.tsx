@@ -1,5 +1,8 @@
 import React from 'react'
+import { getServerFloors } from '@/lib/data/server-data'
 import { FloorFormClient } from '../FloorsClient'
+
+export const dynamic = 'force-dynamic'
 
 export default async function EditFloorPage({
   params,
@@ -7,5 +10,7 @@ export default async function EditFloorPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  return <FloorFormClient id={id} />
+  const floors = await getServerFloors()
+  const floor = floors.find((f) => f.id === id) || null
+  return <FloorFormClient id={id} initialFloor={floor} />
 }

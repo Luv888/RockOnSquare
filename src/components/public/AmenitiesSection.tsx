@@ -39,154 +39,137 @@ const VERIFIED_AMENITIES: AmenityDetail[] = [
   {
     id: 'amenity-1',
     name: 'Premium Finishes',
-    shortDesc: 'Granite and premium tile throughout all common areas',
+    shortDesc: 'Granite and tile finishes across designated areas.',
     iconName: 'Gem',
     effectType: 'finishes',
     badge: 'LUXURY FINISH',
     imageUrl: '/images/retail-1.jpg',
     fullDescription:
-      'Impeccably detailed public spaces featuring high-grade polished granite, Italian-style vitrified slabs, and brushed metallic gold accents. Designed to withstand high footfall while retaining a refined, prestigious look.',
+      'Granite and tile finishes across designated common areas, lobbies, corridors, and exterior portals. Engineered to maintain enduring elegance under high footfall.',
     specifications: [
-      'Polished granite & large-format vitrified flooring',
-      'Architectural false ceiling with recessed LED illumination',
+      'Granite and tile finishes across designated areas',
+      'Architectural ceiling detailing and ambient illumination',
       'Brushed metallic gold trim portals and handrails',
-      'Hard-wearing, slip-resistant exterior plaza paving',
+      'Slip-resistant exterior pedestrian plaza paving',
     ],
   },
   {
     id: 'amenity-2',
-    name: 'Dual Power Supply',
-    shortDesc: 'Uninterrupted power with 100% DG backup for critical systems',
+    name: 'Reliable Power Support',
+    shortDesc: 'Dual power supply with DG backup.',
     iconName: 'Zap',
     effectType: 'power',
-    badge: '24×7 CONTINUITY',
+    badge: '24×7 POWER',
     imageUrl: '/images/building-aerial.jpg',
     fullDescription:
-      'Engineered with dual independent grid feeder sources and an automatic diesel generator backup system, guaranteeing 24×7 uninterrupted operations for retail, offices, elevators, and essential building services.',
+      'Dual power supply with automatic DG backup guaranteeing uninterrupted commercial, retail, and residential operations.',
     specifications: [
-      'Automatic transfer switchgear (ATS) with zero changeover disruption',
-      '100% DG capacity for common areas, elevators & commercial loads',
-      'Energy-efficient step-down transformers & surge suppression',
-      'Individual metered sub-panels for all commercial units',
+      'Dual power supply network infrastructure',
+      'Automatic DG backup for critical loads and common areas',
+      'Zero changeover disruption for digital and retail networks',
+      'Individual sub-metering systems for all units',
     ],
   },
   {
     id: 'amenity-3',
-    name: 'HVAC',
-    shortDesc: 'Centralised climate control across commercial zones',
+    name: 'Integrated Climate Comfort',
+    shortDesc: 'Integrated HVAC system.',
     iconName: 'Wind',
     effectType: 'hvac',
-    badge: 'CLIMATE CONTROL',
+    badge: 'INTEGRATED HVAC',
     imageUrl: '/images/office-1.jpg',
     fullDescription:
-      'High-efficiency central air-conditioning and ventilation systems engineered to maintain optimal temperature, continuous air renewal, and acoustic quiet throughout all commercial zones and retail gallerias.',
+      'Integrated HVAC system engineered to maintain balanced indoor temperature and continuous clean airflow throughout commercial zones.',
     specifications: [
-      'Variable Refrigerant Flow (VRF/VAV) energy-saving chillers',
-      'Clean air filtration removing particulate matter & allergens',
-      'Acoustically lined ductwork to eliminate operational noise',
-      'Independent smart thermostat controls per floor zone',
+      'Integrated HVAC system across commercial zones',
+      'High-efficiency thermal control and indoor air renewal',
+      'Acoustically insulated ducting for quiet operation',
+      'Smart zoned climate regulation per floor area',
     ],
   },
   {
     id: 'amenity-4',
-    name: 'Advanced Fire Safety',
-    shortDesc: 'Multi-zone fire detection and suppression systems',
+    name: 'Safety by Design',
+    shortDesc: 'Advanced firefighting systems.',
     iconName: 'Shield',
     effectType: 'fire',
-    badge: 'LIFE SAFETY SPEC',
+    badge: 'NBC COMPLIANT',
     imageUrl: '/images/building-front.jpg',
     fullDescription:
-      'Fully compliant with National Building Code (NBC) life safety standards, featuring automatic sprinkler grids, addressable smoke sensors, pressurized fire escape stairwells, and emergency fire hydrants.',
+      'Advanced firefighting systems featuring automatic sprinklers, addressable smoke detectors, pressurized stairwells, and emergency fire hydrants.',
     specifications: [
-      'Multi-zone microprocessor-based fire alarm control panel',
-      'Automatic ceiling sprinkler coverage on all 11 levels & basements',
+      'Advanced firefighting systems on all levels',
+      'Comprehensive sprinkler grid & sensitive smoke detectors',
       'Pressurized smoke-evacuation stairways and fire doors',
-      'Dedicated underground and overhead fire-fighting water reserves',
+      'Dedicated underground and overhead fire water reserves',
     ],
   },
   {
     id: 'amenity-5',
-    name: '24×7 CCTV & Security',
-    shortDesc: 'Comprehensive surveillance across all levels and access points',
+    name: 'Round-the-Clock Monitoring',
+    shortDesc: '24×7 CCTV surveillance.',
     iconName: 'Camera',
     effectType: 'cctv',
-    badge: 'MULTI-TIER SECURITY',
+    badge: '24×7 SECURITY',
     imageUrl: '/images/retail-1.jpg',
     fullDescription:
-      'A comprehensive security network including high-resolution IP dome cameras, perimeter infrared beams, 24-hour centralized security monitoring room, and trained security personnel at all access portals.',
+      '24×7 CCTV surveillance across all access portals, gallerias, common corridors, elevator lobbies, and parking basements.',
     specifications: [
-      'Full coverage HD IP cameras with night-vision capabilities',
-      'Digital video recording with 30+ days continuous archiving',
-      '24×7 manned security control desk and quick-response protocols',
-      'Boom-barrier automated license plate recognition at parking gates',
+      '24×7 CCTV surveillance network',
+      'High-definition IP cameras across all levels',
+      'Centralized surveillance monitoring console',
+      'Trained security personnel and entry control',
     ],
   },
   {
     id: 'amenity-6',
-    name: '8 Elevators',
-    shortDesc: "Eight elevators designed to provide convenient vertical access between the building's different levels",
+    name: 'Seamless Vertical Movement',
+    shortDesc: '8 high-speed elevators.',
     iconName: 'ArrowUpDown',
     effectType: 'elevators',
-    badge: 'VERTICAL MOBILITY',
+    badge: 'HIGH-SPEED LIFTS',
     imageUrl: '/images/building-front.jpg',
     fullDescription:
-      "Eight elevators designed to provide convenient vertical access between the building's different levels.",
+      '8 high-speed elevators planned to provide rapid, smooth vertical transit connecting basement parking, retail, entertainment, offices, and studios.',
     specifications: [
-      'Eight elevators planned for convenient vertical access',
-      'Seamless circulation between different building levels',
-      'Automatic rescue devices (ARD) in the event of grid fluctuations',
-      'Direct access connecting parking, retail, and upper levels',
+      '8 high-speed elevators for swift vertical movement',
+      'Intelligent traffic dispatch to minimize wait times',
+      'Automatic rescue devices (ARD) in the event of grid interruption',
+      'Spacious cabs with premium interior finishes',
+    ],
+  },
+  {
+    id: 'amenity-7',
+    name: 'Convenient Parking',
+    shortDesc: 'Extensive basement parking with modern wayfinding.',
+    iconName: 'Car',
+    effectType: 'parking',
+    badge: 'BASEMENT PARKING',
+    imageUrl: '/images/building-aerial.jpg',
+    fullDescription:
+      'Extensive basement parking with modern wayfinding, wide vehicular ramps, and convenient access to elevators.',
+    specifications: [
+      'Extensive basement parking with modern wayfinding',
+      'Multi-level vehicular access and designated drop-offs',
+      'Clear directional signage and stall numbering',
+      'Dedicated elevator access from basements to all upper levels',
     ],
   },
   {
     id: 'amenity-8',
-    name: 'Service Areas',
-    shortDesc: 'Dedicated back-of-house operations and service entry points',
+    name: 'Efficient Service Access',
+    shortDesc: 'Discreet service area at the rear.',
     iconName: 'Package',
     effectType: 'service',
-    badge: 'LOGISTICS INFRASTRUCTURE',
+    badge: 'SERVICE LOGISTICS',
     imageUrl: '/images/office-1.jpg',
     fullDescription:
-      'Thoughtfully separated back-of-house circulation corridors, freight delivery docks, and commercial kitchen service infrastructure, keeping goods movement completely separate from visitor shopping zones.',
+      'Discreet service area at the rear engineered for back-of-house deliveries, waste management, and logistics without disrupting public areas.',
     specifications: [
-      'Dedicated delivery loading dock with direct service elevator access',
-      'Specialized commercial garbage collection & organic waste disposal',
-      'Separated maintenance passages and service riser ducts',
-      'Heavy-duty floor loading capacity in all back-of-house corridors',
-    ],
-  },
-  {
-    id: 'amenity-9',
-    name: 'Grand Entrance',
-    shortDesc: 'Architecturally impressive entrance statement and lobby',
-    iconName: 'DoorOpen',
-    effectType: 'entrance',
-    badge: 'ARRIVALS STATEMENT',
-    imageUrl: '/images/building-front.jpg',
-    fullDescription:
-      'An imposing double-height covered vehicular drop-off portico and wide landscaped pedestrian plaza along Meerut Road, establishing an unmistakable signature address for brands and visitors alike.',
-    specifications: [
-      'Grand covered drop-off porch shielding visitors from weather',
-      'Architectural water features and manicured perimeter landscaping',
-      'Illuminated signage totems with maximum Meerut Road visibility',
-      'Direct barrier-free access ramps for strollers and wheelchairs',
-    ],
-  },
-  {
-    id: 'amenity-10',
-    name: 'Valet & Mechanical Parking',
-    shortDesc: 'Convenient parking arrangements supporting visitors, shoppers, and tenants',
-    iconName: 'Car',
-    effectType: 'parking',
-    badge: 'PARKING AMENITY',
-    imageUrl: '/images/building-aerial.jpg',
-    fullDescription:
-      'Convenient parking arrangements designed to support visitors, shoppers, tenants, and commercial operations.',
-    specifications: [
-      'Organized vehicular flow and convenient parking access',
-      'Integrated carbon monoxide sensor-triggered air exhausts',
-      'Dedicated secure pedestrian walkways leading to elevator lobbies',
-      'Direct connectivity to retail and office levels',
+      'Discreet service area at the rear',
+      'Dedicated logistics and loading bay access',
+      'Separated back-of-house corridors and freight access',
+      'Independent waste handling and maintenance routing',
     ],
   },
 ]
@@ -328,22 +311,24 @@ export function AmenitiesSection({ amenities }: AmenitiesSectionProps = {}) {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 text-[#e4c870] text-xs font-semibold uppercase tracking-widest mb-4">
             <Sparkles className="w-3.5 h-3.5" />
-            Infrastructure & Quality
+            Amenities & Specifications
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight">
-            Built for{' '}
+            Every Detail.{' '}
             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
-              Comfort and Prestige
+              Thoughtfully Considered.
             </span>
           </h2>
-          <p className="mt-4 text-white/60 text-sm sm:text-base leading-relaxed">
-            10 verified infrastructure pillars designed for high-capacity commercial performance, seamless daily operations,
-            and enduring asset value. Click any amenity to view detailed engineering specifications.
+          <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
+            An elevated experience is created through more than design alone. It comes from the details that make everyday movement, work and living more convenient.
+          </p>
+          <p className="mt-2 text-white/60 text-xs sm:text-sm leading-relaxed">
+            At ROCK ONE SQUARE, functional planning and essential building systems come together to support a seamless experience for visitors, businesses and residents.
           </p>
         </div>
 
-        {/* 10 Amenities Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* 8 Amenities Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {VERIFIED_AMENITIES.map((amenity, idx) => {
             const Icon = ICON_MAP[amenity.iconName] || Gem
             return (
@@ -368,7 +353,7 @@ export function AmenitiesSection({ amenities }: AmenitiesSectionProps = {}) {
                   <h3 className="text-white text-sm font-medium mb-1.5 group-hover:text-[#e4c870] transition-colors">
                     {amenity.name}
                   </h3>
-                  <p className="text-white/50 text-xs leading-relaxed line-clamp-3">
+                  <p className="text-white/60 text-xs leading-relaxed">
                     {amenity.shortDesc}
                   </p>
                 </div>
@@ -380,6 +365,13 @@ export function AmenitiesSection({ amenities }: AmenitiesSectionProps = {}) {
               </div>
             )
           })}
+        </div>
+
+        {/* Draft Tagline */}
+        <div className="mt-12 text-center">
+          <p className="font-serif italic text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
+            Thoughtfully Planned. Designed Around You.
+          </p>
         </div>
       </div>
 

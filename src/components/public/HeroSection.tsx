@@ -43,8 +43,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     badge: '7 FLOORS COMPLETE | POSSESSION SOON',
     title: 'ROCK ONE SQUARE',
     subtitle: 'DESIGNED TO ELEVATE EVERY EXPERIENCE.',
-    description:
-      'Retail. Entertainment. Modern Offices. Studio Apartments. One landmark address redefining commercial architecture along Meerut Road in Raj Nagar Extension.',
+    description: 'Retail. Entertainment. Modern Offices. Studio Apartments.',
     imageUrl: '/images/building-front.jpg',
     imagePosition: 'object-center lg:object-[center_35%]',
     showLogo: true,
@@ -58,12 +57,12 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: 'banner-2',
     navNumber: '02',
-    navLabel: 'Entertainment & Dining',
-    badge: 'CURATED SOCIAL & DINING DESTINATION',
-    title: 'ENTERTAINMENT & DINING',
-    subtitle: 'CURATED CULINARY & SOCIAL DESTINATIONS.',
+    navLabel: 'Lord of the Drinks',
+    badge: 'FOR THE FIRST TIME IN GHAZIABAD',
+    title: 'LORD OF THE DRINKS',
+    subtitle: 'AN ICONIC EXPERIENCE. A NEW ADDRESS.',
     description:
-      'A vibrant commercial destination bringing together curated fine dining, artisanal casual eateries, and immersive social experiences across the lower entertainment tiers.',
+      'An iconic dining experience arrives in Raj Nagar Extension with Lord of the Drinks. A vibrant commercial destination bringing together curated fine dining and memorable social moments.',
     imageUrl: '/images/lord-of-the-drinks.jpg',
     imagePosition: 'object-center lg:object-[center_45%]',
     showLogo: false,
@@ -78,8 +77,8 @@ export const HERO_SLIDES: HeroSlide[] = [
     id: 'banner-3',
     navNumber: '03',
     navLabel: 'Gaming Zone',
-    badge: 'THE BIGGEST GAMING ZONE IN GHAZIABAD',
-    title: 'GAMING ZONE',
+    badge: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
+    title: 'THE BIGGEST GAMING ZONE IN GHAZIABAD',
     subtitle: 'TAKE ENTERTAINMENT TO THE NEXT LEVEL.',
     description:
       'The biggest gaming zone in Ghaziabad. Immersive virtual reality, dynamic arcade arenas, and family recreation spanning the expansive 3rd floor entertainment level.',

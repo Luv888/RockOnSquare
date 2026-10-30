@@ -8,8 +8,10 @@ import {
   getStoredFAQs,
   saveFAQ,
   deleteFAQ,
+  syncStoredFAQs,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { saveFAQAction, deleteFAQAction } from '@/lib/actions/admin'
 import type { FAQ } from '@/lib/data/types'
 
 const inputClass =
@@ -18,18 +20,29 @@ const labelClass = 'block text-sm font-medium text-white/70 mb-1'
 
 // ─── FAQs List ────────────────────────────────────────────────
 
-export function FAQsListClient() {
-  const [faqs, setFaqs] = useState<FAQ[]>([])
+export function FAQsListClient({ initialFaqs }: { initialFaqs?: FAQ[] }) {
+  const router = useRouter()
+  const [faqs, setFaqs] = useState<FAQ[]>(() => {
+    if (initialFaqs && initialFaqs.length > 0) return initialFaqs
+    return getStoredFAQs()
+  })
 
   useEffect(() => {
-    setFaqs(getStoredFAQs())
+    if (initialFaqs && initialFaqs.length > 0) {
+      syncStoredFAQs(initialFaqs)
+      setFaqs(initialFaqs)
+    } else {
+      setFaqs(getStoredFAQs())
+    }
     return subscribeToDataChanges(() => setFaqs(getStoredFAQs()))
-  }, [])
+  }, [initialFaqs])
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Delete this FAQ?')) return
     deleteFAQ(id)
-    setFaqs(getStoredFAQs())
+    setFaqs((prev) => prev.filter((f) => f.id !== id))
+    await deleteFAQAction(id)
+    router.refresh()
   }
 
   return (
@@ -81,27 +94,36 @@ export function FAQsListClient() {
 
 interface FAQFormProps {
   id?: string
+  initialFaq?: FAQ | null
 }
 
-export function FAQFormClient({ id }: FAQFormProps) {
+export function FAQFormClient({ id, initialFaq }: FAQFormProps) {
   const router = useRouter()
   const isNew = !id
 
-  const [form, setForm] = useState<Partial<FAQ>>({
-    question: '',
-    answer: '',
-    sortOrder: 0,
-    isPublished: true,
+  const [form, setForm] = useState<Partial<FAQ>>(() => {
+    if (initialFaq) return initialFaq
+    return {
+      question: '',
+      answer: '',
+      sortOrder: 0,
+      isPublished: true,
+    }
   })
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (id) {
-      const found = getStoredFAQs().find((f) => f.id === id)
-      if (found) setForm(found)
-      else setError('FAQ not found.')
+      if (initialFaq) {
+        setForm(initialFaq)
+      } else {
+        const found = getStoredFAQs().find((f) => f.id === id)
+        if (found) setForm(found)
+        else setError('FAQ not found.')
+      }
     }
-  }, [id])
+  }, [id, initialFaq])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -111,24 +133,39 @@ export function FAQFormClient({ id }: FAQFormProps) {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.question?.trim() || !form.answer?.trim()) { setError('Question and answer are required.'); return }
+    setLoading(true)
     const faq: FAQ = {
-      id: id || `faq-${Date.now()}`,
+      id: id || form.id || `faq-${Date.now()}`,
       question: form.question!,
       answer: form.answer!,
       sortOrder: form.sortOrder ?? 0,
       isPublished: form.isPublished ?? true,
     }
+
     saveFAQ(faq)
+
+    await saveFAQAction({
+      id: id || form.id,
+      question: faq.question,
+      answer: faq.answer,
+      sortOrder: faq.sortOrder,
+      isPublished: faq.isPublished,
+    })
+
     router.push('/admin/faqs')
+    router.refresh()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!id || !confirm('Permanently delete this FAQ?')) return
+    setLoading(true)
     deleteFAQ(id)
+    await deleteFAQAction(id)
     router.push('/admin/faqs')
+    router.refresh()
   }
 
   if (error && id) return <div className="p-6 border border-red-500/20 rounded-sm text-red-400 text-sm">{error}</div>
@@ -165,7 +202,7 @@ export function FAQFormClient({ id }: FAQFormProps) {
           </select>
         </div>
         <div className="flex items-center gap-3 pt-2">
-          <button type="submit" className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors">
+          <button type="submit" disabled={loading} className="flex items-center gap-2 bg-[#c9a84c] text-black px-6 py-2 rounded font-medium hover:bg-[#e4c870] transition-colors disabled:opacity-50">
             <Save className="w-4 h-4" />{isNew ? 'Create FAQ' : 'Save Changes'}
           </button>
           <Link href="/admin/faqs" className="px-6 py-2 rounded border border-white/20 text-white hover:bg-white/5 transition-colors">Cancel</Link>
@@ -176,7 +213,7 @@ export function FAQFormClient({ id }: FAQFormProps) {
         <div className="mt-8 rounded-lg border border-red-500/30 p-6 border-t-4 border-t-red-500">
           <h2 className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
           <p className="text-white/50 text-sm mb-4">Permanently delete this FAQ. This action cannot be undone.</p>
-          <button onClick={handleDelete} className="bg-red-600 text-white px-6 py-2 rounded font-medium hover:bg-red-700 transition-colors">Delete FAQ</button>
+          <button onClick={handleDelete} disabled={loading} className="bg-red-600 text-white px-6 py-2 rounded font-medium hover:bg-red-700 transition-colors disabled:opacity-50">Delete FAQ</button>
         </div>
       )}
     </div>

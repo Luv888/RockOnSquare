@@ -138,9 +138,8 @@ export function ConstructionProgress({ updates }: ConstructionProgressProps = {}
               7 FLOORS COMPLETE.
             </span>
           </h2>
-          <p className="mt-4 text-white/60 text-sm sm:text-base leading-relaxed">
-            Constructed with uncompromising structural precision. Follow the milestone roadmap and verify our
-            on-ground progress in Raj Nagar Extension.
+          <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
+            The vision of ROCK ONE SQUARE is steadily becoming reality, with construction progressing ahead of schedule. Every completed floor brings this landmark destination closer to welcoming a new generation of businesses, experiences and modern urban lifestyles.
           </p>
         </div>
 
@@ -350,6 +349,13 @@ export function ConstructionProgress({ updates }: ConstructionProgressProps = {}
               <Calendar className="w-3.5 h-3.5 text-[#c9a84c]" />
               <span>Possession Soon</span>
             </div>
+          </div>
+
+          {/* Draft Tagline */}
+          <div className="mt-12 text-center">
+            <p className="font-serif italic text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
+              A Landmark in Progress. An Elevated Experience Ahead.
+            </p>
           </div>
         </div>
       </div>

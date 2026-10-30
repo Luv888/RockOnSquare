@@ -8,8 +8,10 @@ import {
   getStoredBanners,
   saveBanner,
   deleteBanner,
+  syncStoredBanners,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { saveBannerAction, deleteBannerAction } from '@/lib/actions/admin'
 import { INITIAL_BANNERS } from '@/lib/data/initial-data'
 import type { Banner } from '@/lib/data/types'
 
@@ -34,18 +36,29 @@ function BannerThumbnail({ url }: { url?: string | null }) {
   )
 }
 
-export function BannersListClient() {
-  const [banners, setBanners] = useState<Banner[]>([])
+export function BannersListClient({ initialBanners }: { initialBanners?: Banner[] }) {
+  const router = useRouter()
+  const [banners, setBanners] = useState<Banner[]>(() => {
+    if (initialBanners && initialBanners.length > 0) return initialBanners
+    return getStoredBanners()
+  })
 
   useEffect(() => {
-    setBanners(getStoredBanners())
+    if (initialBanners && initialBanners.length > 0) {
+      syncStoredBanners(initialBanners)
+      setBanners(initialBanners)
+    } else {
+      setBanners(getStoredBanners())
+    }
     return subscribeToDataChanges(() => setBanners(getStoredBanners()))
-  }, [])
+  }, [initialBanners])
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Delete this banner?')) return
     deleteBanner(id)
-    setBanners(getStoredBanners())
+    setBanners((prev) => prev.filter((b) => b.id !== id))
+    await deleteBannerAction(id)
+    router.refresh()
   }
 
   return (
@@ -100,40 +113,48 @@ export function BannersListClient() {
 
 interface BannerFormProps {
   id?: string
+  initialBanner?: Banner | null
 }
 
 const inputClass =
   'w-full bg-[#0a0f1e] border border-white/10 rounded px-3 py-2 text-white placeholder-white/30 focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c]'
 const labelClass = 'block text-sm font-medium text-white/70 mb-1'
 
-export function BannerFormClient({ id }: BannerFormProps) {
+export function BannerFormClient({ id, initialBanner }: BannerFormProps) {
   const router = useRouter()
   const isNew = !id
 
-  const [form, setForm] = useState<Partial<Banner>>({
-    title: '',
-    subtitle: '',
-    description: '',
-    imageUrl: '',
-    ctaLabel: '',
-    ctaUrl: '',
-    secondaryCtaLabel: '',
-    secondaryCtaUrl: '',
-    badge: '',
-    sortOrder: 0,
-    status: 'DRAFT',
+  const [form, setForm] = useState<Partial<Banner>>(() => {
+    if (initialBanner) return initialBanner
+    return {
+      title: '',
+      subtitle: '',
+      description: '',
+      imageUrl: '',
+      ctaLabel: '',
+      ctaUrl: '',
+      secondaryCtaLabel: '',
+      secondaryCtaUrl: '',
+      badge: '',
+      sortOrder: 0,
+      status: 'DRAFT',
+    }
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (id) {
-      const banners = getStoredBanners()
-      const found = banners.find((b) => b.id === id)
-      if (found) setForm(found)
-      else setError('Banner not found.')
+      if (initialBanner) {
+        setForm(initialBanner)
+      } else {
+        const banners = getStoredBanners()
+        const found = banners.find((b) => b.id === id)
+        if (found) setForm(found)
+        else setError('Banner not found.')
+      }
     }
-  }, [id])
+  }, [id, initialBanner])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -143,26 +164,49 @@ export function BannerFormClient({ id }: BannerFormProps) {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.title?.trim()) { setError('Title is required.'); return }
     setLoading(true)
     const banner: Banner = {
       ...INITIAL_BANNERS[0],
       ...form,
-      id: id || `banner-${Date.now()}`,
+      id: id || form.id || `banner-${Date.now()}`,
       title: form.title!,
       sortOrder: form.sortOrder ?? 0,
-      status: form.status as Banner['status'] ?? 'DRAFT',
+      status: (form.status as Banner['status']) ?? 'DRAFT',
     }
+
+    // Save locally
     saveBanner(banner)
+
+    // Persist to MongoDB
+    await saveBannerAction({
+      id: id || form.id,
+      title: banner.title,
+      subtitle: banner.subtitle,
+      description: banner.description,
+      imageUrl: banner.imageUrl,
+      ctaLabel: banner.ctaLabel,
+      ctaUrl: banner.ctaUrl,
+      secondaryCtaLabel: banner.secondaryCtaLabel,
+      secondaryCtaUrl: banner.secondaryCtaUrl,
+      badge: banner.badge,
+      sortOrder: banner.sortOrder,
+      status: banner.status,
+    })
+
     router.push('/admin/banners')
+    router.refresh()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!id || !confirm('Permanently delete this banner?')) return
+    setLoading(true)
     deleteBanner(id)
+    await deleteBannerAction(id)
     router.push('/admin/banners')
+    router.refresh()
   }
 
   if (error && id) return (
@@ -279,7 +323,7 @@ export function BannerFormClient({ id }: BannerFormProps) {
         <div className="mt-10 pt-6 border-t border-red-900/30">
           <h3 className="text-red-400 font-medium mb-2">Danger Zone</h3>
           <p className="text-white/50 text-sm mb-3">Permanently delete this banner. This cannot be undone.</p>
-          <button onClick={handleDelete} className="bg-red-900/40 text-red-400 border border-red-900/50 px-4 py-2 rounded hover:bg-red-900/60 text-sm">
+          <button onClick={handleDelete} disabled={loading} className="bg-red-900/40 text-red-400 border border-red-900/50 px-4 py-2 rounded hover:bg-red-900/60 text-sm disabled:opacity-50">
             Delete Banner
           </button>
         </div>

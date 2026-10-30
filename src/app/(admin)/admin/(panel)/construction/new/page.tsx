@@ -1,6 +1,4 @@
 import React from 'react'
 import { ConstructionFormClient } from '../ConstructionClient'
-
-export default function NewConstructionPage() {
-  return <ConstructionFormClient />
-}
+export const dynamic = 'force-dynamic'
+export default function NewConstructionPage() { return <ConstructionFormClient /> }

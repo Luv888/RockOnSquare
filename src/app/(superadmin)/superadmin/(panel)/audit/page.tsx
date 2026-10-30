@@ -1,7 +1,9 @@
-﻿import React from "react";
+import React from "react";
 import { prisma } from "@/lib/db/prisma";
 import { requireSuperAdmin } from "@/lib/auth/guards";
 import { FileText } from "lucide-react";
+
+export const dynamic = 'force-dynamic'
 
 async function getAuditLog() {
   try {

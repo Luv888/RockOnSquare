@@ -1,25 +1,37 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Save, RefreshCw, Check } from 'lucide-react'
 import {
   getStoredSettings,
   saveSetting,
   resetToDemoDefaults,
+  syncStoredSettings,
   subscribeToDataChanges,
 } from '@/lib/data/local-storage'
+import { saveSettingAction } from '@/lib/actions/admin'
 import type { SiteSetting } from '@/lib/data/types'
 
-export function SettingsClient() {
-  const [settings, setSettings] = useState<SiteSetting[]>([])
+export function SettingsClient({ initialSettings }: { initialSettings?: SiteSetting[] }) {
+  const router = useRouter()
+  const [settings, setSettings] = useState<SiteSetting[]>(() => {
+    if (initialSettings && initialSettings.length > 0) return initialSettings
+    return getStoredSettings()
+  })
   const [editingKey, setEditingKey] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
   const [savedKey, setSavedKey] = useState<string | null>(null)
 
   useEffect(() => {
-    setSettings(getStoredSettings())
+    if (initialSettings && initialSettings.length > 0) {
+      syncStoredSettings(initialSettings)
+      setSettings(initialSettings)
+    } else {
+      setSettings(getStoredSettings())
+    }
     return subscribeToDataChanges(() => setSettings(getStoredSettings()))
-  }, [])
+  }, [initialSettings])
 
   const groups = Array.from(new Set(settings.map((s) => s.group || 'General')))
 
@@ -28,11 +40,15 @@ export function SettingsClient() {
     setEditValue(currentVal || '')
   }
 
-  const handleSave = (key: string) => {
+  const handleSave = async (key: string) => {
     saveSetting(key, editValue)
     setSettings(getStoredSettings())
     setEditingKey(null)
     setSavedKey(key)
+
+    await saveSettingAction(key, editValue)
+    router.refresh()
+
     setTimeout(() => setSavedKey(null), 2500)
   }
 
@@ -40,6 +56,7 @@ export function SettingsClient() {
     if (confirm('Reset all demo data (settings, banners, amenities, etc.) to default sample values?')) {
       resetToDemoDefaults()
       setSettings(getStoredSettings())
+      router.refresh()
     }
   }
 
@@ -62,9 +79,9 @@ export function SettingsClient() {
       </div>
 
       <div className="p-4 mb-6 border border-[#c9a84c]/20 rounded-sm bg-[#c9a84c]/5">
-        <p className="text-[#c9a84c] text-xs font-medium">Demo Mode Active</p>
+        <p className="text-[#c9a84c] text-xs font-medium">Authoritative Settings Synchronization</p>
         <p className="text-white/60 text-xs mt-1">
-          Settings are saved to browser local storage. Click the edit button on any row to change a value.
+          Settings are saved to MongoDB and synchronized across the website. Click the edit button on any row to change a value.
         </p>
       </div>
 
@@ -98,34 +115,38 @@ export function SettingsClient() {
 
                         return (
                           <tr key={s.id} className="border-b border-white/5 hover:bg-white/2">
-                            <td className="px-4 py-3">
-                              <p className="text-white text-sm">{s.label || s.key}</p>
-                              <p className="text-white/25 text-xs font-mono">{s.key}</p>
+                            <td className="px-4 py-3 text-white/70">
+                              <p className="font-medium text-white">{s.label || s.key}</p>
+                              <p className="text-white/30 font-mono text-xs">{s.key}</p>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 text-white max-w-xs">
                               {isEditing ? (
                                 <input
                                   type="text"
                                   value={editValue}
                                   onChange={(e) => setEditValue(e.target.value)}
-                                  className="w-full max-w-md bg-[#0a0f1e] border border-white/20 rounded px-2.5 py-1 text-white text-xs focus:outline-none focus:border-[#c9a84c]"
+                                  className="w-full bg-[#0a0f1e] border border-[#c9a84c] rounded px-2 py-1 text-white text-xs focus:outline-none"
                                   autoFocus
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') handleSave(s.key)
+                                    if (e.key === 'Escape') setEditingKey(null)
+                                  }}
                                 />
                               ) : (
-                                <p className="text-white/70 text-sm max-w-xs truncate">
-                                  {s.value || <span className="text-white/20 italic">Not set</span>}
-                                </p>
+                                <span className="text-white/80 text-xs break-all">
+                                  {s.value || <span className="text-white/25 italic">Not set</span>}
+                                </span>
                               )}
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 text-xs">
                               <span
-                                className={`px-2 py-0.5 rounded-sm text-xs ${
+                                className={`px-2 py-0.5 rounded-sm ${
                                   s.isPublic
-                                    ? 'bg-green-500/15 text-green-400'
-                                    : 'bg-white/10 text-white/30'
+                                    ? 'bg-green-500/10 text-green-400'
+                                    : 'bg-white/5 text-white/30'
                                 }`}
                               >
-                                {s.isPublic ? 'Public' : 'Private'}
+                                {s.isPublic ? 'Yes' : 'No'}
                               </span>
                             </td>
                             <td className="px-4 py-3 text-right">
@@ -133,28 +154,31 @@ export function SettingsClient() {
                                 <div className="flex items-center justify-end gap-2">
                                   <button
                                     onClick={() => handleSave(s.key)}
-                                    className="px-2.5 py-1 bg-[#c9a84c] text-black text-xs font-medium rounded hover:bg-[#e4c870] transition-colors flex items-center gap-1"
+                                    className="flex items-center gap-1 text-xs text-[#c9a84c] hover:underline"
                                   >
                                     <Save className="w-3 h-3" /> Save
                                   </button>
                                   <button
                                     onClick={() => setEditingKey(null)}
-                                    className="px-2 py-1 text-white/40 hover:text-white text-xs"
+                                    className="text-xs text-white/40 hover:text-white"
                                   >
                                     Cancel
                                   </button>
                                 </div>
-                              ) : justSaved ? (
-                                <span className="inline-flex items-center gap-1 text-green-400 text-xs">
-                                  <Check className="w-3.5 h-3.5" /> Saved
-                                </span>
                               ) : (
-                                <button
-                                  onClick={() => handleStartEdit(s.key, s.value ?? '')}
-                                  className="text-[#c9a84c] text-xs hover:underline"
-                                >
-                                  Edit
-                                </button>
+                                <div className="flex items-center justify-end gap-2">
+                                  {justSaved && (
+                                    <span className="flex items-center gap-1 text-xs text-green-400">
+                                      <Check className="w-3 h-3" /> Saved
+                                    </span>
+                                  )}
+                                  <button
+                                    onClick={() => handleStartEdit(s.key, s.value || '')}
+                                    className="text-xs text-[#c9a84c] hover:underline"
+                                  >
+                                    Edit
+                                  </button>
+                                </div>
                               )}
                             </td>
                           </tr>

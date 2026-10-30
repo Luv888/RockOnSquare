@@ -56,36 +56,33 @@ export function ProjectIntro() {
           {/* Left Narrative (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-[1.15]">
-              Some destinations offer a place to shop.{' '}
+              Designed to{' '}
               <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
-                ROCK ONE SQUARE brings them all together.
+                Elevate Every Experience.
               </span>
             </h2>
 
             <p className="text-white/80 text-base sm:text-lg font-light leading-relaxed">
-              Spread across one acre along the high-momentum Meerut Road corridor in Raj Nagar Extension,{' '}
-              <span className="text-white font-medium">ROCK ONE SQUARE</span> is a thoughtfully planned mixed-use
-              commercial landmark bringing together four distinct verticals into a cohesive architectural presence.
+              Some destinations offer a place to shop. Others offer a place to work, unwind or call home. <strong className="text-white font-medium">ROCK ONE SQUARE</strong> brings them all together.
+            </p>
+
+            <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+              Spread across one acre, ROCK ONE SQUARE is a thoughtfully planned mixed-use destination that brings together four distinct verticals &mdash; Retail, Entertainment, Modern Offices and Studio Apartments &mdash; under one landmark address.
             </p>
 
             <p className="text-white/60 text-sm sm:text-base leading-relaxed">
-              The lower levels form a vibrant social and commercial core combining double-height flagship retail,
-              acclaimed culinary brands, and the largest entertainment zone in Ghaziabad. Above, modern corporate offices
-              and executive studio apartments offer professionals an environment that unites productivity, leisure, and
-              effortless living.
+              From vibrant retail spaces and immersive entertainment to contemporary workspaces and modern urban living, every level is designed to create a more enriching experience.
             </p>
 
-            {/* Construction milestone callout */}
-            <div className="inline-flex items-center gap-3 p-3.5 rounded-xl bg-gradient-to-r from-[#c9a84c]/15 to-transparent border border-[#c9a84c]/30">
-              <ShieldCheck className="w-5 h-5 text-[#c9a84c] flex-shrink-0" />
-              <div className="text-xs">
-                <span className="font-semibold text-white uppercase tracking-wider block">
-                  7 FLOORS COMPLETE &bull; POSSESSION SOON
-                </span>
-                <span className="text-white/60">
-                  RCC superstructure executed to the 7th level. Development advancing at rapid pace.
-                </span>
-              </div>
+            <p className="text-white/60 text-sm sm:text-base leading-relaxed">
+              A destination where everyday moments become memorable, business finds new opportunities and modern lifestyles find their perfect setting.
+            </p>
+
+            {/* Brand Callout */}
+            <div className="p-4 rounded-xl bg-gradient-to-r from-[#c9a84c]/15 to-transparent border border-[#c9a84c]/30">
+              <p className="font-serif italic text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
+                ROCK ONE SQUARE &mdash; Where Every Experience Finds a Higher Level.
+              </p>
             </div>
           </div>
 

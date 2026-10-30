@@ -1,4 +1,3 @@
 import { BannerFormClient } from '../BannersClient'
-export default function NewBannerPage() {
-  return <BannerFormClient />
-}
+export const dynamic = 'force-dynamic'
+export default function NewBannerPage() { return <BannerFormClient /> }

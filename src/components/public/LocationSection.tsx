@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { MapPin, Navigation, Compass, Train, Car, Building, ArrowUpRight, Landmark, Store } from 'lucide-react'
+import { MapPin, Navigation, Compass, Train, Car, Building, ArrowUpRight, Landmark, Trophy, Plane } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/config/site'
 
 interface ConnectivityPoint {
@@ -18,58 +18,58 @@ interface ConnectivityPoint {
 const CONNECTIVITY_PILLARS: ConnectivityPoint[] = [
   {
     id: 'meerut-road',
-    name: 'Meerut Road (Direct Frontage)',
+    name: 'Direct Access to Meerut Road',
     category: 'Arterial Corridor',
     icon: Car,
-    travelTime: '0 Min (Direct Access)',
-    distance: '30m Arterial Frontage',
+    travelTime: 'Direct Ingress / Egress',
+    distance: '30m Arterial Road Frontage',
     description:
-      'Direct frontage on high-density Meerut Road, ensuring continuous commercial visibility, high daily vehicle movement, and instant vehicular ingress/egress.',
-    highlight: 'Flagship commercial visibility on main arterial route',
+      'Convenient connectivity to an important regional road corridor.',
+    highlight: 'Direct access to an important regional road corridor',
   },
   {
     id: 'dme',
-    name: 'Delhi-Meerut Expressway (DME)',
-    category: 'Expressway',
+    name: 'Close to the Delhi–Meerut Expressway',
+    category: 'Expressway Network',
     icon: Compass,
     travelTime: '8–10 Mins',
     distance: '~4.5 km',
     description:
-      'Fast, multi-lane signal-free expressway providing rapid access to Anand Vihar, Akshardham, Noida Sector 62, and central Delhi.',
-    highlight: 'Rapid signal-free expressway linkage across NCR',
+      'Access to a key road network connecting Delhi and western Uttar Pradesh.',
+    highlight: 'Key road network connecting Delhi & western UP',
+  },
+  {
+    id: 'cricket-stadium',
+    name: 'Near the Upcoming Cricket Stadium',
+    category: 'Sports & Entertainment',
+    icon: Trophy,
+    travelTime: '5–7 Mins',
+    distance: 'Immediate Vicinity',
+    description:
+      'Proximity to a major sports and entertainment destination.',
+    highlight: 'Proximity to major sports & entertainment destination',
+  },
+  {
+    id: 'aerocity',
+    name: 'Connectivity to Aerocity',
+    category: 'Emerging Hub',
+    icon: Plane,
+    travelTime: 'Direct Route Access',
+    distance: 'NCR Connectivity Plan',
+    description:
+      "Access to the emerging destination referenced in the project's connectivity plan.",
+    highlight: 'Access to emerging NCR destination hub',
   },
   {
     id: 'rrts',
-    name: 'Namo Bharat RRTS Corridor',
-    category: 'Rapid Rail Transit',
+    name: 'Connected Through Namo Bharat RRTS',
+    category: 'High-Speed Regional Rail',
     icon: Train,
     travelTime: '5–7 Mins',
-    distance: '~2.8 km (Guldhar / Duhai Station)',
+    distance: 'Guldhar / Duhai Station',
     description:
-      'India’s premier semi-high-speed regional rail network connecting Delhi to Meerut in under 55 minutes, providing frictionless transit for shoppers and office commuters.',
-    highlight: '160 km/h high-speed regional transit corridor',
-  },
-  {
-    id: 'rdc-rajnagar',
-    name: 'RDC Raj Nagar Commercial & Banking Hub',
-    category: 'Financial & Business District',
-    icon: Landmark,
-    travelTime: '8–10 Mins',
-    distance: '~4.0 km',
-    description:
-      'Ghaziabad’s premier commercial and financial district, housing leading public and private bank branches, corporate offices, and professional business centers.',
-    highlight: 'Key banking, corporate finance, and commercial hub',
-  },
-  {
-    id: 'rajnagar-ext-market',
-    name: 'Raj Nagar Extension Commercial Center',
-    category: 'Retail & Commercial Market',
-    icon: Store,
-    travelTime: '3–5 Mins',
-    distance: '~1.5 km',
-    description:
-      'Established high-street retail destination and commercial market serving dense residential townships in the immediate catchment corridor.',
-    highlight: 'High-density consumer footfall and local retail catchment',
+      'Regional connectivity linking key destinations across the Delhi–Ghaziabad–Meerut corridor.',
+    highlight: 'Delhi–Ghaziabad–Meerut high-speed transit corridor',
   },
 ]
 
@@ -91,7 +91,7 @@ export function LocationSection() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 text-[#e4c870] text-xs font-semibold uppercase tracking-widest mb-4">
             <Compass className="w-3.5 h-3.5" />
-            Strategic Geographic Advantage
+            A LOCATION THAT MOVES YOU FORWARD
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight">
             Connected to Progress.{' '}
@@ -99,9 +99,11 @@ export function LocationSection() {
               Positioned for Possibility.
             </span>
           </h2>
-          <p className="mt-4 text-white/60 text-sm sm:text-base leading-relaxed">
-            Positioned along Meerut Road in Raj Nagar Extension, ROCK ONE SQUARE enjoys exceptional connectivity
-            to major transit corridors, affluent residential townships, and marquee infrastructure landmarks.
+          <p className="mt-4 text-white/70 text-sm sm:text-base leading-relaxed">
+            The future of NCR is being shaped by expanding infrastructure, evolving connectivity and emerging urban destinations. Raj Nagar Extension is increasingly becoming part of this growth story.
+          </p>
+          <p className="mt-2 text-white/60 text-xs sm:text-sm leading-relaxed">
+            Strategically located in this evolving corridor, ROCK ONE SQUARE brings business, entertainment and modern living closer to the opportunities emerging across the region.
           </p>
         </div>
 
@@ -111,7 +113,7 @@ export function LocationSection() {
           <div className="lg:col-span-6 space-y-3">
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
               <span className="text-xs font-mono uppercase tracking-wider text-[#c9a84c]">
-                Key Connectivity Landmarks
+                A LOCATION THAT MOVES YOU FORWARD
               </span>
               <span className="text-xs font-mono text-white/40">Select to Inspect</span>
             </div>
@@ -243,6 +245,13 @@ export function LocationSection() {
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Draft Tagline */}
+        <div className="mt-12 text-center">
+          <p className="font-serif italic text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#c9a84c] via-[#e4c870] to-[#c9a84c]">
+            ROCK ONE SQUARE &mdash; Well Connected to the Opportunities of Tomorrow.
+          </p>
         </div>
       </div>
     </section>
