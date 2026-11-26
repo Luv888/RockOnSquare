@@ -101,10 +101,10 @@ async function main() {
       slug: 'modern-offices',
       type: OfferingType.OFFICE,
       title: 'Modern Offices',
-      shortDesc: 'Contemporary office spaces with HVAC',
-      description: 'Professional office environment with climate control, high-speed connectivity, and access to the full Rock One Square ecosystem.',
+      shortDesc: 'Contemporary office spaces with modern infrastructure',
+      description: 'Professional office environment with contemporary layouts, high-speed connectivity, and access to the full Rock One Square ecosystem.',
       floorInfo: '4th Floor',
-      highlights: ['HVAC', 'High-speed connectivity', 'Professional setting'],
+      highlights: ['Contemporary layouts', 'High-speed connectivity', 'Professional setting'],
       sortOrder: 2,
       status: PublishStatus.PUBLISHED,
     },
@@ -138,7 +138,7 @@ async function main() {
     { floorNumber: 1, floorLabel: 'First Floor', shortLabel: '1F', offeringType: OfferingType.RETAIL, description: 'Retail spaces, hotel lobby access, and dining entry points.', highlights: ['Hotel lobby access', 'Retail spaces'], sortOrder: 1, status: PublishStatus.PUBLISHED },
     { floorNumber: 2, floorLabel: 'Second Floor', shortLabel: '2F', offeringType: OfferingType.DINING, description: 'Retail continuity, hotel amenities, and curated dining zone.', highlights: ['Dining zone', 'Hotel amenities'], sortOrder: 2, status: PublishStatus.PUBLISHED },
     { floorNumber: 3, floorLabel: 'Third Floor', shortLabel: '3F', offeringType: OfferingType.ENTERTAINMENT, description: "Entertainment hub — Ghaziabad's biggest gaming zone, gymnasium, and restaurant cluster.", highlights: ["Biggest gaming zone", 'Restaurant cluster', 'Gymnasium'], sortOrder: 3, status: PublishStatus.PUBLISHED },
-    { floorNumber: 4, floorLabel: 'Fourth Floor', shortLabel: '4F', offeringType: OfferingType.OFFICE, description: 'Modern offices with HVAC and high-speed connectivity.', highlights: ['Modern offices', 'HVAC'], sortOrder: 4, status: PublishStatus.PUBLISHED },
+    { floorNumber: 4, floorLabel: 'Fourth Floor', shortLabel: '4F', offeringType: OfferingType.OFFICE, description: 'Modern offices with contemporary layouts and high-speed connectivity.', highlights: ['Modern offices', 'High-speed connectivity'], sortOrder: 4, status: PublishStatus.PUBLISHED },
     { floorNumber: 5, floorLabel: 'Fifth Floor', shortLabel: '5F', offeringType: OfferingType.STUDIO_APARTMENT, description: 'Service apartments and studio units with panoramic views.', highlights: ['Service apartments', 'Studio units'], sortOrder: 5, status: PublishStatus.PUBLISHED },
     { floorNumber: 6, floorLabel: 'Sixth Floor', shortLabel: '6F', offeringType: OfferingType.STUDIO_APARTMENT, description: 'Premium studio apartments with full service facilities.', highlights: ['Premium studios', 'Full services'], sortOrder: 6, status: PublishStatus.PUBLISHED },
     { floorNumber: 7, floorLabel: 'Seventh Floor', shortLabel: '7F', offeringType: OfferingType.STUDIO_APARTMENT, description: 'Studio apartments — construction completed.', highlights: ['Construction complete', 'Studio apartments'], sortOrder: 7, status: PublishStatus.PUBLISHED },
@@ -162,19 +162,32 @@ async function main() {
   const amenitiesData = [
     { name: 'Premium Finishes', description: 'Granite and tile finishes across designated areas.', iconName: 'Gem', sortOrder: 0 },
     { name: 'Reliable Power Support', description: 'Dual power supply with DG backup.', iconName: 'Zap', sortOrder: 1 },
-    { name: 'Integrated Climate Comfort', description: 'Integrated HVAC system.', iconName: 'Wind', sortOrder: 2 },
-    { name: 'Safety by Design', description: 'Advanced firefighting systems.', iconName: 'Shield', sortOrder: 3 },
-    { name: 'Round-the-Clock Monitoring', description: '24×7 CCTV surveillance.', iconName: 'Camera', sortOrder: 4 },
-    { name: 'Seamless Vertical Movement', description: '8 high-speed elevators.', iconName: 'ArrowUpDown', sortOrder: 5 },
-    { name: 'Convenient Parking', description: 'Extensive basement parking with modern wayfinding.', iconName: 'Car', sortOrder: 6 },
-    { name: 'Efficient Service Access', description: 'Discreet service area at the rear.', iconName: 'Package', sortOrder: 7 },
+    { name: 'Safety by Design', description: 'Advanced firefighting systems.', iconName: 'Shield', sortOrder: 2 },
+    { name: 'Round-the-Clock Monitoring', description: '24×7 CCTV surveillance.', iconName: 'Camera', sortOrder: 3 },
+    { name: 'Seamless Vertical Movement', description: '8 high-speed elevators.', iconName: 'ArrowUpDown', sortOrder: 4 },
+    { name: 'Convenient Parking', description: 'Two Basements providing ample parking space with Valet Parking provision.', iconName: 'Car', sortOrder: 5 },
+    { name: 'Efficient Service Access', description: 'Discreet service area at the rear.', iconName: 'Package', sortOrder: 6 },
   ]
+
+  // Remove deprecated HVAC amenities if present in database
+  try {
+    await prisma.amenity.deleteMany({
+      where: {
+        name: { in: ['Climate Comfort', 'Integrated Climate Comfort'] },
+      },
+    })
+  } catch {}
 
   for (const a of amenitiesData) {
     const existing = await prisma.amenity.findFirst({ where: { name: a.name } })
     if (!existing) {
       const amenity = await prisma.amenity.create({ data: { ...a, isPublished: true } })
       await prisma.projectAmenity.create({ data: { projectId: project.id, amenityId: amenity.id, sortOrder: a.sortOrder } })
+    } else {
+      await prisma.amenity.update({
+        where: { id: existing.id },
+        data: { description: a.description, iconName: a.iconName, sortOrder: a.sortOrder, isPublished: true },
+      })
     }
   }
   console.log(`✅ Amenities: ${amenitiesData.length}`)
@@ -185,12 +198,12 @@ async function main() {
   const faqsData = [
     { question: 'Where is Rock One Square located?', answer: 'Rock One Square is located in Raj Nagar Extension, Ghaziabad, Uttar Pradesh — with direct frontage on a 30-metre-wide arterial road connected to Meerut Road and the Delhi–Meerut Expressway corridor.', sortOrder: 0 },
     { question: 'What are the four verticals available at Rock One Square?', answer: 'Rock One Square brings together four key verticals: Premium Retail, Food & Beverage, Entertainment, and Studio Apartments. Contact our sales team for details about available spaces.', sortOrder: 1 },
-    { question: 'What amenities are included?', answer: 'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.', sortOrder: 2 },
-    { question: 'How can I book a site visit?', answer: 'Click the "Book a Site Visit" button on this page, fill out the enquiry form, call our sales team directly, or reach us on WhatsApp. Our team will confirm a convenient time for your visit.', sortOrder: 3 },
+    { question: 'What amenities are included?', answer: 'The development features dual power supply with DG backup, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, two Basements providing ample parking space with Valet Parking provision, and efficient service access.', sortOrder: 2 },
+    { question: 'How can I book a site visit?', answer: 'Our Project Location is mentioned below and you may visit the site any time between 10 a.m to 8 pm. Also you may fill the Book a Visit button on this page, fill out the enquiry form or call our sales team directly to book the site visit as per your convenient time.', sortOrder: 3 },
     { question: 'How can I get the project brochure?', answer: 'You can request the project brochure by submitting an enquiry or contacting our sales team directly. We will send you the latest project documentation to your email or WhatsApp.', sortOrder: 4 },
     { question: 'How can I contact the sales team?', answer: 'Use the enquiry form at the bottom of this page, call us during business hours (Monday to Sunday, 10 AM–9 PM), or message us on WhatsApp.', sortOrder: 5 },
-    { question: 'What is the current construction status?', answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites and rooftop, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.', sortOrder: 6 },
-    { question: 'What is the RERA status?', answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.", sortOrder: 7 },
+    { question: 'What is the current construction status?', answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.', sortOrder: 6 },
+    { question: 'What is the RERA status?', answer: 'The project is approved by RERA vide Registration No. UPRERAPRJ352708/09/2026. You can also check the Project RERA registration information on reratracker.com website. The RERA Certificate can be viewed [here].', sortOrder: 7 },
   ]
 
   // Remove legacy outdated questions from the database

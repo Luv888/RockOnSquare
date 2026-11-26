@@ -140,7 +140,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     categoryLabel: 'Modern Offices',
     imageUrl: '/images/office-1.jpg',
     aspect: 'landscape',
-    caption: '4th floor smart corporate workspaces engineered with HVAC climate control and ergonomic planning.',
+    caption: '4th floor smart corporate workspaces engineered with contemporary layouts and ergonomic planning.',
     details: 'Contemporary layouts designed for tech companies, corporate branches, and professionals seeking prestige and connectivity.',
   },
   {
@@ -163,7 +163,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     imageUrl: '/images/retail-1.jpg',
     aspect: 'landscape',
     caption: 'Prime 30-metre Meerut Road frontage with double-height retail facades and maximum commercial footfall.',
-    details: 'Ground and 1st floor retail galleria with continuous escalators, wide pedestrian plazas, and granite paving.',
+    details: 'Ground and 1st floor retail galleria with continuous vertical transit, wide pedestrian plazas, and granite paving.',
   },
 ]
 

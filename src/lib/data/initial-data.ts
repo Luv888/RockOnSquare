@@ -85,7 +85,7 @@ export const INITIAL_OFFERINGS: Offering[] = [
     floorInfo: '4th Floor',
     highlights: [
       'Smart, efficient and contemporary workspaces.',
-      'Integrated climate comfort & HVAC systems',
+      'Column-efficient contemporary office layouts',
       'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
@@ -141,12 +141,12 @@ export const INITIAL_FLOORS: Floor[] = [
     shortLabel: '1F',
     offeringType: 'RETAIL',
     description:
-      'Anchor retail stores, lifestyle outlets, and escalator connectivity from the central atrium. Seamless vertical transit and dedicated shopping corridors.',
+      'Anchor retail stores, lifestyle outlets, and vertical transit connectivity from the central atrium. Seamless movement and dedicated shopping corridors.',
     highlights: [
       'Atrium-facing anchor retail stores',
-      'Escalator connectivity & 8 elevators',
+      'High-speed vertical transit & 8 elevators',
       'Wide lifestyle shopping corridors',
-      'HVAC climate comfort',
+      'Architecturally illuminated shopfronts',
     ],
     imageUrls: ['/images/retail-1.jpg'],
     sortOrder: 1,
@@ -184,7 +184,7 @@ export const INITIAL_FLOORS: Floor[] = [
       'Indoor recreational activities and arcade-style attractions',
       'Interactive gaming experiences and virtual reality zones',
       'The biggest gaming zone in Ghaziabad',
-      'High-capacity central escalator and elevator access',
+      'High-capacity central elevator and vertical transit access',
     ],
     imageUrls: ['/images/gaming-zone-bumper-cars.png', '/images/gaming-entertainment.jpg'],
     sortOrder: 3,
@@ -198,10 +198,10 @@ export const INITIAL_FLOORS: Floor[] = [
     shortLabel: '4F',
     offeringType: 'OFFICE',
     description:
-      'Smart corporate suites and contemporary workspaces with HVAC climate control, acoustic treatment, and professional executive reception.',
+      'Smart corporate suites and contemporary workspaces with acoustic treatment and professional executive reception.',
     highlights: [
       'Contemporary corporate office layouts',
-      'HVAC climate control',
+      'Column-efficient floorplates with natural daylight',
       'High-speed optic fiber connectivity',
       'Flexible commercial office space allocations',
     ],
@@ -293,9 +293,9 @@ export const INITIAL_FLOORS: Floor[] = [
     shortLabel: '9F',
     offeringType: 'STUDIO_APARTMENT',
     description:
-      'Penthouse-level studio apartments with sweeping panoramic vistas across Ghaziabad and the National Capital Region.',
+      'Executive upper-tier studio apartments with sweeping panoramic vistas across Ghaziabad and the National Capital Region.',
     highlights: [
-      'Penthouse level panoramic views',
+      'Elevated panoramic views',
       'Highest residential elevation in project',
       'Maximum privacy and noise insulation',
       'Premium architectural specifications',
@@ -308,16 +308,16 @@ export const INITIAL_FLOORS: Floor[] = [
     id: 'floor-10',
     projectId: 'proj-rock-one-square',
     floorNumber: 10,
-    floorLabel: 'Tenth Floor & Rooftop',
+    floorLabel: 'Tenth Floor',
     shortLabel: '10F',
-    offeringType: 'HOTEL',
+    offeringType: 'OFFICE',
     description:
-      'Rooftop hospitality lounge and executive management facilities with landscaped open-air terrace decks.',
+      'Executive management facilities and corporate administrative suites with panoramic views of the National Capital Region.',
     highlights: [
-      'Landscaped rooftop terrace lounge',
-      'Executive hospitality management suites',
+      'Executive administrative facilities',
+      'Executive management suites',
       'Unmatched 360-degree skyline views',
-      'Private event & recreation space',
+      'Acoustic insulation & double-glazed architectural glass',
     ],
     imageUrls: ['/images/fine-dining-1.jpg', '/images/building-aerial.jpg'],
     sortOrder: 10,
@@ -343,19 +343,11 @@ export const INITIAL_AMENITIES: Amenity[] = [
     isPublished: true,
   },
   {
-    id: 'amenity-3',
-    name: 'Integrated Climate Comfort',
-    description: 'Integrated HVAC system.',
-    iconName: 'Wind',
-    sortOrder: 2,
-    isPublished: true,
-  },
-  {
     id: 'amenity-4',
     name: 'Safety by Design',
     description: 'Advanced firefighting systems.',
     iconName: 'Shield',
-    sortOrder: 3,
+    sortOrder: 2,
     isPublished: true,
   },
   {
@@ -363,7 +355,7 @@ export const INITIAL_AMENITIES: Amenity[] = [
     name: 'Round-the-Clock Monitoring',
     description: '24×7 CCTV surveillance.',
     iconName: 'Camera',
-    sortOrder: 4,
+    sortOrder: 3,
     isPublished: true,
   },
   {
@@ -371,15 +363,15 @@ export const INITIAL_AMENITIES: Amenity[] = [
     name: 'Seamless Vertical Movement',
     description: '8 high-speed elevators.',
     iconName: 'ArrowUpDown',
-    sortOrder: 5,
+    sortOrder: 4,
     isPublished: true,
   },
   {
     id: 'amenity-7',
     name: 'Convenient Parking',
-    description: 'Extensive basement parking with modern wayfinding.',
+    description: 'Two Basements providing ample parking space with Valet Parking provision.',
     iconName: 'Car',
-    sortOrder: 6,
+    sortOrder: 5,
     isPublished: true,
   },
   {
@@ -387,7 +379,7 @@ export const INITIAL_AMENITIES: Amenity[] = [
     name: 'Efficient Service Access',
     description: 'Discreet service area at the rear.',
     iconName: 'Package',
-    sortOrder: 7,
+    sortOrder: 6,
     isPublished: true,
   },
 ]
@@ -433,14 +425,28 @@ export function normalizeFaqRecord<T extends { id: string; question: string; ans
   if (question.toLowerCase().includes('what amenities are included')) {
     question = 'What amenities are included?'
     answer =
-      'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.'
+      'The development features dual power supply with DG backup, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, two Basements providing ample parking space with Valet Parking provision, and efficient service access.'
   }
 
-  // 4. RERA FAQ
+  // 4. Site visit FAQ
+  if (question.toLowerCase().includes('book a site visit')) {
+    question = 'How can I book a site visit?'
+    answer =
+      'Our Project Location is mentioned below and you may visit the site any time between 10 a.m to 8 pm. Also you may fill the Book a Visit button on this page, fill out the enquiry form or call our sales team directly to book the site visit as per your convenient time.'
+  }
+
+  // 5. Construction status FAQ
+  if (question.toLowerCase().includes('construction status')) {
+    question = 'What is the current construction status?'
+    answer =
+      'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.'
+  }
+
+  // 6. RERA FAQ
   if (question.toLowerCase().includes('rera status')) {
     question = 'What is the RERA status?'
     answer =
-      "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal."
+      'The project is approved by RERA vide Registration No. UPRERAPRJ352708/09/2026. You can also check the Project RERA registration information on reratracker.com website. The RERA Certificate can be viewed [here].'
   }
 
   // Universal cleanup for business hours
@@ -468,14 +474,14 @@ export const INITIAL_FAQS: FAQ[] = [
   {
     id: 'faq-3',
     question: 'What amenities are included?',
-    answer: 'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.',
+    answer: 'The development features dual power supply with DG backup, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, two Basements providing ample parking space with Valet Parking provision, and efficient service access.',
     sortOrder: 2,
     isPublished: true,
   },
   {
     id: 'faq-4',
     question: 'How can I book a site visit?',
-    answer: 'Click the "Book a Site Visit" button on this page, fill out the enquiry form, call our sales team directly, or reach us on WhatsApp. Our team will confirm a convenient time for your visit.',
+    answer: 'Our Project Location is mentioned below and you may visit the site any time between 10 a.m to 8 pm. Also you may fill the Book a Visit button on this page, fill out the enquiry form or call our sales team directly to book the site visit as per your convenient time.',
     sortOrder: 3,
     isPublished: true,
   },
@@ -496,14 +502,14 @@ export const INITIAL_FAQS: FAQ[] = [
   {
     id: 'faq-7',
     question: 'What is the current construction status?',
-    answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites and rooftop, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.',
+    answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.',
     sortOrder: 6,
     isPublished: true,
   },
   {
     id: 'faq-8',
     question: 'What is the RERA status?',
-    answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.",
+    answer: 'The project is approved by RERA vide Registration No. UPRERAPRJ352708/09/2026. You can also check the Project RERA registration information on reratracker.com website. The RERA Certificate can be viewed [here].',
     sortOrder: 7,
     isPublished: true,
   },

@@ -217,7 +217,7 @@ export function AmenityFormClient({ id, initialAmenity }: AmenityFormProps) {
             <span className="text-white/40 self-center">Project Assets:</span>
             {[
               { label: 'Retail Finishes', path: '/images/retail-1.jpg' },
-              { label: 'HVAC Office', path: '/images/office-1.jpg' },
+              { label: 'Modern Office', path: '/images/office-1.jpg' },
               { label: 'Building Elevation', path: '/images/building-front.jpg' },
               { label: 'Aerial View', path: '/images/building-aerial.jpg' },
               { label: 'Fine Dining', path: '/images/fine-dining-1.jpg' },

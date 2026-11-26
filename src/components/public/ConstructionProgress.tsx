@@ -43,7 +43,7 @@ const MILESTONES: Milestone[] = [
     status: 'COMPLETED',
     dateLabel: 'Completed',
     description:
-      'Ground Floor 30m frontage retail structure and 1st Floor anchor galleria cast. Central atrium spatial voids and escalator service banks framed.',
+      'Ground Floor 30m frontage retail structure and 1st Floor anchor galleria cast. Central atrium spatial voids framed.',
     floorsIndicator: 'Ground & 1st Floor',
   },
   {
@@ -69,21 +69,21 @@ const MILESTONES: Milestone[] = [
   {
     id: 'm-5',
     stage: 'PHASE 5',
-    title: 'Upper Studio Penthouses & Rooftop Skydeck',
+    title: 'External Facade & Interior Finishes',
     status: 'IN_PROGRESS',
     dateLabel: 'Active Work',
     description:
-      'Casting of 8th, 9th executive studio apartments and 10th Floor rooftop hospitality skydeck. MEP service risers advancing simultaneously.',
-    floorsIndicator: '8F, 9F & 10F Rooftop',
+      'External Facade, MEP services, interior lobby finishes, and handover to commercial occupants.',
+    floorsIndicator: 'Upper Floors & Commercial Zones',
   },
   {
     id: 'm-6',
     stage: 'FINAL PHASE',
-    title: 'Architectural Glazing, HVAC & Possession',
+    title: 'Architectural Glazing, MEP & Possession',
     status: 'UPCOMING',
     dateLabel: 'Possession Soon',
     description:
-      'Curtain wall double glazing, central HVAC installation, interior lobby finishes, and handover to commercial occupants and residents.',
+      'Curtain wall double glazing, MEP commissioning, interior lobby finishes, and handover to commercial occupants and residents.',
     floorsIndicator: 'Handover & Possession',
   },
 ]
@@ -159,7 +159,7 @@ export function ConstructionProgress({ updates }: ConstructionProgressProps = {}
               </h3>
               <p className="text-white/60 text-xs sm:text-sm leading-relaxed mb-6">
                 RCC framing and concrete slabs through the 7th floor are fully complete. Construction is progressing
-                steadily toward the upper executive suites and rooftop crown.
+                steadily toward the upper executive suites and final architectural finishes.
               </p>
 
               {/* Progress Bar */}
@@ -177,7 +177,7 @@ export function ConstructionProgress({ updates }: ConstructionProgressProps = {}
                 <div className="flex justify-between text-[11px] text-white/40 mt-2 font-mono">
                   <span>Ground Floor Plaza</span>
                   <span className="text-[#c9a84c]">7F Milestone Level</span>
-                  <span>10F Rooftop Lounge</span>
+                  <span>10F Executive Level</span>
                 </div>
               </div>
             </div>

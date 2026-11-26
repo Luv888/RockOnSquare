@@ -432,7 +432,7 @@ export function FloorFormClient({ id, initialFloor }: FloorFormProps) {
             <span className="text-white/40 self-center">Project Assets:</span>
             {[
               { label: 'Retail Flagship', path: '/images/retail-1.jpg' },
-              { label: 'Fine Dining & Skydeck', path: '/images/fine-dining-1.jpg' },
+              { label: 'Fine Dining & Restaurant', path: '/images/fine-dining-1.jpg' },
               { label: 'Entertainment & Dining', path: '/images/lord-of-the-drinks.jpg' },
               { label: 'Gaming Zone', path: '/images/gaming-zone-bumper-cars.png' },
               { label: 'Executive Office', path: '/images/office-1.jpg' },

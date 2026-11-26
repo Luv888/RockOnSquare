@@ -21,7 +21,6 @@ const VERTICAL_LINKS = [
   { label: 'Entertainment & Gaming (2nd–3rd Floor)', href: '#offerings' },
   { label: 'Modern Offices (4th Floor)', href: '#offerings' },
   { label: 'Studio Apartments (5th–9th Floor)', href: '#offerings' },
-  { label: 'Rooftop Lounge (10th Floor)', href: '#explorer' },
 ]
 
 export function Footer() {
