@@ -53,6 +53,14 @@ export const SITE_CONFIG = {
     },
   },
 
+  // Official RERA Information
+  rera: {
+    registrationNumber: 'UPRERAPRJ352708/09/2026',
+    reratrackerUrl: 'https://reratracker.com',
+    certificateUrl: 'https://drive.google.com/file/d/1SAh9McV2Y7wxjs76IfmDSiv7-1oiNHBr/view?usp=sharing',
+    upReraUrl: 'https://up-rera.in',
+  },
+
   // Official Branding Assets
   brand: {
     logo: '/images/logo.png',

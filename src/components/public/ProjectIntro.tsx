@@ -7,15 +7,15 @@ export function ProjectIntro() {
     { value: '~1 Acre', label: 'Land Parcel', sub: 'Prime Raj Nagar Extn' },
     { value: '30 Metres', label: 'Road Frontage', sub: 'High-Visibility Meerut Road' },
     { value: '7 Floors', label: 'Complete', sub: 'Milestone Achieved' },
-    { value: '4 Verticals', label: 'Ecosystem', sub: 'Retail &bull; Fun &bull; Work &bull; Living' },
+    { value: '4 Verticals', label: 'Ecosystem', sub: 'Retail . Entertainment . Modern Offices . Studio Apartments' },
   ]
 
   const verticals = [
     {
       icon: Store,
       label: 'Retail',
-      highlight: '30m Frontage & Atrium',
-      desc: 'Prime street-level and atrium shopping with maximum visibility on Meerut Road.',
+      highlight: '30m Frontage & Central Atrium',
+      desc: 'Prime street-level visibility on Meerut Road, paired with a central atrium that brings natural light, open sightlines, and smooth customer flow across retail spaces.',
     },
     {
       icon: Gamepad2,
@@ -26,8 +26,8 @@ export function ProjectIntro() {
     {
       icon: Briefcase,
       label: 'Modern Offices',
-      highlight: 'Smart Workspaces & HVAC',
-      desc: 'Contemporary office suites engineered with integrated climate control and connectivity.',
+      highlight: 'Smart Workspaces & Connectivity',
+      desc: 'Contemporary office suites engineered for modern business productivity and high-speed connectivity.',
     },
     {
       icon: Home,
@@ -43,13 +43,7 @@ export function ProjectIntro() {
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#c9a84c]/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Lead Tag */}
-        <div className="flex items-center gap-3 mb-6">
-          <span className="w-8 h-px bg-[#c9a84c]" />
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#c9a84c]">
-            The Rock Solid Destination &bull; Senflore Hospitality LLP
-          </span>
-        </div>
+        
 
         {/* Top Split: Master Brand Narrative & Architectural Perspective */}
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20">
@@ -141,7 +135,7 @@ export function ProjectIntro() {
         <div>
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h3 className="font-serif text-2xl sm:text-3xl font-light text-white">
-              An Integrated Mixed-Use Landmark
+              A Mixed-Use Landmark
             </h3>
             <p className="text-white/50 text-xs sm:text-sm mt-2">
               Four thoughtfully planned verticals designed to create continuous footfall and mutual commercial synergy.

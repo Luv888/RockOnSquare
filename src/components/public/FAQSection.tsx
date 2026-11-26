@@ -26,12 +26,12 @@ const DEFAULT_FAQS: FAQ[] = [
   {
     id: '3',
     question: 'What amenities are included?',
-    answer: 'The development features dual power supply with DG backup, integrated HVAC system, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, extensive basement parking with modern wayfinding, and efficient service access.',
+    answer: 'The development features dual power supply with DG backup, advanced firefighting systems, 24×7 CCTV surveillance, 8 high-speed elevators, premium finishes, two Basements providing ample parking space with Valet Parking provision, and efficient service access.',
   },
   {
     id: '4',
     question: 'How can I book a site visit?',
-    answer: 'Click the "Book a Site Visit" button on this page, fill out the enquiry form, call our sales team directly, or reach us on WhatsApp. Our team will confirm a convenient time for your visit.',
+    answer: 'Our Project Location is mentioned below and you may visit the site any time between 10 a.m to 8 pm. Also you may fill the Book a Visit button on this page, fill out the enquiry form or call our sales team directly to book the site visit as per your convenient time.',
   },
   {
     id: '5',
@@ -46,12 +46,12 @@ const DEFAULT_FAQS: FAQ[] = [
   {
     id: '7',
     question: 'What is the current construction status?',
-    answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites and rooftop, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.',
+    answer: 'Rock One Square has officially achieved a major structural milestone with 7 FLOORS COMPLETE. RCC superstructure casting is executed up to the 7th floor level. Work is progressing steadily toward the upper suites, with possession scheduled soon. Prospective buyers and tenants are welcome to schedule guided on-site inspections.',
   },
   {
     id: '8',
     question: 'What is the RERA status?',
-    answer: "You can check the project's RERA registration information using ReraTracker. For official confirmation of registration status, please verify the project's registration details on the Uttar Pradesh RERA portal.",
+    answer: 'The project is approved by RERA vide Registration No. UPRERAPRJ352708/09/2026. You can also check the Project RERA registration information on reratracker.com website. The RERA Certificate can be viewed [here].',
   },
 ]
 
@@ -108,17 +108,50 @@ export function FAQSection({ faqs }: FAQSectionProps) {
               </Accordion.Header>
               <Accordion.Content className="overflow-hidden data-[state=open]:animate-[accordion-down_150ms_ease-out] data-[state=closed]:animate-[accordion-up_150ms_ease-out]">
                 <div className="px-5 pb-4 text-white/55 text-sm leading-relaxed space-y-3">
-                  <p>{faq.answer}</p>
-                  {(faq.question.toLowerCase().includes('rera') || faq.answer.includes('ReraTracker')) && (
-                    <div className="pt-2 border-t border-white/5 flex flex-wrap items-center gap-3">
+                  {faq.question.toLowerCase().includes('rera') || faq.answer.includes('UPRERAPRJ352708/09/2026') || faq.answer.includes('reratracker.com') ? (
+                    <p>
+                      The project is approved by RERA vide Registration No. UPRERAPRJ352708/09/2026. You can also check the Project RERA registration information on{' '}
                       <a
                         href="https://reratracker.com/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="text-[#c9a84c] underline underline-offset-2 hover:text-[#e4c870] font-medium"
+                      >
+                        reratracker.com
+                      </a>{' '}
+                      website. The RERA Certificate can be viewed{' '}
+                      <a
+                        href="https://drive.google.com/file/d/1SAh9McV2Y7wxjs76IfmDSiv7-1oiNHBr/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#c9a84c] underline underline-offset-2 hover:text-[#e4c870] font-medium"
+                        title="Official RERA Certificate"
+                      >
+                        [here]
+                      </a>.
+                    </p>
+                  ) : (
+                    <p>{faq.answer}</p>
+                  )}
+                  {(faq.question.toLowerCase().includes('rera') || faq.answer.includes('ReraTracker') || faq.answer.includes('reratracker.com') || faq.answer.includes('UPRERAPRJ352708/09/2026')) && (
+                    <div className="pt-2 border-t border-white/5 flex flex-wrap items-center gap-3">
+                      <a
+                        href="https://drive.google.com/file/d/1SAh9McV2Y7wxjs76IfmDSiv7-1oiNHBr/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-xs font-medium text-[#c9a84c] hover:text-[#e4c870] transition-colors bg-[#c9a84c]/10 border border-[#c9a84c]/20 hover:border-[#c9a84c]/40 px-3 py-1.5 rounded"
                       >
-                        <span>Check RERA Details on ReraTracker</span>
+                        <span>Official RERA Certificate</span>
                         <ArrowUpRight className="w-3.5 h-3.5 flex-shrink-0" />
+                      </a>
+                      <a
+                        href="https://reratracker.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white transition-colors"
+                      >
+                        <span>Check on ReraTracker</span>
+                        <ArrowUpRight className="w-3 h-3 flex-shrink-0" />
                       </a>
                       <a
                         href="https://up-rera.in"

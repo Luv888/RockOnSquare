@@ -28,7 +28,7 @@ interface AmenityDetail {
   name: string
   shortDesc: string
   iconName: string
-  effectType: 'finishes' | 'power' | 'hvac' | 'fire' | 'cctv' | 'elevators' | 'parking' | 'service' | 'entrance' | 'multilevel'
+  effectType: 'finishes' | 'power' | 'fire' | 'cctv' | 'elevators' | 'parking' | 'service' | 'entrance' | 'multilevel'
   badge: string
   imageUrl: string
   fullDescription: string
@@ -68,23 +68,6 @@ const VERIFIED_AMENITIES: AmenityDetail[] = [
       'Automatic DG backup for critical loads and common areas',
       'Zero changeover disruption for digital and retail networks',
       'Individual sub-metering systems for all units',
-    ],
-  },
-  {
-    id: 'amenity-3',
-    name: 'Integrated Climate Comfort',
-    shortDesc: 'Integrated HVAC system.',
-    iconName: 'Wind',
-    effectType: 'hvac',
-    badge: 'INTEGRATED HVAC',
-    imageUrl: '/images/office-1.jpg',
-    fullDescription:
-      'Integrated HVAC system engineered to maintain balanced indoor temperature and continuous clean airflow throughout commercial zones.',
-    specifications: [
-      'Integrated HVAC system across commercial zones',
-      'High-efficiency thermal control and indoor air renewal',
-      'Acoustically insulated ducting for quiet operation',
-      'Smart zoned climate regulation per floor area',
     ],
   },
   {
@@ -141,15 +124,15 @@ const VERIFIED_AMENITIES: AmenityDetail[] = [
   {
     id: 'amenity-7',
     name: 'Convenient Parking',
-    shortDesc: 'Extensive basement parking with modern wayfinding.',
+    shortDesc: 'Two Basements providing ample parking space with Valet Parking provision.',
     iconName: 'Car',
     effectType: 'parking',
-    badge: 'BASEMENT PARKING',
+    badge: 'VALET & PARKING',
     imageUrl: '/images/building-aerial.jpg',
     fullDescription:
-      'Extensive basement parking with modern wayfinding, wide vehicular ramps, and convenient access to elevators.',
+      'Two Basements providing ample parking space with Valet Parking provision, wide vehicular ramps, and convenient access to elevators.',
     specifications: [
-      'Extensive basement parking with modern wayfinding',
+      'Two Basements providing ample parking space with Valet Parking provision',
       'Multi-level vehicular access and designated drop-offs',
       'Clear directional signage and stall numbering',
       'Dedicated elevator access from basements to all upper levels',
@@ -200,13 +183,6 @@ function AmenitySubjectEffect({ type }: { type: string }) {
         <div className="absolute top-0 inset-x-0 h-1 flex gap-1 pointer-events-none">
           <div className="h-full flex-1 bg-amber-400/80 animate-pulse" />
           <div className="h-full flex-1 bg-[#c9a84c]/80 animate-pulse delay-75" />
-        </div>
-      )
-    case 'hvac':
-      return (
-        <div className="absolute top-0 inset-x-0 h-1 flex items-center justify-around pointer-events-none opacity-80">
-          <div className="w-8 h-0.5 bg-cyan-400 rounded-full animate-pulse" />
-          <div className="w-8 h-0.5 bg-blue-300 rounded-full animate-pulse delay-100" />
         </div>
       )
     case 'fire':
@@ -327,7 +303,7 @@ export function AmenitiesSection({ amenities }: AmenitiesSectionProps = {}) {
           </p>
         </div>
 
-        {/* 8 Amenities Grid */}
+        {/* Amenities Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {VERIFIED_AMENITIES.map((amenity, idx) => {
             const Icon = ICON_MAP[amenity.iconName] || Gem

@@ -40,25 +40,25 @@ export interface FloorInfo {
 export const FLOOR_DIRECTORY: FloorInfo[] = [
   {
     floorNumber: 10,
-    label: 'Tenth Floor & Rooftop',
+    label: 'Tenth Floor',
     shortLabel: '10F',
-    offeringType: 'HOTEL',
-    categoryName: 'Hospitality & Rooftop Lounge',
+    offeringType: 'OFFICE',
+    categoryName: 'Executive Suites & Management',
     accentColor: '#c9a84c',
     bgTint: 'rgba(201,168,76,0.12)',
-    imageUrl: '/images/fine-dining-1.jpg',
+    imageUrl: '/images/office-1.jpg',
     description:
-      'The crown of Rock One Square. Open-air landscaped terrace lounge, executive hospitality management headquarters, and panoramic 360-degree vistas of the NCR skyline.',
+      'Executive management suites and corporate facilities offering panoramic 360-degree vistas across Ghaziabad and the Meerut Expressway corridor.',
     highlights: [
-      'Landscaped open-air terrace lounge & skydeck',
-      'Executive hospitality management suites',
-      'Panoramic 360-degree skyline views across Ghaziabad & Meerut Expressway',
-      'Private VIP reception & exclusive elevator access',
+      'Executive administrative & management suites',
+      'Panoramic 360-degree skyline views across Ghaziabad',
+      'Private reception & express elevator access',
+      'Acoustic insulation & double-glazed architectural glass',
     ],
     specs: {
       height: '3.6m Clear Ceiling',
       access: 'Express Passenger Elevators',
-      footfall: 'Exclusive Hospitality & Private Lounge',
+      footfall: 'Executive / Corporate',
     },
     isComplete: false,
   },
@@ -67,12 +67,12 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
     label: 'Ninth Floor',
     shortLabel: '9F',
     offeringType: 'STUDIO_APARTMENT',
-    categoryName: 'Penthouse Studio Apartments',
+    categoryName: 'Executive Studio Apartments',
     accentColor: '#e4c870',
     bgTint: 'rgba(228,200,112,0.12)',
     imageUrl: '/images/studio-apartment-4.jpg',
     description:
-      'Penthouse-tier studio residences offering serene, elevated urban living with generous natural daylight, premium finishes, and maximum privacy.',
+      'Upper-tier studio residences offering serene, elevated urban living with generous natural daylight, premium finishes, and maximum privacy.',
     highlights: [
       'Highest residential elevation within the development',
       'Sweeping horizon views over Raj Nagar Extension',
@@ -149,7 +149,7 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
       'Contemporary space-efficient interior architecture',
       'Smart home infrastructure readiness & digital lock doors',
       '24×7 multi-tier security and CCTV surveillance',
-      'Integrated housekeeping & concierge services support',
+      'Housekeeping & concierge services support',
     ],
     specs: {
       height: '3.3m Floor-to-Ceiling',
@@ -192,10 +192,10 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
     bgTint: 'rgba(96,165,250,0.12)',
     imageUrl: '/images/office-1.jpg',
     description:
-      'Smart corporate workspaces designed for professionals, consultants, tech enterprises, and expanding businesses. Flexible floorplates with climate comfort.',
+      'Smart corporate workspaces designed for professionals, consultants, tech enterprises, and expanding businesses with flexible floorplates.',
     highlights: [
       'Contemporary corporate layouts with column-efficient planning',
-      'Energy-efficient HVAC climate control systems',
+      'Column-efficient floorplates with natural daylight',
       'Dual optical-fiber backbone for high-speed data connectivity',
       'Smart corporate office planning and dedicated reception',
     ],
@@ -221,11 +221,11 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
       'Interactive gaming experiences and virtual reality arenas',
       'The biggest gaming zone in Ghaziabad with modern arcade attractions',
       'Family entertainment and leisure activities across expansive floorplates',
-      'Direct connectivity via central atrium escalators and elevators',
+      'Direct connectivity via central atrium elevators and vertical transit',
     ],
     specs: {
       height: '4.2m High Entertainment Clearance',
-      access: 'Central Atrium Escalators + 8 Elevators',
+      access: 'Central Atrium Transit + 8 High-Speed Elevators',
       footfall: 'Peak Evening & Weekend Leisure Traffic',
     },
     isComplete: true,
@@ -245,11 +245,11 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
       'Curated cluster of fine dining and artisanal casual restaurants',
       'Spacious indoor dining layouts with vibrant social ambiance',
       'Specialized commercial kitchen exhaust and gas-bank infrastructure',
-      'Direct escalator transit linking seamlessly from the retail floors',
+      'Seamless vertical transit linking directly from the retail floors',
     ],
     specs: {
       height: '3.8m Commercial Clearance',
-      access: 'Central Atrium Escalators & Elevators',
+      access: 'Central Atrium Elevators & Vertical Transit',
       footfall: 'High Lunch, Dinner & Social Footfall',
     },
     isComplete: true,
@@ -267,13 +267,13 @@ export const FLOOR_DIRECTORY: FloorInfo[] = [
       'High-traffic retail galleria featuring anchor brand showrooms, fashion boutiques, and lifestyle stores encircling the illuminated central atrium.',
     highlights: [
       'Atrium-facing anchor showrooms with unobstructed visual frontage',
-      'Continuous central escalator connectivity from Ground Floor plaza',
+      'Effortless vertical transit connectivity from Ground Floor plaza',
       'Wide marble/granite shopping walkways designed for effortless movement',
-      'Centralized climate comfort & architecturally illuminated shopfronts',
+      'Architecturally illuminated shopfronts & double-height atrium',
     ],
     specs: {
       height: '4.0m Clear Commercial Height',
-      access: 'Central Escalators + 8 Elevators',
+      access: 'Central Transit Core + 8 High-Speed Elevators',
       footfall: 'High Shopping Footfall',
     },
     isComplete: true,
@@ -476,8 +476,7 @@ export function FloorExplorer() {
             {/* Digital Indicator Display Screen */}
             <div className="bg-[#03060c] border border-[#c9a84c]/40 rounded-lg p-4 mb-5 text-center shadow-inner relative overflow-hidden">
               <div className="text-[10px] font-mono tracking-widest text-[#c9a84c]/70 uppercase mb-1 flex items-center justify-center gap-2">
-                <span>DOORS READY</span>
-                <span>&bull;</span>
+                
                 <span className="text-white/60">LEVEL {currentFloor.floorNumber}/10</span>
               </div>
               <div className="flex items-center justify-center gap-3">

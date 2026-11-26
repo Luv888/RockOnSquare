@@ -89,7 +89,7 @@ const VERTICALS: VerticalItem[] = [
       'Work deserves a space that inspires ideas and supports ambition. The modern office spaces at ROCK ONE SQUARE are thoughtfully designed for today’s professionals, entrepreneurs and growing businesses. Contemporary layouts and efficient planning create an environment that brings functionality and design together.',
     highlights: [
       'Key Highlight: Smart, efficient and contemporary workspaces.',
-      'Integrated climate comfort & HVAC systems',
+      'Column-efficient contemporary office layouts',
       'High-speed digital connectivity infrastructure',
       'Direct access to on-site dining, retail and leisure amenities',
     ],
@@ -299,11 +299,11 @@ export function CommercialOfferings() {
 
               {/* Stack items */}
               <div className="space-y-2">
-                {/* 10F Rooftop */}
+                {/* 10F Executive Facilities */}
                 <div className="p-2.5 rounded-lg border border-white/5 bg-white/[0.02] flex items-center justify-between text-xs text-white/50">
                   <span className="font-mono text-[11px]">10F</span>
-                  <span className="font-medium text-white/70">Rooftop Skydeck & Hospitality</span>
-                  <span className="text-[10px] text-white/40">Exclusive</span>
+                  <span className="font-medium text-white/70">Executive Suites & Management</span>
+                  <span className="text-[10px] text-white/40">Facilities</span>
                 </div>
 
                 {/* 5F-9F Studios */}
